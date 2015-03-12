@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jds.webapp.Fragment.FragmentTop">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn1_frame">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/btn1"
+                android:background="#ffff5774"
+                android:text="HOME"
+                android:textColor="#ffffffff" />
+
+
+            <include android:id="@+id/btn1Pressed"
+                layout="@layout/pressed"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn2_frame">
+
+            <Button
+                android:layout_gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/btn2"
+                android:background="#ffff5774"
+                android:text="ARTICLE"
+                android:textColor="#ffffffff" />
+
+            <include android:id="@+id/btn2Pressed"
+                layout="@layout/pressed"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="7dp"
+        android:background="@drawable/drop_shadow"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    </FrameLayout>
+
+</RelativeLayout>

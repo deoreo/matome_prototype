@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/articleListLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    >
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/articleListBgImage"
+        android:cropToPadding="false"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/drop_shadow2" />
+
+    <ImageView
+        android:layout_width="81dp"
+        android:layout_height="81dp"
+        android:id="@+id/articleListThumbnail"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/news" />
+
+    <FrameLayout android:layout_width="fill_parent"
+        android:layout_height="190dp"
+        android:layout_marginRight="7dp"
+        android:paddingTop="10dp"
+        android:id="@+id/parentContentListLayout">
+
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingBottom="10dp"
+            android:background="@drawable/drop_shadow"
+            android:id="@+id/childContentListLayout" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="18dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="3dp"
+                android:id="@+id/contentListDescTop"
+                android:layout_alignRight="@+id/contentListDescCenter"
+                android:layout_alignEnd="@+id/contentListDescCenter">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/dateText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/contentListDescTop"
+                android:orientation="horizontal"
+                android:id="@+id/contentListDescCenter">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/titleText"
+                    android:text="-"
+                    android:singleLine="false"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                   />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/contentListDescCenter"
+                android:orientation="horizontal"
+                android:id="@+id/contentListDescBottom" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/authorText" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textColor="#ffffff"
+                    android:textStyle="italic"
+                    android:id="@+id/pvText"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="7dp"
+        android:background="@drawable/drop_shadow"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginRight="7dp">
+    </FrameLayout>
+
+</FrameLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bgColorHome">#ffdcdcdc</color>
+    <color name="bgColorEventElementDefault">#fa00aaaa</color>
+    <color name="bgColorEventDetailNotification">#8cc81919</color>
+
+    <color name="borderColorDashed">#ff969696</color>
+
+    <color name="buttonEventTabActive">#ff646464</color>
+    <color name="buttonEventTabNormal">#ffc81919</color>
+
+    <color name="progressBar">#c81919</color>
+
+    <color name="ER255r255g255b255a_white">#ffffffff</color>
+    <color name="ER255r255g255b153a_whiteTransparent">#99ffffff</color>
+    <color name="ER100r100g255b255a_blueLight">#ff6464ff</color>
+    <color name="ER100r100g255b255a_blueNikkei">#00629d</color>
+    <color name="ER0r0g255b255a_blueDark">#ff0000ff</color>
+    <color name="ER235r235g235b100a">#64ebebeb</color>
+    <color name="ER0r0g0b30a_pressed">#1e000000</color>
+    <color name="ER200r200g200b255a_borderColor">#ffc8c8c8</color>
+    <color name="ER180r180g180b255a_borderColor">#ffb4b4b4</color>
+    <color name="ER0r0g0b195a_bg">#c3000000</color>
+    <color name="ER0r0g0b100a_bg">#64000000</color>
+    <color name="ER200r25g25b255a_alertNotification">#ffc81919</color>
+    <color name="ER200r25g25b153a_alertNotificationTransparent">#99c81919</color>
+</resources>

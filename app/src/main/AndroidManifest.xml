@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- suppress ALL -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jds.webapp" >
+
+    <!-- Allow to connect with internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".Fragment.FragmentArticle"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Fragment.FragmentMain"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FragmentTopBar"
+            android:label="@string/title_activity_fragment_header" >
+        </activity>
+        <activity
+            android:name=".Fragment.FragmentTop"
+            android:label="@string/title_activity_fragment_top" >
+        </activity>
+        <activity
+            android:name=".Fragment.FragmentHeaderMain"
+            android:label="@string/title_activity_fragment_header" >
+        </activity>
+        <activity
+            android:name=".Fragment.FragmentListArticle"
+            android:label="@string/title_activity_fragment_list_article" >
+        </activity>
+        <activity
+            android:name=".Fragment.FragmentHeaderArticle"
+            android:label="@string/title_activity_fragment_header_article" >
+        </activity>
+        <activity
+            android:name=".Fragment.FragmentListSavedArticle"
+            android:label="@string/title_activity_fragment_saved_article" >
+        </activity>
+    </application>
+
+</manifest>

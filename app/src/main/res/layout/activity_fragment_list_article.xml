@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.jds.webapp.Fragment.FragmentListArticle">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ListView
+            android:id="@+id/lvArticle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="7dp"
+            android:background="@drawable/drop_shadow"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_below="@+id/linearLayout2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+        </FrameLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

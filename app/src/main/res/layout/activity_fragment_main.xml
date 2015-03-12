@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/parentLayout"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context="com.jds.webapp.Fragment.FragmentMain" tools:ignore="MergeRootFrame"
+    android:background="#ffffff"
+    >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/parentTopBar">
+
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/headerLayout"></FrameLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/parentContent"
+        android:layout_below="@+id/parentTopBar">
+
+        <FrameLayout
+            android:id="@+id/topLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topLayout"></FrameLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
