@@ -41,6 +41,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     private static final String KEY_AUTHOR = "nam";
     private static final String KEY_PV = "pv";
     private static final String KEY_POST_DATE = "pos";
+    private static final String KEY_THUMBNAIL = "img";
     private static final String KEY_DESC = "dsc";
 
     private static String TAG = "FragmentListAticle";
@@ -99,37 +100,50 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             super.onPostExecute(json);
             pDialog.dismiss();
             mSwipeRefreshLayout.setRefreshing(false);
+
             ArticlePersistence articlePersistence = new ArticlePersistence(getActivity().getApplicationContext());
             if (json != null) {
-                try {
 
                     for(int i=0; i<json.length(); i++){
-                        JSONObject jsonObject = json.getJSONObject(i);
-                        String key = jsonObject.getString(KEY_KEY);
-                        String title = jsonObject.getString(KEY_TITLE);
-                        String pv = jsonObject.getString(KEY_PV);
-                        String pos = jsonObject.getString(KEY_POST_DATE);
-                        Date date = convertFormatDate(pos);
-                        String posdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
-                        JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
-                        String author = jsonObject1.getString(KEY_AUTHOR);
-
-                        article = new DataArticle();
-                        article.setKey(key);
-                        article.setAuthor(author);
-                        article.setTitle(title);
-                        article.setDate(posdate);
-                        article.setPv(pv);
-
-                        mListArticle.add(article);
-
+                        String key="";
+                        String thumbnail = "";
+                        String title = "";
+                        String pv = "";
+                        String pos = "";
+                        String posdate = "";
+                        String author = "";
+                        boolean status=true;
+                        try {
+                            JSONObject jsonObject = json.getJSONObject(i);
+                            key = jsonObject.getString(KEY_KEY);
+                            thumbnail = jsonObject.getString(KEY_THUMBNAIL);
+                            title = jsonObject.getString(KEY_TITLE);
+                            pv = jsonObject.getString(KEY_PV);
+                            pos = jsonObject.getString(KEY_POST_DATE);
+                            Date date = convertFormatDate(pos);
+                            posdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
+                            JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
+                            author = jsonObject1.getString(KEY_AUTHOR);
+                            status = true;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            status = false;
+                        }
+                        if(status) {
+                            article = new DataArticle();
+                            article.setKey(key);
+                            article.setThumbnail(thumbnail);
+                            article.setAuthor(author);
+                            article.setTitle(title);
+                            article.setDate(posdate);
+                            article.setPv(pv);
+                            mListArticle.add(article);
+                        }
                     }
                     mAdapter = new AdapterListArticle(getActivity(), mListArticle);
                     mListView.setAdapter(mAdapter);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
             } else {
 
             }

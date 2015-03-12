@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.jds.webapp.R;
 
@@ -13,6 +14,7 @@ import com.jds.webapp.R;
 public class FragmentTop extends Fragment {
     Button btn1, btn2;
     View mVw;
+    TextView searchText;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +27,8 @@ public class FragmentTop extends Fragment {
         if (container == null) {
             return null;
         }
+        searchText = (TextView) view.findViewById(R.id.SearchText);
+        /*
         btn1 = (Button) view.findViewById(R.id.btn1);
         btn2 = (Button) view.findViewById(R.id.btn2);
         Btn1Pressed();
@@ -50,27 +54,10 @@ public class FragmentTop extends Fragment {
                 mVw.findViewById(R.id.btn2Pressed).setVisibility(View.VISIBLE);
             }
         });
+        */
         return view;
     }
 
-    private void Btn1Pressed(){
-
-        btn1.setSelected(true);
-        btn1.setEnabled(false);
-        btn1.setClickable(false);
-        btn2.setSelected(false);
-        btn2.setEnabled(true);
-        btn2.setClickable(true);
-    }
-    private void Btn2Pressed(){
-
-        btn2.setSelected(true);
-        btn2.setEnabled(false);
-        btn2.setClickable(false);
-        btn1.setSelected(false);
-        btn1.setEnabled(true);
-        btn1.setClickable(true);
-    }
 
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {

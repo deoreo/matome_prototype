@@ -49,7 +49,7 @@ public class FragmentHeaderArticle extends Fragment {
         if (container == null) {
         }
         btn1 = view.findViewById(R.id.btnShare);
-        btn2 = view.findViewById(R.id.btnSaveArticle);
+        btn2 = view.findViewById(R.id.btnSave);
         if(query.equalTo("key", key).count() > 0){
             btn2.setEnabled(false);
             int sdk = android.os.Build.VERSION.SDK_INT;

@@ -10,7 +10,7 @@ import com.jds.webapp.R;
 
 
 public class FragmentHeaderMain extends Fragment {
-    View btn1, btn2;
+    View btn1, btn2, btn3;
     View mVw;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,10 +27,11 @@ public class FragmentHeaderMain extends Fragment {
         }
             btn1 = view.findViewById(R.id.btnHome);
             btn2 = view.findViewById(R.id.btnSaved);
+            btn3 = view.findViewById(R.id.btnSearch);
             btnHomePressed();
             view.findViewById(R.id.btnHomePressed).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
-
+            view.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
 
             btn1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -40,6 +41,7 @@ public class FragmentHeaderMain extends Fragment {
                     btnHomePressed();
                     mVw.findViewById(R.id.btnHomePressed).setVisibility(View.VISIBLE);
                     mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
+                    mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
                 }
             });
             btn2.setOnClickListener(new View.OnClickListener() {
@@ -50,8 +52,20 @@ public class FragmentHeaderMain extends Fragment {
                     btnSavedPressed();
                     mVw.findViewById(R.id.btnHomePressed).setVisibility(View.INVISIBLE);
                     mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.VISIBLE);
+                    mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
                 }
             });
+        btn3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.topLayout, new FragmentTop())
+                        .commit();
+                btnSearchPressed();
+                mVw.findViewById(R.id.btnHomePressed).setVisibility(View.INVISIBLE);
+                mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
+                mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.VISIBLE);
+            }
+        });
             return view;
     }
     private void btnHomePressed(){
@@ -62,15 +76,31 @@ public class FragmentHeaderMain extends Fragment {
         btn2.setSelected(false);
         btn2.setEnabled(true);
         btn2.setClickable(true);
+        btn3.setSelected(false);
+        btn3.setEnabled(true);
+        btn3.setClickable(true);
     }
     private void btnSavedPressed(){
-
-        btn2.setSelected(true);
-        btn2.setEnabled(false);
-        btn2.setClickable(false);
         btn1.setSelected(false);
         btn1.setEnabled(true);
         btn1.setClickable(true);
+        btn2.setSelected(true);
+        btn2.setEnabled(false);
+        btn2.setClickable(false);
+        btn3.setSelected(false);
+        btn3.setEnabled(true);
+        btn3.setClickable(true);
+    }
+    private void btnSearchPressed(){
+        btn1.setSelected(false);
+        btn1.setEnabled(true);
+        btn1.setClickable(true);
+        btn2.setSelected(false);
+        btn2.setEnabled(true);
+        btn2.setClickable(true);
+        btn3.setSelected(true);
+        btn3.setEnabled(false);
+        btn3.setClickable(false);
     }
 
     @Override

@@ -12,10 +12,10 @@
         android:id="@+id/linearLayout">
 
         <FrameLayout
-            android:layout_width="208dp"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:id="@+id/title_frame">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,35 +27,20 @@
                 android:textStyle="bold"
                 android:typeface="sans"
                 android:text="Matome" />
-
-
         </FrameLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            >
 
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:paddingRight="20dp"
-                android:id="@+id/frameLayoutBtn" >
-
-                <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/btnSaved"
-                    android:background="@drawable/folder"
-                    android:layout_gravity="right|center_vertical"
-                    android:clickable="true">
-                    <include
-                        layout="@layout/pressed"
-                        android:id="@+id/btnSavedPressed" />
-                </FrameLayout>
-
+                android:id="@+id/frameLayoutBtnHome"
+                android:layout_weight="1">
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -70,14 +55,53 @@
                 </FrameLayout>
 
             </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/frameLayoutBtnSaved"
+                android:layout_weight="1">
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/btnSaved"
+                    android:background="@drawable/folder"
+                    android:layout_gravity="center"
+                    android:clickable="true" >
+
+                    <include
+                        layout="@layout/pressed"
+                        android:id="@+id/btnSavedPressed" />
+                </FrameLayout>
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/frameLayoutBtnSearch"
+                android:layout_weight="1">
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/btnSearch"
+                    android:background="@drawable/search"
+                    android:layout_gravity="center"
+                    android:clickable="true" >
+
+                    <include
+                        layout="@layout/pressed"
+                        android:id="@+id/btnSearchPressed" />
+                </FrameLayout>
+            </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#ba2f2f2f"
+        android:layout_height="2dp"
+        android:background="#ffff5774"
         android:layout_gravity="center"
         android:layout_alignLeft="@+id/linearLayout"
         android:layout_alignStart="@+id/linearLayout"
@@ -85,6 +109,7 @@
 
 
     </LinearLayout>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="10dp"
@@ -93,4 +118,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
     </FrameLayout>
+
 </RelativeLayout>

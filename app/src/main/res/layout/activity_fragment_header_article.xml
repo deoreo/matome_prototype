@@ -9,17 +9,17 @@
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:background="@drawable/drop_shadow3"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout3" >
 
         <FrameLayout
             android:layout_width="208dp"
             android:layout_height="fill_parent"
-            android:id="@+id/title_frame">
+            android:id="@+id/frameLayout" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
+                android:id="@+id/textView3"
                 android:textColor="#9ce84f63"
                 android:layout_gravity="left|center_vertical"
                 android:textSize="30dp"
@@ -27,34 +27,18 @@
                 android:textStyle="bold"
                 android:typeface="sans"
                 android:text="Matome" />
-
-
         </FrameLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
 
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:paddingRight="20dp"
-                android:id="@+id/frameLayoutBtn" >
-
-                <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/btnSaveArticle"
-                    android:background="@drawable/unsave"
-                    android:layout_gravity="right|center_vertical"
-                    android:clickable="true">
-                    <include
-                        layout="@layout/pressed"
-                        android:id="@+id/btnSavePressed" />
-                </FrameLayout>
+                android:id="@+id/frameShare"
+                android:layout_weight="1" >
 
                 <FrameLayout
                     android:layout_width="40dp"
@@ -62,35 +46,47 @@
                     android:id="@+id/btnShare"
                     android:background="@drawable/share"
                     android:layout_gravity="center"
-                    android:clickable="true">
-
-                    <include
-                        layout="@layout/pressed"
-                        android:id="@+id/btnSharePressed" />
+                    android:clickable="true" >
                 </FrameLayout>
+            </FrameLayout>
 
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/frameSave"
+                android:layout_weight="1" >
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/btnSave"
+                    android:background="@drawable/unsave"
+                    android:layout_gravity="center"
+                    android:clickable="true" >
+                </FrameLayout>
             </FrameLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#ba2f2f2f"
+        android:layout_height="2dp"
+        android:background="#ffff5774"
         android:layout_gravity="center"
-        android:layout_alignLeft="@+id/linearLayout"
-        android:layout_alignStart="@+id/linearLayout"
-        android:layout_below="@+id/linearLayout">
+        android:layout_alignLeft="@+id/linearLayout3"
+        android:layout_alignStart="@+id/linearLayout3"
+        android:layout_below="@+id/linearLayout3">
 
 
     </LinearLayout>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:background="@drawable/drop_shadow"
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/linearLayout3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
     </FrameLayout>
+
 </RelativeLayout>

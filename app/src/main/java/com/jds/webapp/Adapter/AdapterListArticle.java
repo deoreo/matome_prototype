@@ -19,9 +19,13 @@ import android.widget.TextView;
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 public class AdapterListArticle extends BaseAdapter {
@@ -71,12 +75,16 @@ public class AdapterListArticle extends BaseAdapter {
         final String AUTHOR = article.getAuthor();
         final String PV = article.getPv();
         final String KEY = article.getKey();
+        final String THUMBNAIL = article.getThumbnail();
+        final String URL_THUMBNAIL = "http://api.matome.id/photo/"+THUMBNAIL+"?w=100&h=100&c=fill";
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR);
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
-        //new DownloadImageTask(holder.articleListThumbnail).execute(THUMBNAIL);
+
+        Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
+        //new DownloadImageTask(holder.articleListThumbnail).execute(URL_THUMBNAIL);
         convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV));
         return convertView;
     }
@@ -89,6 +97,24 @@ public class AdapterListArticle extends BaseAdapter {
         public ImageView articleListBgImage;
         public ImageView articleListThumbnail;
     }
+
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
@@ -97,15 +123,7 @@ public class AdapterListArticle extends BaseAdapter {
         }
 
         protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
+            return getBitmapFromURL(urls[0]);
         }
 
         protected void onPostExecute(Bitmap result) {
