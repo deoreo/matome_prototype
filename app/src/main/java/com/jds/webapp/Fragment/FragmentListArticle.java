@@ -82,12 +82,17 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             fragmentTag = "";
         }
         Log.v("FragmentArticle", fragmentTag);
+        int articleCount = articlePersistence.getListSavedArticle().size();
         if(!fragmentTag.equals("search")) {
-            new GetArticle().execute();
+
+            if(articleCount < 0)
+                new GetArticle().execute();
+            else
+                new GetArticleFromSharedPref().execute();
         }
         else{
-            ArticlePersistence persistence = new ArticlePersistence(getActivity());
-            LIST_ARTICLE_MATOME = persistence.getListSavedArticle();
+
+            LIST_ARTICLE_MATOME = articlePersistence.getListSavedArticle();
             new SearchArticle(keyword, LIST_ARTICLE_MATOME).execute();
         }
         return view;
@@ -106,7 +111,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Load Articles...");
+            pDialog.setMessage("Retrieve Articles.Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -231,6 +236,36 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         }
     }
 
+    public class GetArticleFromSharedPref extends AsyncTask<String, Void, String> {
+        ProgressDialog pDialog;
+        ArticlePersistence articlePersistence = new ArticlePersistence(getActivity());
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Load Articles...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... arg) {
+            LIST_ARTICLE_MATOME = articlePersistence.getListSavedArticle();
+            mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
+            return "Success";
+        }
+
+        @Override
+        protected void onPostExecute(final String result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            pDialog.dismiss();
+            mListView.setAdapter(mAdapter);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
 
     private Date convertFormatDate(final String iso8601string){
         String s = iso8601string.replace("Z", "+00:00");
