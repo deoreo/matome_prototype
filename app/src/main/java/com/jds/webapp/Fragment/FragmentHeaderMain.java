@@ -53,7 +53,10 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener  {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container, new FragmentListArticle())
                             .commit();
-
+                    btnHomePressed();
+                    mVw.findViewById(R.id.btnHomePressed).setVisibility(View.VISIBLE);
+                    mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
+                    mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
                 }
             });
             btn2.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +91,8 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener  {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchText.getWindowToken(),0);
                 searchText.setText("");
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction().replace(R.id.container, new FragmentListArticle()).commit();
             }
         });
         searchText.setOnKeyListener(this);

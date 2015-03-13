@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.jds.webapp.Adapter.AdapterListArticle;
 import com.jds.webapp.ArticleControl;
+import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.Filter;
 import com.jds.webapp.R;
@@ -37,9 +38,9 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     ListView mListView;
     SwipeRefreshLayout mSwipeRefreshLayout;
     AdapterListArticle mAdapter;
-    List<DataArticle> mListArticle = null;
+    List<DataArticle> LIST_ARTICLE_MATOME = null;
     DataArticle article ;
-    Filter filter;
+    Filter INI_FILTER;
 
     private static String KEY_RESULT = "result";
     private static final String KEY_KEY = "key";
@@ -53,6 +54,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     private static final String KEY_WORD = "keyword";
     private String keyword;
     String fragmentTag;
+    private ArticlePersistence articlePersistence;
     private static String TAG = "FragmentListAticle";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getExtras();
+        articlePersistence = new ArticlePersistence(getActivity());
+        //LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
         View view = inflater.inflate(R.layout.activity_fragment_list_article, container, false);
         mListView = (ListView)view.findViewById(R.id.lvArticle);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -82,7 +86,9 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             new GetArticle().execute();
         }
         else{
-            new SearchArticle(keyword, mListArticle).execute();
+            ArticlePersistence persistence = new ArticlePersistence(getActivity());
+            LIST_ARTICLE_MATOME = persistence.getListSavedArticle();
+            new SearchArticle(keyword, LIST_ARTICLE_MATOME).execute();
         }
         return view;
     }
@@ -110,7 +116,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         @Override
         protected JSONArray doInBackground(String... arg) {
             JSONArray json = null;
-            mListArticle = new ArrayList<DataArticle>();
+            LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
+            ArticlePersistence persistence = new ArticlePersistence(getActivity());
             ArticleControl articleControl = new ArticleControl();
             json = articleControl.listArticle();
             if (json != null) {
@@ -135,7 +142,6 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                         posdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
                         JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
                         author = jsonObject1.getString(KEY_AUTHOR);
-
                         try{
                             Document doc = Jsoup.connect("http://matome.id/" +key).get();
                             String primeDiv="content";
@@ -150,13 +156,9 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                                 postcontent = c.text();
                             }
                         }
-
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
                         status = true;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -171,14 +173,15 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                         article.setDate(posdate);
                         article.setPv(pv);
                         article.setContent(postcontent);
-                        mListArticle.add(article);
+                        LIST_ARTICLE_MATOME.add(article);
                     }
                 }
-                mAdapter = new AdapterListArticle(getActivity(), mListArticle);
 
-            } else {
+                persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
+                mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
 
             }
+
             return json;
         }
 
@@ -188,9 +191,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             super.onPostExecute(json);
             pDialog.dismiss();
             mListView.setAdapter(mAdapter);
-            filter = new Filter(mListArticle);
             mSwipeRefreshLayout.setRefreshing(false);
-            return;
         }
     }
 
@@ -215,9 +216,9 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
 
         @Override
         protected Filter doInBackground(String... arg) {
-            filter = new Filter(dataArticles);
-            mAdapter = new AdapterListArticle(getActivity(), filter.getFilter(keyword));
-            return filter;
+            INI_FILTER = new Filter(dataArticles);
+            mAdapter = new AdapterListArticle(getActivity(), INI_FILTER.getFilter(keyword));
+            return INI_FILTER;
         }
 
         @Override

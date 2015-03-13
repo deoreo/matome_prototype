@@ -106,7 +106,7 @@ public class ArticlePersistence {
     }
 
     public void setListSavedArticle(List<DataArticle> newList){
-        newList = new ArrayList<DataArticle>();
+        //newList = new ArrayList<DataArticle>();
         _sharedPrefEditor.putInt("Status_size", newList.size()); /* sKey is an array */
 
         for(int i=0;i<newList.size();i++)
@@ -118,8 +118,8 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
 
-    public List<DataArticle> getListSavedArticle(List<DataArticle> newList) {
-        newList = new ArrayList<DataArticle>();
+    public List<DataArticle> getListSavedArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
         int size = _sharedPref.getInt("Status_size", 0);
         for(int i=0;i<size;i++)
         {
