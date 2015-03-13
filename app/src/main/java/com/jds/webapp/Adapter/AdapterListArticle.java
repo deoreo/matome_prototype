@@ -19,22 +19,15 @@ import android.widget.TextView;
 
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
-import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-import android.widget.Filter;
-import android.widget.Filterable;
-
-import io.realm.Realm;
 
 public class AdapterListArticle extends BaseAdapter {
     private FragmentActivity mAct;

@@ -59,11 +59,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         super.onCreate(savedInstanceState);
 
     }
-    @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
-    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getExtras();
@@ -254,7 +250,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
 
     private void getExtras() {
         Bundle bundle = getArguments();
-        keyword = bundle.getString(KEY_WORD);
+        if(bundle!=null){keyword = bundle.getString(KEY_WORD);}
     }
 
 }

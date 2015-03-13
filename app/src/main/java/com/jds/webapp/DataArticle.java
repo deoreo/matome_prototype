@@ -2,12 +2,11 @@ package com.jds.webapp;
 
 import java.io.Serializable;
 
-import io.realm.RealmObject;
 
 /**
  * Created by deoreo06 on 07/03/2015.
  */
-public class DataArticle extends RealmObject {
+public class DataArticle implements Serializable {
     private String key, title, date, author, pv, thumbnail, content;
 
     public String getTitle() {
