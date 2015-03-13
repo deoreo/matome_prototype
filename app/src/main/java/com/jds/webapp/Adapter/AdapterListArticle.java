@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jds.webapp.ArticleListClickListener;
+import com.jds.webapp.BlurTransform;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.R;
 import com.squareup.picasso.Picasso;
@@ -85,8 +86,14 @@ public class AdapterListArticle extends BaseAdapter {
         holder.authorText.setText(AUTHOR);
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
         Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
+        Picasso.with(mAct).load(URL_THUMBNAIL)
+                .fit()
+                .transform(new BlurTransform(mAct))
+                .into(holder.articleListBgImage)
 
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV));
+        ;
+
+        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
         return convertView;
     }

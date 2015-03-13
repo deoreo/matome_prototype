@@ -82,7 +82,7 @@ public class AdapterSavedArticle extends BaseAdapter {
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR);
         //holder.pvText.setText(PV);
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY,TITLE,DATE,AUTHOR,PV));
+        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY,TITLE,DATE,AUTHOR,PV,""));
         return convertView;
     }
 

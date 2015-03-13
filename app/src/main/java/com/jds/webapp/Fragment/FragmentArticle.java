@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jds.webapp.BlurTransform;
 import com.jds.webapp.R;
+import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,7 +28,8 @@ public class FragmentArticle extends Fragment {
     WebView webview;
     TextView titleText, authorText;
     String data = "",  judul="", info="", pv="";
-    String key, title, date, author, bundlepv;
+    String key, title, date, author, bundlepv, thumbnail;
+    ImageView articleImage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +40,14 @@ public class FragmentArticle extends Fragment {
                              Bundle savedInstanceState) {
         getExtras();
         View view = inflater.inflate(R.layout.activity_web, container, false);
-        titleText = (TextView)view.findViewById(R.id.textView);
+        titleText = (TextView)view.findViewById(R.id.articletitleText);
         authorText = (TextView)view.findViewById(R.id.authorText);
         webview = (WebView) view.findViewById(R.id.webView);
         webview.getSettings().setJavaScriptEnabled(true);
+        articleImage = (ImageView) view.findViewById(R.id.articleImage);
+        Picasso.with(getActivity()).load(thumbnail)
+                .fit()
+                .into(articleImage);
         new LoadPage().execute(key);
         return view;
     }
@@ -50,6 +58,7 @@ public class FragmentArticle extends Fragment {
         date = bundle.getString("date");
         author = bundle.getString("author");
         bundlepv = bundle.getString("pv");
+        thumbnail = bundle.getString("thumbnail");
     }
 
 
@@ -69,9 +78,9 @@ public class FragmentArticle extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-
+            String key = params[0];
             try {
-                doc = Jsoup.connect("http://matome.id/"+params[0]).get();
+                doc = Jsoup.connect("http://matome.id/"+key).get();
                 String primeDiv="content";
                 //scrap content
                 Elements content = doc.select("div[id="+primeDiv+"]");
@@ -96,7 +105,7 @@ public class FragmentArticle extends Fragment {
                 e.printStackTrace();
             }
 
-            return "Executed";
+            return key;
         }
 
         @Override
@@ -107,6 +116,8 @@ public class FragmentArticle extends Fragment {
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
             authorText.setText(Html.fromHtml("<font color='#000011'><i>Oleh : " + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
             Log.v("WebS", data);
+
+
 
         }
 

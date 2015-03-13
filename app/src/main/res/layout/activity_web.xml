@@ -1,42 +1,54 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="5dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
     android:background="#ffffff"
-    tools:context=".WebActivity">
-
+    tools:context=".WebActivity"
+    android:id="@+id/ArticleLayout">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
     <WebView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/webView"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/topArticle"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-
-        android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"/>
 
-    <TextView
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/webView"
-        android:layout_alignEnd="@+id/webView" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/authorText"
-        android:textSize="15dp"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:paddingTop="20dp"
+        android:paddingBottom="5dp"
+        android:layout_below="@+id/articleImage"
+        android:id="@+id/topArticle">
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/articletitleText"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/authorText"
+            android:textSize="15dp"
+            android:layout_below="@+id/articletitleText"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/articleImage" />
 </RelativeLayout>
+</ScrollView>
