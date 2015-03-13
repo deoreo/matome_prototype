@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
+import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -26,12 +28,19 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+
+import android.widget.Filter;
+import android.widget.Filterable;
+
+import io.realm.Realm;
 
 public class AdapterListArticle extends BaseAdapter {
     private FragmentActivity mAct;
-    private List<DataArticle> mSourceData;
+    private List<DataArticle> mSourceData, mFilterData;
     private LayoutInflater mInflater =null;
+    public String content;
 
     public AdapterListArticle(FragmentActivity activity,List<DataArticle> d) {
         mAct = activity;
@@ -39,7 +48,6 @@ public class AdapterListArticle extends BaseAdapter {
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
-
 
     @Override
     public int getCount() {
@@ -77,15 +85,16 @@ public class AdapterListArticle extends BaseAdapter {
         final String KEY = article.getKey();
         final String THUMBNAIL = article.getThumbnail();
         final String URL_THUMBNAIL = "http://api.matome.id/photo/"+THUMBNAIL+"?w=100&h=100&c=fill";
+        content = article.getContent();
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR);
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
-
         Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
-        //new DownloadImageTask(holder.articleListThumbnail).execute(URL_THUMBNAIL);
+
         convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV));
+
         return convertView;
     }
 
@@ -97,6 +106,8 @@ public class AdapterListArticle extends BaseAdapter {
         public ImageView articleListBgImage;
         public ImageView articleListThumbnail;
     }
+
+
 
 
     public static Bitmap getBitmapFromURL(String src) {
@@ -115,19 +126,4 @@ public class AdapterListArticle extends BaseAdapter {
     }
 
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            return getBitmapFromURL(urls[0]);
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 }

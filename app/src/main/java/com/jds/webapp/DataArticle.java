@@ -2,11 +2,13 @@ package com.jds.webapp;
 
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+
 /**
  * Created by deoreo06 on 07/03/2015.
  */
-public class DataArticle implements Serializable {
-    private String title, author,pv, description, date, url,thumbnail, key;
+public class DataArticle extends RealmObject {
+    private String key, title, date, author, pv, thumbnail, content;
 
     public String getTitle() {
         return title;
@@ -16,28 +18,12 @@ public class DataArticle implements Serializable {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDate() {
         return date;
     }
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getThumbnail() {
@@ -70,5 +56,13 @@ public class DataArticle implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

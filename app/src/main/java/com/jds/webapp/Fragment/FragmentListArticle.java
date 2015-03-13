@@ -2,10 +2,10 @@ package com.jds.webapp.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +13,19 @@ import android.widget.ListView;
 
 import com.jds.webapp.Adapter.AdapterListArticle;
 import com.jds.webapp.ArticleControl;
-import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
+import com.jds.webapp.Filter;
 import com.jds.webapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +39,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     AdapterListArticle mAdapter;
     List<DataArticle> mListArticle = null;
     DataArticle article ;
+    Filter filter;
+
     private static String KEY_RESULT = "result";
     private static final String KEY_KEY = "key";
     private static final String KEY_TITLE = "ttl";
@@ -43,16 +50,23 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     private static final String KEY_POST_DATE = "pos";
     private static final String KEY_THUMBNAIL = "img";
     private static final String KEY_DESC = "dsc";
-
+    private static final String KEY_WORD = "keyword";
+    private String keyword;
+    String fragmentTag;
     private static String TAG = "FragmentListAticle";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        getExtras();
         View view = inflater.inflate(R.layout.activity_fragment_list_article, container, false);
         mListView = (ListView)view.findViewById(R.id.lvArticle);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -61,9 +75,22 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        new GetArticle().execute();
+        try {
+            fragmentTag = getFragmentManager().findFragmentByTag("search").getTag();
+        }
+        catch (NullPointerException e){
+            fragmentTag = "";
+        }
+        Log.v("FragmentArticle", fragmentTag);
+        if(!fragmentTag.equals("search")) {
+            new GetArticle().execute();
+        }
+        else{
+            new SearchArticle(keyword, mListArticle).execute();
+        }
         return view;
     }
+
 
     @Override
     public void onRefresh() {
@@ -87,10 +114,75 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         @Override
         protected JSONArray doInBackground(String... arg) {
             JSONArray json = null;
-
             mListArticle = new ArrayList<DataArticle>();
             ArticleControl articleControl = new ArticleControl();
             json = articleControl.listArticle();
+            if (json != null) {
+                for(int i=0; i<json.length(); i++){
+                    String key="";
+                    String thumbnail = "";
+                    String title = "";
+                    String pv = "";
+                    String pos = "";
+                    String posdate = "";
+                    String author = "";
+                    String postcontent = "";
+                    boolean status=true;
+                    try {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        key = jsonObject.getString(KEY_KEY);
+                        thumbnail = jsonObject.getString(KEY_THUMBNAIL);
+                        title = jsonObject.getString(KEY_TITLE);
+                        pv = jsonObject.getString(KEY_PV);
+                        pos = jsonObject.getString(KEY_POST_DATE);
+                        Date date = convertFormatDate(pos);
+                        posdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
+                        JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
+                        author = jsonObject1.getString(KEY_AUTHOR);
+
+                        try{
+                            Document doc = Jsoup.connect("http://matome.id/" +key).get();
+                            String primeDiv="content";
+                        //scrap content
+                        Elements content = doc.select("div[id="+primeDiv+"]");
+                        for (Element post : content) {
+                            Elements post_content = post.getElementsByClass("post-content");
+                            for(Element c : post_content){
+                                c.getElementsByClass("post-sns").remove();
+                                c.getElementsByClass("post-info").remove();
+                                c.getElementsByClass("author-line").remove();
+                                postcontent = c.text();
+                            }
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                        status = true;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        status = false;
+                    }
+                    if(status) {
+                        article = new DataArticle();
+                        article.setKey(key);
+                        article.setThumbnail(thumbnail);
+                        article.setAuthor(author);
+                        article.setTitle(title);
+                        article.setDate(posdate);
+                        article.setPv(pv);
+                        article.setContent(postcontent);
+                        mListArticle.add(article);
+                    }
+                }
+                mAdapter = new AdapterListArticle(getActivity(), mListArticle);
+
+            } else {
+
+            }
             return json;
         }
 
@@ -99,57 +191,49 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             // TODO Auto-generated method stub
             super.onPostExecute(json);
             pDialog.dismiss();
+            mListView.setAdapter(mAdapter);
+            filter = new Filter(mListArticle);
             mSwipeRefreshLayout.setRefreshing(false);
-
-            ArticlePersistence articlePersistence = new ArticlePersistence(getActivity().getApplicationContext());
-            if (json != null) {
-
-                    for(int i=0; i<json.length(); i++){
-                        String key="";
-                        String thumbnail = "";
-                        String title = "";
-                        String pv = "";
-                        String pos = "";
-                        String posdate = "";
-                        String author = "";
-                        boolean status=true;
-                        try {
-                            JSONObject jsonObject = json.getJSONObject(i);
-                            key = jsonObject.getString(KEY_KEY);
-                            thumbnail = jsonObject.getString(KEY_THUMBNAIL);
-                            title = jsonObject.getString(KEY_TITLE);
-                            pv = jsonObject.getString(KEY_PV);
-                            pos = jsonObject.getString(KEY_POST_DATE);
-                            Date date = convertFormatDate(pos);
-                            posdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
-                            JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
-                            author = jsonObject1.getString(KEY_AUTHOR);
-                            status = true;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            status = false;
-                        }
-                        if(status) {
-                            article = new DataArticle();
-                            article.setKey(key);
-                            article.setThumbnail(thumbnail);
-                            article.setAuthor(author);
-                            article.setTitle(title);
-                            article.setDate(posdate);
-                            article.setPv(pv);
-                            mListArticle.add(article);
-                        }
-                    }
-                    mAdapter = new AdapterListArticle(getActivity(), mListArticle);
-                    mListView.setAdapter(mAdapter);
-
-
-            } else {
-
-            }
             return;
         }
     }
+
+    public class SearchArticle extends AsyncTask<String, Void, Filter> {
+        ProgressDialog pDialog;
+        public String keyword;
+        public List<DataArticle> dataArticles;
+        public SearchArticle(String keyword, List<DataArticle> dataArticles){
+            this.keyword = keyword;
+            this.dataArticles = dataArticles;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Load Articles...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pDialog.show();
+        }
+
+        @Override
+        protected Filter doInBackground(String... arg) {
+            filter = new Filter(dataArticles);
+            mAdapter = new AdapterListArticle(getActivity(), filter.getFilter(keyword));
+            return filter;
+        }
+
+        @Override
+        protected void onPostExecute(Filter str) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(str);
+            pDialog.dismiss();
+            mListView.setAdapter(mAdapter);
+            return;
+        }
+    }
+
 
     private Date convertFormatDate(final String iso8601string){
         String s = iso8601string.replace("Z", "+00:00");
@@ -168,5 +252,9 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         return dateFromServer;
     }
 
+    private void getExtras() {
+        Bundle bundle = getArguments();
+        keyword = bundle.getString(KEY_WORD);
+    }
 
 }

@@ -52,38 +52,9 @@ public class FragmentArticle extends Fragment {
         bundlepv = bundle.getString("pv");
     }
 
-    private class LoadArticles extends AsyncTask<String, Void, String> {
-        Document doc = null;
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                doc = Jsoup.connect("http://matome.id/fashion").get();
-                data =doc.html();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return "Executed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            webview.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
-            titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
-            authorText.setText(Html.fromHtml("<font color='#000011'><i>Oleh : " + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
-            Log.v("data", data);
-
-        }
-
-    }
 
     private class LoadPage extends AsyncTask<String, Void, String> {
         Document doc = null;
-        Document doc1 = null;
         ProgressDialog pDialog;
         @Override
         protected void onPreExecute() {

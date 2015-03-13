@@ -25,8 +25,13 @@ public class FragmentMain extends FragmentActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_fragment_main);
         if (savedInstanceState == null) {
+
+            FragmentListArticle fragmentListArticle = new FragmentListArticle();
+            Bundle args = new Bundle();
+            args.putString("keyword", "");
+            fragmentListArticle.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new FragmentListArticle())
+                    .add(R.id.container, fragmentListArticle)
                     .commit();
             /*
             getSupportFragmentManager().beginTransaction()

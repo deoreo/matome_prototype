@@ -18,7 +18,7 @@
             android:layout_height="7dp"
             android:background="@drawable/drop_shadow"
             android:layout_gravity="top|center_horizontal"
-            android:layout_below="@+id/linearLayout2"
+            android:layout_below="@+id/searchLayout"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
         </FrameLayout>

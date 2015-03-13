@@ -42,7 +42,7 @@ public class AdapterSavedArticle extends BaseAdapter {
     public AdapterSavedArticle(FragmentActivity activity) {
         mAct = activity;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        realm = Realm.getInstance(mAct);
+        realm = Realm.getInstance(mAct, "listarticle.realm");
         mSourceData = realm.where(DataListSavedArticle.class).findAll();
     }
 

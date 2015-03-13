@@ -8,7 +8,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
-            android:id="@+id/linearLayout2">
+            android:id="@+id/searchLayout">
             <!--
                        <FrameLayout
                            android:layout_width="fill_parent"
@@ -72,7 +72,7 @@
             android:layout_height="3dp"
             android:background="@drawable/drop_shadow"
             android:layout_gravity="top|center_horizontal"
-            android:layout_below="@+id/linearLayout2"
+            android:layout_below="@+id/searchLayout"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
         </FrameLayout>
