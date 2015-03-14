@@ -27,7 +27,7 @@ public class SavedArticleHandler extends Handler {
     public static final int LOAD_ARTICLE = 2;
     public static final String ACTION = "action";
 
-    private String key, title, date, author, pv;
+    private String key, title, date, author, pv,thumbnail;
     private Realm realm;
 
     public SavedArticleHandler(Realm realm) {
@@ -43,6 +43,7 @@ public class SavedArticleHandler extends Handler {
         date = bundle.getString("date");
         author = bundle.getString("author");
         pv = bundle.getString("pv");
+        thumbnail = bundle.getString("thumbnail");
 
         switch (action) {
             case ADD_ARTICLE:
@@ -53,6 +54,7 @@ public class SavedArticleHandler extends Handler {
                 dataListSavedArticle.setDate(date);
                 dataListSavedArticle.setAuthor(author);
                 dataListSavedArticle.setPv(pv);
+                dataListSavedArticle.setThumbnail(thumbnail);
                 realm.commitTransaction();
                 break;
             case LOAD_ARTICLE:

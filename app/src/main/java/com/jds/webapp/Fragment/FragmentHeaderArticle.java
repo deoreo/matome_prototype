@@ -22,9 +22,9 @@ import io.realm.RealmQuery;
 public class FragmentHeaderArticle extends Fragment {
     View btn1, btn2;
     View mVw;
-    private Realm realm;
+    Realm realm;
     public SavedArticleThread savedArticleThread;
-    private String key, title, date, author, pv;
+    private String key, title, date, author, pv, thumbnail;
     Drawable drawableSave;
     Resources res;
     int identifierSave;
@@ -38,10 +38,10 @@ public class FragmentHeaderArticle extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.getExtras();
-        realm = Realm.getInstance(getActivity());
         res = getResources();
         identifierSave = res.getIdentifier("save",null,null);
         drawableSave = res.getDrawable(R.drawable.save);
+        realm = Realm.getInstance(getActivity());
         RealmQuery<DataListSavedArticle> query = realm.where(DataListSavedArticle.class);
 
 
@@ -68,7 +68,7 @@ public class FragmentHeaderArticle extends Fragment {
         btn2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.v("HeaderSave", "Save Article");
-                Message message = buildMessage(SavedArticleHandler.ADD_ARTICLE,key,title,date,author,pv );
+                Message message = buildMessage(SavedArticleHandler.ADD_ARTICLE,key,title,date,author,pv,thumbnail);
                 savedArticleThread.handler.sendMessage(message);
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -87,6 +87,7 @@ public class FragmentHeaderArticle extends Fragment {
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mVw = getView();
+
         savedArticleThread = new SavedArticleThread(getActivity());
         savedArticleThread.start();
     }
@@ -98,9 +99,10 @@ public class FragmentHeaderArticle extends Fragment {
         date = bundle.getString("date");
         author = bundle.getString("author");
         pv = bundle.getString("pv");
+        thumbnail = bundle.getString("thumbnail");
     }
 
-    private static Message buildMessage(int action,String key,String title, String date, String author, String pv) {
+    private static Message buildMessage(int action,String key,String title, String date, String author, String pv, String thumbnail) {
         Bundle bundle = new Bundle(2);
         bundle.putInt(SavedArticleHandler.ACTION, action);
         bundle.putString("key", key);
@@ -108,6 +110,7 @@ public class FragmentHeaderArticle extends Fragment {
         bundle.putString("date", date);
         bundle.putString("author", author);
         bundle.putString("pv", pv);
+        bundle.putString("thumbnail", thumbnail);
         Message message = new Message();
         message.setData(bundle);
         return message;

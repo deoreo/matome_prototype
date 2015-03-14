@@ -77,12 +77,13 @@ public class AdapterSavedArticle extends BaseAdapter {
         final String DATE = mSourceData.get(position).getDate();
         final String AUTHOR = mSourceData.get(position).getAuthor();
         final String PV = mSourceData.get(position).getPv();
+        final String THUMBNAIL = mSourceData.get(position).getThumbnail();
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR);
         //holder.pvText.setText(PV);
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY,TITLE,DATE,AUTHOR,PV,""));
+        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY,TITLE,DATE,AUTHOR,PV,THUMBNAIL));
         return convertView;
     }
 
