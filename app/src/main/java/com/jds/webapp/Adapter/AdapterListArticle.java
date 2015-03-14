@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -86,12 +87,16 @@ public class AdapterListArticle extends BaseAdapter {
         holder.authorText.setText(AUTHOR);
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
         Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
-        Picasso.with(mAct).load(URL_THUMBNAIL)
-                .fit()
-                .transform(new BlurTransform(mAct))
-                .into(holder.articleListBgImage)
 
-        ;
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk > Build.VERSION_CODES.JELLY_BEAN) {
+            Picasso.with(mAct).load(URL_THUMBNAIL)
+                    .fit()
+                    .transform(new BlurTransform(mAct))
+                    .into(holder.articleListBgImage)
+
+            ;
+        }
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
