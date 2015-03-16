@@ -8,7 +8,6 @@
     android:paddingBottom="10dp"
     android:paddingTop="10dp"
     >
-
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -16,13 +15,13 @@
         android:cropToPadding="false"
         android:layout_marginRight="7dp"
         android:background="@drawable/drop_shadow2" />
-
     <ImageView
         android:layout_width="81dp"
         android:layout_height="81dp"
         android:id="@+id/articleListThumbnail"
         android:layout_marginTop="15dp"
         android:layout_gravity="center_horizontal"
+        android:visibility="gone"
         android:src="@drawable/news" />
 
     <FrameLayout android:layout_width="fill_parent"
@@ -38,7 +37,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_horizontal|bottom"
             android:paddingBottom="10dp"
-            android:background="@drawable/drop_shadow"
+            android:background="@drawable/drop_shadow4"
             android:id="@+id/childContentListLayout" >
 
             <LinearLayout

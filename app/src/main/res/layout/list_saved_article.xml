@@ -105,6 +105,7 @@
         android:id="@+id/btnSaveArticle"
         android:background="@drawable/save"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="top|right|center_vertical"
         android:clickable="true">
 

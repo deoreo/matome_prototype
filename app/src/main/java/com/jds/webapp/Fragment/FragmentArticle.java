@@ -114,7 +114,7 @@ public class FragmentArticle extends Fragment {
             pDialog.dismiss();
             webview.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
-            authorText.setText(Html.fromHtml("<font color='#000011'><i>Oleh : " + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
+            authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
             Log.v("WebS", data);
 
 

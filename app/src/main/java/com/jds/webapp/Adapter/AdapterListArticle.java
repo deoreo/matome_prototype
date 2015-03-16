@@ -84,7 +84,7 @@ public class AdapterListArticle extends BaseAdapter {
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
-        holder.authorText.setText(AUTHOR);
+        holder.authorText.setText(AUTHOR+" ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
         Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
 
@@ -93,9 +93,12 @@ public class AdapterListArticle extends BaseAdapter {
             Picasso.with(mAct).load(URL_THUMBNAIL)
                     .fit()
                     .transform(new BlurTransform(mAct))
-                    .into(holder.articleListBgImage)
-
-            ;
+                    .into(holder.articleListBgImage);
+        }
+        else{
+            Picasso.with(mAct).load(URL_THUMBNAIL)
+                    .fit()
+                    .into(holder.articleListBgImage);
         }
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
