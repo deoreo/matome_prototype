@@ -1,4 +1,5 @@
 package com.jds.webapp.Fragment;
+
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -25,16 +26,15 @@ import io.realm.RealmQuery;
 
 
 public class FragmentHeaderArticle extends Fragment {
-    View btnFacebook,btnTwitter,btnShareOther, btn2;
-    View mVw;
-    Realm realm;
-    public SavedArticleThread savedArticleThread;
+    private View btnFacebook, btnTwitter, btnShareOther, btnSave;
+    private View mVw;
+    private Realm realm;
+    private SavedArticleThread savedArticleThread;
     private String key, title, date, author, pv, thumbnail;
-    Drawable drawableSave;
-    Resources res;
-    int identifierSave;
-    private UiLifecycleHelper uiHelper;
-    String mySharedLink = "http://matome.id/";
+    private Drawable drawableSave;
+    private Resources res;
+    private int identifierSave;
+    private String urlMatome = "http://matome.id/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class FragmentHeaderArticle extends Fragment {
                              Bundle savedInstanceState) {
         this.getExtras();
         res = getResources();
-        identifierSave = res.getIdentifier("save",null,null);
+        identifierSave = res.getIdentifier("save", null, null);
         drawableSave = res.getDrawable(R.drawable.save);
         realm = Realm.getInstance(getActivity());
         RealmQuery<DataListSavedArticle> query = realm.where(DataListSavedArticle.class);
@@ -56,21 +56,20 @@ public class FragmentHeaderArticle extends Fragment {
         btnFacebook = view.findViewById(R.id.btnShareFacebook);
         btnTwitter = view.findViewById(R.id.btnShareTwitter);
         btnShareOther = view.findViewById(R.id.btnShareOther);
-        btn2 = view.findViewById(R.id.btnSave);
-        if(query.equalTo("key", key).count() > 0){
-            btn2.setEnabled(false);
+        btnSave = view.findViewById(R.id.btnSave);
+        if (query.equalTo("key", key).count() > 0) {
+            btnSave.setEnabled(false);
             int sdk = android.os.Build.VERSION.SDK_INT;
-            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                btn2.setBackgroundResource(identifierSave);
+            if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                btnSave.setBackgroundResource(identifierSave);
             } else {
-                btn2.setBackground(drawableSave);
+                btnSave.setBackground(drawableSave);
             }
-        }
-        else btn2.setEnabled(true);
+        } else btnSave.setEnabled(true);
 
         btnFacebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url_article = mySharedLink + key;
+                String url_article = urlMatome + key;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, url_article);
@@ -87,7 +86,7 @@ public class FragmentHeaderArticle extends Fragment {
                 }
 
                 if (!facebookAppFound) {
-                    String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + url_article+"&t="+title;
+                    String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + url_article + "&t=" + title;
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
                 }
 
@@ -97,11 +96,11 @@ public class FragmentHeaderArticle extends Fragment {
         });
         btnTwitter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url_article = mySharedLink + key;
+                String url_article = urlMatome + key;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, url_article);
-                String sharerUrl = "https://twitter.com/intent/tweet?text="+title+"%20-%20"+ url_article+"&via=matome_id";
+                String sharerUrl = "https://twitter.com/intent/tweet?text=" + title + "%20-%20" + url_article + "&via=matome_id";
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
 
                 startActivity(intent);
@@ -113,30 +112,30 @@ public class FragmentHeaderArticle extends Fragment {
                 String url_article = "http://m.matome.id/" + key;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, title+" - "+url_article);
+                intent.putExtra(Intent.EXTRA_TEXT, title + " - " + url_article);
                 startActivity(intent);
 
             }
         });
-        btn2.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.v("HeaderSave", "Save Article");
-                Message message = buildMessage(SavedArticleHandler.ADD_ARTICLE,key,title,date,author,pv,thumbnail);
+                Message message = buildMessage(SavedArticleHandler.ADD_ARTICLE, key, title, date, author, pv, thumbnail);
                 savedArticleThread.handler.sendMessage(message);
                 int sdk = android.os.Build.VERSION.SDK_INT;
-                if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    btn2.setBackgroundResource(identifierSave);
+                if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    btnSave.setBackgroundResource(identifierSave);
                 } else {
-                    btn2.setBackground(drawableSave);
+                    btnSave.setBackground(drawableSave);
                 }
-                btn2.setEnabled(false);
+                btnSave.setEnabled(false);
             }
         });
         return view;
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mVw = getView();
         savedArticleThread = new SavedArticleThread(getActivity());
@@ -153,7 +152,7 @@ public class FragmentHeaderArticle extends Fragment {
         thumbnail = bundle.getString("thumbnail");
     }
 
-    private static Message buildMessage(int action,String key,String title, String date, String author, String pv, String thumbnail) {
+    private static Message buildMessage(int action, String key, String title, String date, String author, String pv, String thumbnail) {
         Bundle bundle = new Bundle(2);
         bundle.putInt(SavedArticleHandler.ACTION, action);
         bundle.putString("key", key);
@@ -166,10 +165,6 @@ public class FragmentHeaderArticle extends Fragment {
         message.setData(bundle);
         return message;
     }
-
-
-
-
 
 
 }

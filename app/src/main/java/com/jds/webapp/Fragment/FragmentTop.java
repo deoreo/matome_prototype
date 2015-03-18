@@ -30,7 +30,7 @@ public class FragmentTop extends Fragment {
         searchText = (TextView) view.findViewById(R.id.SearchText);
         /*
         btnFacebook = (Button) view.findViewById(R.id.btnFacebook);
-        btn2 = (Button) view.findViewById(R.id.btn2);
+        btnSaved = (Button) view.findViewById(R.id.btnSaved);
         Btn1Pressed();
         view.findViewById(R.id.btn1Pressed).setVisibility(View.VISIBLE);
         view.findViewById(R.id.btn2Pressed).setVisibility(View.INVISIBLE);
@@ -44,7 +44,7 @@ public class FragmentTop extends Fragment {
                 mVw.findViewById(R.id.btn2Pressed).setVisibility(View.INVISIBLE);
             }
         });
-        btn2.setOnClickListener(new View.OnClickListener() {
+        btnSaved.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new FragmentListArticle())

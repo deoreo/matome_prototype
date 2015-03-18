@@ -39,7 +39,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     SwipeRefreshLayout mSwipeRefreshLayout;
     AdapterListArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
-    DataArticle article ;
+    DataArticle article;
     Filter INI_FILTER;
 
     private static String KEY_RESULT = "result";
@@ -56,6 +56,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     String fragmentTag;
     private ArticlePersistence articlePersistence;
     private static String TAG = "FragmentListAticle";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +69,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         articlePersistence = new ArticlePersistence(getActivity());
         //LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
         View view = inflater.inflate(R.layout.activity_fragment_list_article, container, false);
-        mListView = (ListView)view.findViewById(R.id.lvArticle);
+        mListView = (ListView) view.findViewById(R.id.lvArticle);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
@@ -77,19 +78,17 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                 android.R.color.holo_red_light);
         try {
             fragmentTag = getFragmentManager().findFragmentByTag("search").getTag();
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             fragmentTag = "";
         }
         Log.v("FragmentArticle", fragmentTag);
         int articleCount = articlePersistence.getListSavedArticle().size();
-        if(!fragmentTag.equals("search")) {
-            if(articleCount <= 0)
+        if (!fragmentTag.equals("search")) {
+            if (articleCount <= 0)
                 new GetArticle().execute();
             else
                 new GetArticleFromSharedPref().execute();
-        }
-        else{
+        } else {
 
             LIST_ARTICLE_MATOME = articlePersistence.getListSavedArticle();
             new SearchArticle(keyword, LIST_ARTICLE_MATOME).execute();
@@ -125,8 +124,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             ArticleControl articleControl = new ArticleControl();
             json = articleControl.listArticle();
             if (json != null) {
-                for(int i=0; i<json.length(); i++){
-                    String key="";
+                for (int i = 0; i < json.length(); i++) {
+                    String key = "";
                     String thumbnail = "";
                     String title = "";
                     String pv = "";
@@ -134,7 +133,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                     String posdate = "";
                     String author = "";
                     String postcontent = "";
-                    boolean status=true;
+                    boolean status = true;
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
                         key = jsonObject.getString(KEY_KEY);
@@ -146,29 +145,29 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                         posdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
                         JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
                         author = jsonObject1.getString(KEY_AUTHOR);
-                        try{
-                            Document doc = Jsoup.connect("http://matome.id/" +key).get();
-                            String primeDiv="content";
-                        //scrap content
-                        Elements content = doc.select("div[id="+primeDiv+"]");
-                        for (Element post : content) {
-                            Elements post_content = post.getElementsByClass("post-content");
-                            for(Element c : post_content){
-                                c.getElementsByClass("post-sns").remove();
-                                c.getElementsByClass("post-info").remove();
-                                c.getElementsByClass("author-line").remove();
-                                postcontent = c.text();
+                        try {
+                            Document doc = Jsoup.connect("http://matome.id/" + key).get();
+                            String primeDiv = "content";
+                            //scrap content
+                            Elements content = doc.select("div[id=" + primeDiv + "]");
+                            for (Element post : content) {
+                                Elements post_content = post.getElementsByClass("post-content");
+                                for (Element c : post_content) {
+                                    c.getElementsByClass("post-sns").remove();
+                                    c.getElementsByClass("post-info").remove();
+                                    c.getElementsByClass("author-line").remove();
+                                    postcontent = c.text();
+                                }
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                         status = true;
                     } catch (JSONException e) {
                         e.printStackTrace();
                         status = false;
                     }
-                    if(status) {
+                    if (status) {
                         article = new DataArticle();
                         article.setKey(key);
                         article.setThumbnail(thumbnail);
@@ -182,7 +181,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                 }
 
                 persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
-                mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
+                mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME, "FragmentListArticleNoSearch");
 
             }
 
@@ -203,10 +202,12 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         ProgressDialog pDialog;
         public String keyword;
         public List<DataArticle> dataArticles;
-        public SearchArticle(String keyword, List<DataArticle> dataArticles){
+
+        public SearchArticle(String keyword, List<DataArticle> dataArticles) {
             this.keyword = keyword;
             this.dataArticles = dataArticles;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -221,7 +222,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         @Override
         protected Filter doInBackground(String... arg) {
             INI_FILTER = new Filter(dataArticles);
-            mAdapter = new AdapterListArticle(getActivity(), INI_FILTER.getFilter(keyword));
+            mAdapter = new AdapterListArticle(getActivity(), INI_FILTER.getFilter(keyword), "FragmentListArticleWithSearch");
             return INI_FILTER;
         }
 
@@ -238,6 +239,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     public class GetArticleFromSharedPref extends AsyncTask<String, Void, String> {
         ProgressDialog pDialog;
         ArticlePersistence articlePersistence = new ArticlePersistence(getActivity());
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -252,7 +254,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         @Override
         protected String doInBackground(String... arg) {
             LIST_ARTICLE_MATOME = articlePersistence.getListSavedArticle();
-            mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
+            mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME, "FragmentListArticleWithSearch");
             return "Success";
         }
 
@@ -266,7 +268,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         }
     }
 
-    private Date convertFormatDate(final String iso8601string){
+    private Date convertFormatDate(final String iso8601string) {
         String s = iso8601string.replace("Z", "+00:00");
         try {
             s = s.substring(0, 22) + s.substring(23);
@@ -285,7 +287,9 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
 
     private void getExtras() {
         Bundle bundle = getArguments();
-        if(bundle!=null){keyword = bundle.getString(KEY_WORD);}
+        if (bundle != null) {
+            keyword = bundle.getString(KEY_WORD);
+        }
     }
 
 }

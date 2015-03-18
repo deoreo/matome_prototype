@@ -14,16 +14,17 @@ public class ArticleListClickListener implements View.OnClickListener{
 
     private DataArticle dataArticle;
     private String key, title, date, author, pv, thumbnail;
+    private String fromAdapter;
 
-    public ArticleListClickListener(FragmentActivity activity, String key,String title, String date, String author, String pv, String thumbnail){
+    public ArticleListClickListener(FragmentActivity activity, String fromAdapter, String key,String title, String date, String author, String pv, String thumbnail){
         mActivity = activity;
+        this.fromAdapter = fromAdapter;
         this.key = key;
         this.title = title;
         this.date = date;
         this.author = author;
         this.pv = pv;
         this.thumbnail = thumbnail;
-
     }
 
     @Override
@@ -36,6 +37,15 @@ public class ArticleListClickListener implements View.OnClickListener{
         args.putString("pv", pv);
         args.putString("thumbnail", thumbnail);
         FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+        if(fromAdapter.equals("AdapterListArticle")) {
+            PageManager.getInstance().fromFragment = "FragmentHome";
+        }
+        else if(fromAdapter.equals("AdapterSavedArticle")) {
+            PageManager.getInstance().fromFragment = "FragmentSaved";
+        }
+        else if(fromAdapter.equals("AdapterListArticleSearch")) {
+            PageManager.getInstance().fromFragment = "FragmentSearch";
+        }
         try {
             FragmentArticle fragmentArticle = new FragmentArticle();
             FragmentHeaderArticle fragmentHeaderArticle = new FragmentHeaderArticle();

@@ -1,7 +1,6 @@
 package com.jds.webapp.Fragment;
 
 import android.content.Context;
-import android.opengl.Visibility;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,18 +11,20 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.View.OnKeyListener;
 
+import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 
 
-public class FragmentHeaderMain extends Fragment implements OnKeyListener  {
-    View btn1, btn2, btn3, btnClose;
+public class FragmentHeaderMain extends Fragment implements OnKeyListener {
+    View btnHome, btnSaved, btnSearch, btnClose;
+    View btnHomePressed, btnSavedPressed, btnSearchPressed;
     View mVw;
     View searchView;
     EditText searchText;
+    String fromFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,125 +38,152 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener  {
         if (container == null) {
             return null;
         }
-            btn1 = view.findViewById(R.id.btnHome);
-            btn2 = view.findViewById(R.id.btnSaved);
-            btn3 = view.findViewById(R.id.btnSearch);
-            btnClose = view.findViewById(R.id.closeBtn);
-            searchView = view.findViewById(R.id.searchLayout);
-            searchText = (EditText) view.findViewById(R.id.searchText);
-            btnHomePressed();
-            view.findViewById(R.id.btnHomePressed).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
+        btnHome = view.findViewById(R.id.btnHome);
+        btnSaved = view.findViewById(R.id.btnSaved);
+        btnSearch = view.findViewById(R.id.btnSearch);
+        btnHomePressed = view.findViewById(R.id.btnHomePressed);
+        btnSavedPressed = view.findViewById(R.id.btnSavedPressed);
+        btnSearchPressed = view.findViewById(R.id.btnSearchPressed);
+        btnClose = view.findViewById(R.id.closeBtn);
+        searchView = view.findViewById(R.id.searchLayout);
+        searchText = (EditText) view.findViewById(R.id.searchText);
 
-            btn1.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new FragmentListArticle())
-                            .commit();
-                    btnHomePressed();
-                    mVw.findViewById(R.id.btnHomePressed).setVisibility(View.VISIBLE);
-                    mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
-                    mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
-                }
-            });
-            btn2.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new FragmentListSavedArticle())
-                            .commit();
-                    btnSavedPressed();
-                    mVw.findViewById(R.id.btnHomePressed).setVisibility(View.INVISIBLE);
-                    mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.VISIBLE);
-                    mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
-                }
-            });
-        btn3.setOnClickListener(new View.OnClickListener() {
+        checkFromFragment();
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new FragmentListArticle())
+                        .commit();
+                btnHomePressed();
+
+            }
+        });
+        btnSaved.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new FragmentListSavedArticle())
+                        .commit();
+                btnSavedPressed();
+
+            }
+        });
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
                 searchView.setVisibility(View.VISIBLE);
                 btnSearchPressed();
-                mVw.findViewById(R.id.btnHomePressed).setVisibility(View.INVISIBLE);
-                mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
-                mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.VISIBLE);
+
 
             }
         });
         btnClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 searchView.setVisibility(View.GONE);
-                btnHomePressed();
-                mVw.findViewById(R.id.btnHomePressed).setVisibility(View.VISIBLE);
-                mVw.findViewById(R.id.btnSavedPressed).setVisibility(View.INVISIBLE);
-                mVw.findViewById(R.id.btnSearchPressed).setVisibility(View.INVISIBLE);
+                checkFromFragment();
                 // Hides keyboard
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(searchText.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
                 searchText.setText("");
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction().replace(R.id.container, new FragmentListArticle()).commit();
+                if(fromFragment.equals("FragmentHome")) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction().replace(R.id.container, new FragmentListArticle()).commit();
+                }
+                else if(fromFragment.equals("FragmentSaved")){
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction().replace(R.id.container, new FragmentListSavedArticle()).commit();
+                }
             }
         });
         searchText.setOnKeyListener(this);
 
-            return view;
+        return view;
     }
-    private void btnHomePressed(){
 
-        btn1.setSelected(true);
-        btn1.setEnabled(false);
-        btn1.setClickable(false);
-        btn2.setSelected(false);
-        btn2.setEnabled(true);
-        btn2.setClickable(true);
-        btn3.setSelected(false);
-        btn3.setEnabled(true);
-        btn3.setClickable(true);
+    private void btnHomePressed() {
+
+        btnHome.setSelected(true);
+        btnHome.setEnabled(false);
+        btnHome.setClickable(false);
+        btnSaved.setSelected(false);
+        btnSaved.setEnabled(true);
+        btnSaved.setClickable(true);
+        btnSearch.setSelected(false);
+        btnSearch.setEnabled(true);
+        btnSearch.setClickable(true);
+        btnHomePressed.setVisibility(View.VISIBLE);
+        btnSavedPressed.setVisibility(View.INVISIBLE);
+        btnSearchPressed.setVisibility(View.INVISIBLE);
+        PageManager.getInstance().fromFragment = "FragmentHome";
     }
-    private void btnSavedPressed(){
-        btn1.setSelected(false);
-        btn1.setEnabled(true);
-        btn1.setClickable(true);
-        btn2.setSelected(true);
-        btn2.setEnabled(false);
-        btn2.setClickable(false);
-        btn3.setSelected(false);
-        btn3.setEnabled(true);
-        btn3.setClickable(true);
+
+    private void btnSavedPressed() {
+        btnHome.setSelected(false);
+        btnHome.setEnabled(true);
+        btnHome.setClickable(true);
+        btnSaved.setSelected(true);
+        btnSaved.setEnabled(false);
+        btnSaved.setClickable(false);
+        btnSearch.setSelected(false);
+        btnSearch.setEnabled(true);
+        btnSearch.setClickable(true);
+        btnHomePressed.setVisibility(View.INVISIBLE);
+        btnSavedPressed.setVisibility(View.VISIBLE);
+        btnSearchPressed.setVisibility(View.INVISIBLE);
+        PageManager.getInstance().fromFragment = "FragmentSaved";
     }
-    private void btnSearchPressed(){
-        btn1.setSelected(false);
-        btn1.setEnabled(true);
-        btn1.setClickable(true);
-        btn2.setSelected(false);
-        btn2.setEnabled(true);
-        btn2.setClickable(true);
-        btn3.setSelected(true);
-        btn3.setEnabled(false);
-        btn3.setClickable(false);
+
+    private void btnSearchPressed() {
+        btnHome.setSelected(false);
+        btnHome.setEnabled(true);
+        btnHome.setClickable(true);
+        btnSaved.setSelected(false);
+        btnSaved.setEnabled(true);
+        btnSaved.setClickable(true);
+        btnSearch.setSelected(true);
+        btnSearch.setEnabled(false);
+        btnSearch.setClickable(false);
+        btnHomePressed.setVisibility(View.INVISIBLE);
+        btnSavedPressed.setVisibility(View.INVISIBLE);
+        btnSearchPressed.setVisibility(View.VISIBLE);
+
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mVw = getView();
     }
 
     @Override
     public boolean onKey(View view, int keyCode, KeyEvent event) {
-        Log.v("FragmentHeader", "OnKey");
         if (keyCode == EditorInfo.IME_ACTION_SEARCH ||
                 keyCode == EditorInfo.IME_ACTION_DONE ||
                 event.getAction() == KeyEvent.ACTION_DOWN &&
                         event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-            //"http://m.matome.id/search/midori"
             String strSearch = searchText.getText().toString();
-            Bundle args= new Bundle();
-            args.putString("keyword",strSearch);
+            Bundle args = new Bundle();
+            args.putString("keyword", strSearch);
             FragmentListArticle fragmentListArticle = new FragmentListArticle();
             fragmentListArticle.setArguments(args);
             getActivity().getSupportFragmentManager()
-                    .beginTransaction().replace(R.id.container, fragmentListArticle,"search").commit();
+                    .beginTransaction().replace(R.id.container, fragmentListArticle, "search").commit();
         }
         return false;
+    }
+
+
+    private void checkFromFragment(){
+        fromFragment= PageManager.getInstance().fromFragment;
+        if(fromFragment.equals("FragmentMain") || fromFragment.equals("FragmentHome")){
+            btnHomePressed();
+        }
+        else if(fromFragment.equals("FragmentSaved")){
+            btnSavedPressed();
+
+        }
+        else if(fromFragment.equals("FragmentSearch")){
+            btnSearchPressed();
+        }
     }
 }

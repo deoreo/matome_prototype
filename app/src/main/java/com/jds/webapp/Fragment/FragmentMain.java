@@ -11,6 +11,7 @@ import android.view.Window;
 import com.facebook.AppEventsLogger;
 import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
+import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleThread;
 
@@ -37,15 +38,12 @@ public class FragmentMain extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragmentListArticle)
                     .commit();
-            /*
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.topLayout, new FragmentTop())
-                    .commit();
-                    */
+
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.headerLayout, new FragmentHeaderMain())
                     .commit();
+            PageManager.getInstance().fromFragment = "FragmentMain";
 
 
         }

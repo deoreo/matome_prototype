@@ -102,7 +102,7 @@ public class AdapterSavedArticle extends BaseAdapter {
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR);
         //holder.pvText.setText(PV);
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY,TITLE,DATE,AUTHOR,PV,THUMBNAIL));
+        convertView.setOnClickListener(new ArticleListClickListener(mAct,"AdapterSavedArticle", KEY,TITLE,DATE,AUTHOR,PV,THUMBNAIL));
 
         holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
             @Override

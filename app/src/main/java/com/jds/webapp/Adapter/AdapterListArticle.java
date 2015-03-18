@@ -35,13 +35,13 @@ public class AdapterListArticle extends BaseAdapter {
     private FragmentActivity mAct;
     private List<DataArticle> mSourceData, mFilterData;
     private LayoutInflater mInflater =null;
-    public String content;
+    public String content, from;
 
-    public AdapterListArticle(FragmentActivity activity,List<DataArticle> d) {
+    public AdapterListArticle(FragmentActivity activity,List<DataArticle> d, String from) {
         mAct = activity;
         mSourceData = d;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        this.from = from;
     }
 
     @Override
@@ -93,9 +93,12 @@ public class AdapterListArticle extends BaseAdapter {
                     .fit()
                     .into(holder.articleListBgImage);
 
-
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
-
+        if(from.equals("FragmentListArticleNoSearch")) {
+            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterListArticle", KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
+        }
+        else if(from.equals("FragmentListArticleWithSearch")) {
+            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterListArticleSearch", KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
+        }
         return convertView;
     }
 
