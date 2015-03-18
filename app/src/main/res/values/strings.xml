@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Matome</string>
 
+    <string name="facebook_app_id">1547630815497663</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_fragment_main">FragmentMain</string>
@@ -9,17 +10,6 @@
     <string name="title_activity_fragment_footer">FragmentFooter</string>
     <string name="title_activity_fragment_top">FragmentTop</string>
     <string name="title_activity_fragment_list_article">FragmentListArticle</string>
-    <string-array name="cat_names">
-        <item>George</item>
-        <item>Zubin</item>
-        <item>Carlos</item>
-        <item>Frank</item>
-        <item>Charles</item>
-        <item>Simon</item>
-        <item>Fezra</item>
-        <item>Henry</item>
-        <item>Schuster</item>
-    </string-array>
     <string name="title_activity_fragment_header_article">FragmentHeaderArticle</string>
     <string name="title_activity_fragment_saved_article">FragmentSavedArticle</string>
 </resources>

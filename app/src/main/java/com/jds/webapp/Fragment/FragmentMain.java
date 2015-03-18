@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
+import com.facebook.AppEventsLogger;
 import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
@@ -17,6 +18,7 @@ import java.io.File;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
 
 
 public class FragmentMain extends FragmentActivity {
@@ -48,5 +50,7 @@ public class FragmentMain extends FragmentActivity {
 
         }
     }
+
+
 
 }

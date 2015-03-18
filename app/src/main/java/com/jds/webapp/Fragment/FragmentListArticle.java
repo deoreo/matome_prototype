@@ -84,8 +84,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         Log.v("FragmentArticle", fragmentTag);
         int articleCount = articlePersistence.getListSavedArticle().size();
         if(!fragmentTag.equals("search")) {
-
-            if(articleCount < 0)
+            if(articleCount <= 0)
                 new GetArticle().execute();
             else
                 new GetArticleFromSharedPref().execute();
