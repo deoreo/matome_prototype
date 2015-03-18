@@ -79,7 +79,7 @@ public class AdapterListArticle extends BaseAdapter {
         final String PV = article.getPv();
         final String KEY = article.getKey();
         final String THUMBNAIL = article.getThumbnail();
-        final String URL_THUMBNAIL = "http://api.matome.id/photo/"+THUMBNAIL+"?w=100&h=100&c=fill";
+        final String URL_THUMBNAIL = "http://api.matome.id/photo/"+THUMBNAIL+"?w=310&h=260&c=fill";
         content = article.getContent();
 
         holder.titleText.setText(TITLE);
@@ -88,18 +88,11 @@ public class AdapterListArticle extends BaseAdapter {
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
         Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
 
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk > Build.VERSION_CODES.JELLY_BEAN) {
-            Picasso.with(mAct).load(URL_THUMBNAIL)
-                    .fit()
-                    .transform(new BlurTransform(mAct))
-                    .into(holder.articleListBgImage);
-        }
-        else{
+
             Picasso.with(mAct).load(URL_THUMBNAIL)
                     .fit()
                     .into(holder.articleListBgImage);
-        }
+
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +45,14 @@ public class FragmentArticle extends Fragment {
         authorText = (TextView)view.findViewById(R.id.authorText);
         webview = (WebView) view.findViewById(R.id.webView);
         webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webview.getSettings().setBuiltInZoomControls(true);
+
+       // webview.getSettings().setLoadWithOverviewMode(true);
+        //webview.getSettings().setUseWideViewPort(true);
+        //webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        webview.setScrollbarFadingEnabled(true);
+
         articleImage = (ImageView) view.findViewById(R.id.articleImage);
         Picasso.with(getActivity()).load(thumbnail)
                 .fit()
@@ -112,7 +121,10 @@ public class FragmentArticle extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             pDialog.dismiss();
-            webview.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+            webview.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100%;}</style>"+
+                    "<style>blockquote{margin: 1em 0 0;padding: 10px 15px 18px 40px;background-color: #f5f5f5;background-image: url(http://matome.id/images/quote.png);background-position: 10px 10px;background-repeat: no-repeat;border-radius: 5px;}</style>"+
+                    "<style>a{display:block;width:300px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:small;text-decoration:none;margin:auto}</style>"+
+                    "<body>"+data+"</body>", "text/html", "utf-8", null);
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
             authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
             Log.v("WebS", data);
