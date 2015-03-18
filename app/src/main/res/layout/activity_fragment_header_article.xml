@@ -33,6 +33,39 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             >
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/frameShareFacebook"
+                android:layout_weight="1" >
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/btnShareFacebook"
+                    android:background="@drawable/fb"
+                    android:layout_gravity="center"
+                    android:clickable="true" >
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/frameShareTwitter"
+                android:layout_weight="1" >
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/btnShareTwitter"
+                    android:background="@drawable/twitter"
+                    android:layout_gravity="center"
+                    android:clickable="true" >
+                </FrameLayout>
+            </FrameLayout>
+
 
             <FrameLayout
                 android:layout_width="fill_parent"
@@ -43,7 +76,7 @@
                 <FrameLayout
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:id="@+id/btnShare"
+                    android:id="@+id/btnShareOther"
                     android:background="@drawable/share"
                     android:layout_gravity="center"
                     android:clickable="true" >

@@ -1,7 +1,9 @@
 package com.jds.webapp.Fragment;
-
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,17 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.UiLifecycleHelper;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleHandler;
 import com.jds.webapp.SavedArticleThread;
+
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 
 
 public class FragmentHeaderArticle extends Fragment {
-    View btn1, btn2;
+    View btnFacebook,btnTwitter,btnShareOther, btn2;
     View mVw;
     Realm realm;
     public SavedArticleThread savedArticleThread;
@@ -28,6 +33,9 @@ public class FragmentHeaderArticle extends Fragment {
     Drawable drawableSave;
     Resources res;
     int identifierSave;
+    private UiLifecycleHelper uiHelper;
+    String mySharedLink = "http://matome.id/";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +52,10 @@ public class FragmentHeaderArticle extends Fragment {
         realm = Realm.getInstance(getActivity());
         RealmQuery<DataListSavedArticle> query = realm.where(DataListSavedArticle.class);
         View view = inflater.inflate(R.layout.activity_fragment_header_article, container, false);
-        if (container == null) {
-        }
-        btn1 = view.findViewById(R.id.btnShare);
+
+        btnFacebook = view.findViewById(R.id.btnShareFacebook);
+        btnTwitter = view.findViewById(R.id.btnShareTwitter);
+        btnShareOther = view.findViewById(R.id.btnShareOther);
         btn2 = view.findViewById(R.id.btnSave);
         if(query.equalTo("key", key).count() > 0){
             btn2.setEnabled(false);
@@ -59,8 +68,54 @@ public class FragmentHeaderArticle extends Fragment {
         }
         else btn2.setEnabled(true);
 
-        btn1.setOnClickListener(new View.OnClickListener() {
+        btnFacebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                String url_article = mySharedLink + key;
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, url_article);
+
+                // See if official Facebook app is found
+                boolean facebookAppFound = false;
+                List<ResolveInfo> matches = getActivity().getPackageManager().queryIntentActivities(intent, 0);
+                for (ResolveInfo info : matches) {
+                    if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+                        intent.setPackage(info.activityInfo.packageName);
+                        facebookAppFound = true;
+                        break;
+                    }
+                }
+
+                if (!facebookAppFound) {
+                    String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + url_article+"&t="+title;
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+                }
+
+                startActivity(intent);
+
+            }
+        });
+        btnTwitter.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String url_article = mySharedLink + key;
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, url_article);
+                String sharerUrl = "https://twitter.com/intent/tweet?text="+title+"%20-%20"+ url_article+"&via=matome_id";
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+
+                startActivity(intent);
+
+            }
+        });
+        btnShareOther.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String url_article = "http://m.matome.id/" + key;
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, title+" - "+url_article);
+                startActivity(intent);
+
             }
         });
         btn2.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +135,10 @@ public class FragmentHeaderArticle extends Fragment {
         return view;
     }
 
-
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mVw = getView();
-
         savedArticleThread = new SavedArticleThread(getActivity());
         savedArticleThread.start();
     }
@@ -113,4 +166,10 @@ public class FragmentHeaderArticle extends Fragment {
         message.setData(bundle);
         return message;
     }
+
+
+
+
+
+
 }

@@ -5,7 +5,7 @@ android {
         apksigned {
             keyAlias 'apksigned'
             keyPassword 'apksigned'
-            storeFile file('C:/jds_attendance/WebApp/keystore/apksigned.jks')
+            storeFile file('C:/EDO_LearningAndroidStudio/Matome/keystore/apksigned.jks')
             storePassword 'apksigned'
         }
     }
@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:support-v4:21.0.+'
     compile 'org.jsoup:jsoup:1.8.1'

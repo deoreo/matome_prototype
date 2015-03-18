@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ProgressBar;
-
-import com.facebook.AppEventsLogger;
-import com.facebook.Session;
 import com.jds.webapp.Fragment.FragmentMain;
 
 import java.security.MessageDigest;
@@ -82,18 +79,6 @@ public class SplashScreen extends Activity {
 
 	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
 
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-    }
 }

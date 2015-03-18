@@ -1,22 +1,17 @@
 package com.jds.webapp.Fragment;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.jds.webapp.Adapter.AdapterSavedArticle;
-import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleThread;

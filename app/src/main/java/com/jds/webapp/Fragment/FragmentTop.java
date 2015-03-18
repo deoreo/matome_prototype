@@ -29,12 +29,12 @@ public class FragmentTop extends Fragment {
         }
         searchText = (TextView) view.findViewById(R.id.SearchText);
         /*
-        btn1 = (Button) view.findViewById(R.id.btn1);
+        btnFacebook = (Button) view.findViewById(R.id.btnFacebook);
         btn2 = (Button) view.findViewById(R.id.btn2);
         Btn1Pressed();
         view.findViewById(R.id.btn1Pressed).setVisibility(View.VISIBLE);
         view.findViewById(R.id.btn2Pressed).setVisibility(View.INVISIBLE);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        btnFacebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new FragmentHome())
