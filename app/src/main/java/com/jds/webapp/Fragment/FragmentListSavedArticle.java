@@ -16,30 +16,25 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.jds.webapp.Adapter.AdapterSavedArticle;
-import com.jds.webapp.ArticlePersistence;
-import com.jds.webapp.DataArticle;
+import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
-import com.jds.webapp.SavedArticleHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.jds.webapp.SavedArticleThread;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 
-public class FragmentListSavedArticle extends Fragment {
+public class FragmentListSavedArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     ListView mListView;
     SwipeRefreshLayout mSwipeRefreshLayout;
     AdapterSavedArticle mAdapter;
     RealmResults<DataListSavedArticle> mListArticle;
     private FragmentActivity mAct;
+    public SavedArticleThread savedArticleThread;
 
     private static String TAG = "FragmentListAticle";
     @Override
@@ -54,18 +49,35 @@ public class FragmentListSavedArticle extends Fragment {
         View view = inflater.inflate(R.layout.activity_fragment_saved_article, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_saved_swipe_refresh_layout);
         mListView = (ListView)view.findViewById(R.id.lvSavedArticle);
-        mAdapter = new AdapterSavedArticle(mAct);
-        mListView.setAdapter(mAdapter);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        new GetListSavedArticle(mAct, savedArticleThread).execute();
         return view;
+    }
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        savedArticleThread = new SavedArticleThread(getActivity());
+        savedArticleThread.start();
+    }
+
+    @Override
+    public void onRefresh() {
+        new GetListSavedArticle(mAct, savedArticleThread).execute();
     }
 
 
-    public class GetListSavedArticle extends AsyncTask<Void, Void, AdapterSavedArticle> {
+    public class GetListSavedArticle extends AsyncTask<Void, Void, String> {
         ProgressDialog pDialog;
         private FragmentActivity fragmentActivity;
+        private SavedArticleThread savedArticleThread;
 
-        public GetListSavedArticle(FragmentActivity fragmentActivity){
+        public GetListSavedArticle(FragmentActivity fragmentActivity, SavedArticleThread savedArticleThread){
             this.fragmentActivity = fragmentActivity;
+            this.savedArticleThread = savedArticleThread;
         }
 
         @Override
@@ -77,21 +89,23 @@ public class FragmentListSavedArticle extends Fragment {
             pDialog.setCancelable(false);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.show();
+            mSwipeRefreshLayout.setRefreshing(true);
 
         }
 
         @Override
-        protected  AdapterSavedArticle doInBackground(Void... arg) {
-
-            return mAdapter;
+        protected  String doInBackground(Void... arg) {
+            return "result";
         }
 
         @Override
-        protected void onPostExecute(final AdapterSavedArticle results) {
+        protected void onPostExecute(final String results) {
             // TODO Auto-generated method stub
             super.onPostExecute(results);
             pDialog.dismiss();
-
+            mAdapter = new AdapterSavedArticle(fragmentActivity);
+            mListView.setAdapter(mAdapter);
+            mSwipeRefreshLayout.setRefreshing(false);
             return;
         }
     }

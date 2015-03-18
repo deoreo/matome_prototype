@@ -25,6 +25,7 @@ public class SavedArticleHandler extends Handler {
 
     public static final int ADD_ARTICLE = 1;
     public static final int LOAD_ARTICLE = 2;
+    public static final int REMOVE_ARTICLE = 3;
     public static final String ACTION = "action";
 
     private String key, title, date, author, pv,thumbnail;
@@ -59,6 +60,11 @@ public class SavedArticleHandler extends Handler {
                 break;
             case LOAD_ARTICLE:
                 realm.where(DataListSavedArticle.class).findAll();
+                break;
+            case REMOVE_ARTICLE:
+                realm.beginTransaction();
+                realm.where(DataListSavedArticle.class).equalTo("key", key).findAll().clear();
+                realm.commitTransaction();
                 break;
         }
     }

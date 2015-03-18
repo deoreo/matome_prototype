@@ -71,7 +71,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         mListView = (ListView)view.findViewById(R.id.lvArticle);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+        mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);

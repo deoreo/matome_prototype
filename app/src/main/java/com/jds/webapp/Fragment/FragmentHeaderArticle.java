@@ -43,8 +43,6 @@ public class FragmentHeaderArticle extends Fragment {
         drawableSave = res.getDrawable(R.drawable.save);
         realm = Realm.getInstance(getActivity());
         RealmQuery<DataListSavedArticle> query = realm.where(DataListSavedArticle.class);
-
-
         View view = inflater.inflate(R.layout.activity_fragment_header_article, container, false);
         if (container == null) {
         }

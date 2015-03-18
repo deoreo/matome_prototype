@@ -5,8 +5,10 @@ import android.content.ContextWrapper;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 
+import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleThread;

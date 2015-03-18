@@ -1,5 +1,6 @@
 package com.jds.webapp.Adapter;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,21 +8,32 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.DataListSavedArticle;
+import com.jds.webapp.Fragment.FragmentArticle;
+import com.jds.webapp.Fragment.FragmentHeaderArticle;
+import com.jds.webapp.Fragment.FragmentListSavedArticle;
 import com.jds.webapp.R;
+import com.jds.webapp.SavedArticleHandler;
+import com.jds.webapp.SavedArticleThread;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -47,6 +59,7 @@ public class AdapterSavedArticle extends BaseAdapter {
     }
 
 
+
     @Override
     public int getCount() {
         return mSourceData.size();
@@ -60,6 +73,11 @@ public class AdapterSavedArticle extends BaseAdapter {
         return position;
     }
 
+    public void removePayOnClickHandler(View v) {
+        AlertDialogManager alertDialogManager = new AlertDialogManager();
+        alertDialogManager.showAlertDialog(mAct.getApplicationContext(), "Delete", "Delete article?", true);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -69,6 +87,7 @@ public class AdapterSavedArticle extends BaseAdapter {
         holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
         holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
         holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
+        holder.deleteArticle = (ImageButton) convertView.findViewById(R.id.btnDeleteArticle);
         convertView.setTag(holder);
 
         mSourceData.get(position);
@@ -84,6 +103,33 @@ public class AdapterSavedArticle extends BaseAdapter {
         holder.authorText.setText(AUTHOR);
         //holder.pvText.setText(PV);
         convertView.setOnClickListener(new ArticleListClickListener(mAct, KEY,TITLE,DATE,AUTHOR,PV,THUMBNAIL));
+
+        holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("ADAPTER", "Click Delete Button - "+KEY);
+                Realm realm = Realm.getInstance(mAct);
+                SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
+
+                savedArticleThread.start();
+                realm.beginTransaction();
+                realm.where(DataListSavedArticle.class).equalTo("key", KEY).findAll().clear();
+                realm.commitTransaction();
+
+
+                FragmentTransaction ft = mAct.getSupportFragmentManager().beginTransaction();
+                try {
+                    FragmentListSavedArticle fragmentArticle = new FragmentListSavedArticle();
+                    ft.replace(R.id.container, fragmentArticle);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
         return convertView;
     }
 
@@ -92,6 +138,7 @@ public class AdapterSavedArticle extends BaseAdapter {
         public TextView dateText;
         public TextView authorText;
         public TextView pvText;
+        public ImageButton deleteArticle;
     }
 
 

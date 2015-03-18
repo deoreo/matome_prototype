@@ -102,14 +102,18 @@
     <FrameLayout
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/btnSaveArticle"
-        android:background="@drawable/save"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/btnDeleteLayout"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
         android:layout_gravity="top|right|center_vertical"
-        android:clickable="true">
+        >
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnDeleteArticle"
+            android:background="@drawable/close"
+           />
 
-
-        </FrameLayout>
+    </FrameLayout>
 
 </FrameLayout>
