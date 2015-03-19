@@ -73,7 +73,6 @@
                         android:id="@+id/btnSavedPressed" />
                 </FrameLayout>
             </FrameLayout>
-
         </LinearLayout>
 
         <LinearLayout
