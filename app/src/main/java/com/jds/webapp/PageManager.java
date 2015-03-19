@@ -7,7 +7,7 @@ public class PageManager {
     private static PageManager sInstance;
 
     // Stated variables
-    public String fromFragment;
+    public String fromFragment, fromSearch;
 
 	public PageManager() { }
 

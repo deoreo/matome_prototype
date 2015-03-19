@@ -43,9 +43,7 @@ public class ArticleListClickListener implements View.OnClickListener{
         else if(fromAdapter.equals("AdapterSavedArticle")) {
             PageManager.getInstance().fromFragment = "FragmentSaved";
         }
-        else if(fromAdapter.equals("AdapterListArticleSearch")) {
-            PageManager.getInstance().fromFragment = "FragmentSearch";
-        }
+
         try {
             FragmentArticle fragmentArticle = new FragmentArticle();
             FragmentHeaderArticle fragmentHeaderArticle = new FragmentHeaderArticle();
