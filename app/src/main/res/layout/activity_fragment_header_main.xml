@@ -73,25 +73,7 @@
                         android:id="@+id/btnSavedPressed" />
                 </FrameLayout>
             </FrameLayout>
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/frameLayoutBtnSearch"
-                android:layout_weight="1">
 
-                <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/btnSearch"
-                    android:background="@drawable/search"
-                    android:layout_gravity="center"
-                    android:clickable="true" >
-
-                    <include
-                        layout="@layout/pressed"
-                        android:id="@+id/btnSearchPressed" />
-                </FrameLayout>
-            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
