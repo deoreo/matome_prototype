@@ -9,8 +9,6 @@
     <FrameLayout android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/parentContentListLayout">
-
-
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="100dp"
@@ -111,7 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnDeleteArticle"
-            android:background="@drawable/close"
+            android:background="@drawable/recycle"
            />
 
     </FrameLayout>
