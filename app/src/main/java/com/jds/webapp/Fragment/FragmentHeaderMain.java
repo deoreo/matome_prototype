@@ -87,7 +87,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction().replace(R.id.container, new FragmentListArticle()).commit();
                 }
-                if(fromFragment.equals("FragmentSaved")){
+                else if(fromFragment.equals("FragmentSaved")){
                     btnSavedPressed();
                     getActivity().getSupportFragmentManager()
                             .beginTransaction().replace(R.id.container, new FragmentListSavedArticle()).commit();
@@ -114,7 +114,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
         btnHomePressed.setVisibility(View.VISIBLE);
         btnSavedPressed.setVisibility(View.INVISIBLE);
         btnSearchPressed.setVisibility(View.INVISIBLE);
-        PageManager.getInstance().fromFragment = "FragmentHome";
+        fromFragment = PageManager.getInstance().fromFragment = "FragmentHome";
     }
 
     private void btnSavedPressed() {
@@ -130,7 +130,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
         btnHomePressed.setVisibility(View.INVISIBLE);
         btnSavedPressed.setVisibility(View.VISIBLE);
         btnSearchPressed.setVisibility(View.INVISIBLE);
-        PageManager.getInstance().fromFragment = "FragmentSaved";
+        fromFragment = PageManager.getInstance().fromFragment = "FragmentSaved";
     }
 
     private void btnSearchPressed() {
@@ -147,7 +147,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
         btnSavedPressed.setVisibility(View.INVISIBLE);
         btnSearchPressed.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.VISIBLE);
-        PageManager.getInstance().fromFragment = "FragmentSearch";
+        fromFragment = PageManager.getInstance().fromFragment = "FragmentSearch";
 
     }
 
