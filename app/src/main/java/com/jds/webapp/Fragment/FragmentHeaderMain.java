@@ -82,7 +82,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
                 imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
                 searchText.setText("");
 
-                if(fromFragment.equals("FragmentHome")) {
+                if(fromFragment.equals("FragmentHome") ||fromFragment.equals("FragmentSearch") ) {
                     btnHomePressed();
                     getActivity().getSupportFragmentManager()
                             .beginTransaction().replace(R.id.container, new FragmentListArticle()).commit();
@@ -114,7 +114,6 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
         btnHomePressed.setVisibility(View.VISIBLE);
         btnSavedPressed.setVisibility(View.INVISIBLE);
         btnSearchPressed.setVisibility(View.INVISIBLE);
-        //searchView.setVisibility(View.GONE);
         PageManager.getInstance().fromFragment = "FragmentHome";
     }
 
@@ -128,7 +127,6 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
         btnSearch.setSelected(false);
         btnSearch.setEnabled(true);
         btnSearch.setClickable(true);
-        btnSearch.setVisibility(View.GONE);
         btnHomePressed.setVisibility(View.INVISIBLE);
         btnSavedPressed.setVisibility(View.VISIBLE);
         btnSearchPressed.setVisibility(View.INVISIBLE);
@@ -149,6 +147,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
         btnSavedPressed.setVisibility(View.INVISIBLE);
         btnSearchPressed.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.VISIBLE);
+        PageManager.getInstance().fromFragment = "FragmentSearch";
 
     }
 
@@ -167,10 +166,10 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
             String strSearch = searchText.getText().toString();
             Bundle args = new Bundle();
             args.putString("keyword", strSearch);
-            FragmentListArticle fragmentListArticle = new FragmentListArticle();
-            fragmentListArticle.setArguments(args);
+            FragmentSearchArticle fragmentSearchArticle = new FragmentSearchArticle();
+            fragmentSearchArticle.setArguments(args);
             getActivity().getSupportFragmentManager()
-                    .beginTransaction().replace(R.id.container, fragmentListArticle, "search").commit();
+                    .beginTransaction().replace(R.id.container, fragmentSearchArticle).commit();
         }
         return false;
     }
@@ -182,6 +181,8 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
             btnHomePressed();
         } else if (fromFragment.equals("FragmentSaved")) {
             btnSavedPressed();
+        } else if(fromFragment.equals("FragmentSearch")) {
+            btnSearchPressed();
         }
     }
 }

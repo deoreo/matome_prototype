@@ -50,18 +50,26 @@ public class AdapterSavedArticle extends BaseAdapter {
     private List<DataListSavedArticle> mSourceData;
     private LayoutInflater mInflater =null;
     private Realm realm;
+    boolean isEmpty = false;
 
     public AdapterSavedArticle(FragmentActivity activity) {
         mAct = activity;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         realm = Realm.getInstance(mAct);
         mSourceData = realm.where(DataListSavedArticle.class).findAll();
+        if(mSourceData.isEmpty() || mSourceData==null){
+            isEmpty=true;
+        }
+        else{
+            isEmpty = false;
+        }
+
     }
-
-
 
     @Override
     public int getCount() {
+        if(isEmpty)
+            return 1;
         return mSourceData.size();
     }
     @Override
@@ -73,63 +81,64 @@ public class AdapterSavedArticle extends BaseAdapter {
         return position;
     }
 
-    public void removePayOnClickHandler(View v) {
-        AlertDialogManager alertDialogManager = new AlertDialogManager();
-        alertDialogManager.showAlertDialog(mAct.getApplicationContext(), "Delete", "Delete article?", true);
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        convertView = mInflater.inflate(R.layout.list_saved_article, null);
-        holder = new ViewHolder();
-        holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
-        holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
-        holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
-        holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
-        holder.deleteArticle = (ImageButton) convertView.findViewById(R.id.btnDeleteArticle);
-        convertView.setTag(holder);
+        if(isEmpty){
+            convertView = mInflater.inflate(R.layout.list_row_empty, null);
+            return convertView;
+        }
+        else{
+            convertView = mInflater.inflate(R.layout.list_saved_article, null);
+            holder = new ViewHolder();
+            holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
+            holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
+            holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
+            holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
+            holder.deleteArticle = (ImageButton) convertView.findViewById(R.id.btnDeleteArticle);
+            convertView.setTag(holder);
 
-        mSourceData.get(position);
-        final String KEY = mSourceData.get(position).getKey();
-        final String TITLE = mSourceData.get(position).getTitle();
-        final String DATE = mSourceData.get(position).getDate();
-        final String AUTHOR = mSourceData.get(position).getAuthor();
-        final String PV = mSourceData.get(position).getPv();
-        final String THUMBNAIL = mSourceData.get(position).getThumbnail();
+            mSourceData.get(position);
+            final String KEY = mSourceData.get(position).getKey();
+            final String TITLE = mSourceData.get(position).getTitle();
+            final String DATE = mSourceData.get(position).getDate();
+            final String AUTHOR = mSourceData.get(position).getAuthor();
+            final String PV = mSourceData.get(position).getPv();
+            final String THUMBNAIL = mSourceData.get(position).getThumbnail();
 
-        holder.titleText.setText(TITLE);
-        holder.dateText.setText(DATE);
-        holder.authorText.setText(AUTHOR);
-        //holder.pvText.setText(PV);
-        convertView.setOnClickListener(new ArticleListClickListener(mAct,"AdapterSavedArticle", KEY,TITLE,DATE,AUTHOR,PV,THUMBNAIL));
+            holder.titleText.setText(TITLE);
+            holder.dateText.setText(DATE);
+            holder.authorText.setText(AUTHOR);
+            //holder.pvText.setText(PV);
+            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", KEY, TITLE, DATE, AUTHOR, PV, THUMBNAIL));
 
-        holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("ADAPTER", "Click Delete Button - "+KEY);
-                Realm realm = Realm.getInstance(mAct);
-                SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
+            holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("ADAPTER", "Click Delete Button - " + KEY);
+                    Realm realm = Realm.getInstance(mAct);
+                    SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
 
-                savedArticleThread.start();
-                realm.beginTransaction();
-                realm.where(DataListSavedArticle.class).equalTo("key", KEY).findAll().clear();
-                realm.commitTransaction();
+                    savedArticleThread.start();
+                    realm.beginTransaction();
+                    realm.where(DataListSavedArticle.class).equalTo("key", KEY).findAll().clear();
+                    realm.commitTransaction();
 
 
-                FragmentTransaction ft = mAct.getSupportFragmentManager().beginTransaction();
-                try {
-                    FragmentListSavedArticle fragmentArticle = new FragmentListSavedArticle();
-                    ft.replace(R.id.container, fragmentArticle);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                } catch (ClassCastException e) {
-                    e.printStackTrace();
+                    FragmentTransaction ft = mAct.getSupportFragmentManager().beginTransaction();
+                    try {
+                        FragmentListSavedArticle fragmentArticle = new FragmentListSavedArticle();
+                        ft.replace(R.id.container, fragmentArticle);
+                        ft.addToBackStack(null);
+                        ft.commit();
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
-
-
-            }
-        });
+            });
+        }
         return convertView;
     }
 

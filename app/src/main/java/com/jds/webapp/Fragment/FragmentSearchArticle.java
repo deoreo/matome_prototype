@@ -2,36 +2,34 @@ package com.jds.webapp.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.jds.webapp.Adapter.AdapterListArticle;
+import com.jds.webapp.Adapter.AdapterSearchArticle;
 import com.jds.webapp.ArticleControl;
-import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
-import com.jds.webapp.Filter;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     ListView mListView;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    AdapterListArticle mAdapter;
+    AdapterSearchArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     DataArticle article;
 
@@ -42,7 +40,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     private static final String KEY_PV = "pv";
     private static final String KEY_POST_DATE = "pos";
     private static final String KEY_THUMBNAIL = "img";
-    private ArticlePersistence articlePersistence;
+    private static final String KEY_WORD = "keyword";
+    private String keyword;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +50,7 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        articlePersistence = new ArticlePersistence(getActivity());
+        getExtras();
         View view = inflater.inflate(R.layout.activity_fragment_list_article, container, false);
         mListView = (ListView) view.findViewById(R.id.lvArticle);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -61,21 +59,21 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        int articleCount = articlePersistence.getListSavedArticle().size();
-        if (articleCount <= 0)
-            new GetArticle().execute();
-        else
-            new GetArticleFromSharedPref().execute();
+        new GetArticle(keyword).execute();
         return view;
     }
 
     @Override
     public void onRefresh() {
-        new GetArticle().execute();
+        new GetArticle(keyword).execute();
     }
 
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
+        String keyword="";
+        public GetArticle(String keyword){
+            this.keyword = keyword;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -92,9 +90,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         protected JSONArray doInBackground(String... arg) {
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
-            ArticlePersistence persistence = new ArticlePersistence(getActivity());
             ArticleControl articleControl = new ArticleControl();
-            json = articleControl.listArticle();
+            json = articleControl.searchArticle(keyword);
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
                     String key = "";
@@ -133,11 +130,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                         LIST_ARTICLE_MATOME.add(article);
                     }
                 }
-                persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
-                mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
-
+                mAdapter = new AdapterSearchArticle(getActivity(), LIST_ARTICLE_MATOME);
             }
-
             return json;
         }
 
@@ -151,37 +145,11 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
         }
     }
 
-    public class GetArticleFromSharedPref extends AsyncTask<String, Void, String> {
-        ProgressDialog pDialog;
-        ArticlePersistence articlePersistence = new ArticlePersistence(getActivity());
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Load Articles...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... arg) {
-            LIST_ARTICLE_MATOME = articlePersistence.getListSavedArticle();
-            mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
-            return "Success";
-        }
-
-        @Override
-        protected void onPostExecute(final String result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-            pDialog.dismiss();
-            mListView.setAdapter(mAdapter);
-            mSwipeRefreshLayout.setRefreshing(false);
+    private void getExtras() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            keyword = bundle.getString(KEY_WORD);
         }
     }
-
 
 }

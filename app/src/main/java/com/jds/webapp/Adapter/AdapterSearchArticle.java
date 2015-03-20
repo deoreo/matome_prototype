@@ -1,42 +1,29 @@
 package com.jds.webapp.Adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jds.webapp.ArticleListClickListener;
-import com.jds.webapp.BlurTransform;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 
-public class AdapterListArticle extends BaseAdapter {
+public class AdapterSearchArticle extends BaseAdapter {
     private FragmentActivity mAct;
     private List<DataArticle> mSourceData, mFilterData;
-    private LayoutInflater mInflater =null;
+    private LayoutInflater mInflater = null;
 
-    public AdapterListArticle(FragmentActivity activity,List<DataArticle> d) {
+    public AdapterSearchArticle(FragmentActivity activity, List<DataArticle> d) {
         mAct = activity;
         mSourceData = d;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -78,19 +65,19 @@ public class AdapterListArticle extends BaseAdapter {
         final String PV = article.getPv();
         final String KEY = article.getKey();
         final String THUMBNAIL = article.getThumbnail();
-        final String URL_THUMBNAIL = "http://api.matome.id/photo/"+THUMBNAIL+"?w=310&h=260&c=fill";
+        final String URL_THUMBNAIL = "http://api.matome.id/photo/" + THUMBNAIL + "?w=310&h=260&c=fill";
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
-        holder.authorText.setText(AUTHOR+" ");
+        holder.authorText.setText(AUTHOR + " ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
         Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
 
-            Picasso.with(mAct).load(URL_THUMBNAIL)
-                    .fit()
-                    .into(holder.articleListBgImage);
+        Picasso.with(mAct).load(URL_THUMBNAIL)
+                .fit()
+                .into(holder.articleListBgImage);
 
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterListArticle", KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
+        convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSearchArticle", KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
 
         return convertView;
