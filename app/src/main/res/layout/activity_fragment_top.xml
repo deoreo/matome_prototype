@@ -4,77 +4,98 @@
     android:layout_height="match_parent"
     tools:context="com.jds.webapp.Fragment.FragmentTop">
 
+    <HorizontalScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/drop_shadow5"
+        android:id="@+id/horizontalScrollView" >
+
         <LinearLayout
             android:orientation="horizontal"
+            android:background="#ffffff"
             android:layout_width="fill_parent"
-            android:layout_height="45dp"
-            android:id="@+id/searchLayout">
-            <!--
-                       <FrameLayout
-                           android:layout_width="fill_parent"
-                           android:layout_height="fill_parent"
-                           android:layout_weight="1"
-                           android:id="@+id/btn1_frame">
+            android:layout_height="fill_parent">
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Fashion"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button"/>
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Cosmetics"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button2" />
 
-                           <Button
-                               android:layout_width="fill_parent"
-                               android:layout_height="fill_parent"
-                               android:id="@+id/btn1"
-                               android:background="#ffff5774"
-                               android:text="HOME"
-                               android:textColor="#ffffffff" />
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Travel"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button3" />
 
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Beauty"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button4" />
 
-                           <include android:id="@+id/btn1Pressed"
-                               layout="@layout/pressed"/>
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Gourmet"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button5" />
 
-                       </FrameLayout>
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Goods"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button6" />
 
-                       <FrameLayout
-                           android:layout_width="fill_parent"
-                           android:layout_height="fill_parent"
-                           android:layout_weight="1"
-                           android:id="@+id/btn2_frame">
-                           <Button
-                               android:layout_gravity="center"
-                               android:layout_width="fill_parent"
-                               android:layout_height="fill_parent"
-                               android:id="@+id/btn2"
-                               android:background="#ffff5774"
-                               android:text="ARTICLE"
-                               android:textColor="#ffffffff" />
-                           <include android:id="@+id/btn2Pressed"
-                               layout="@layout/pressed"/>
-                       </FrameLayout>
-                       -->
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
-                    android:hint="Search Article"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/SearchText"
-                    android:layout_weight="1"
-                    />
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="8">
-
-
-                </FrameLayout>
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Life"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button7" />
+            <Button
+                android:layout_width="170dp"
+                android:layout_height="50dp"
+                android:text="Game and Apps"
+                android:textColor="#77FF0014"
+                android:background="@drawable/drop_shadow3"
+                android:id="@+id/button8" />
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="3dp"
-            android:background="@drawable/drop_shadow"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_below="@+id/searchLayout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-        </FrameLayout>
+    </HorizontalScrollView>
 
-    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ffff5774"
+        android:layout_gravity="center"
+        android:layout_below="@+id/horizontalScrollView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/drop_shadow"
+        android:layout_below="@+id/horizontalScrollView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    </FrameLayout>
+
+</RelativeLayout>

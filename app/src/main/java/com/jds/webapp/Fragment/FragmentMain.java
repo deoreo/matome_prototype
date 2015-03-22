@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
-import com.facebook.AppEventsLogger;
 import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.PageManager;
@@ -29,22 +28,20 @@ public class FragmentMain extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_fragment_main);
-        if (savedInstanceState == null) {
 
+        if (savedInstanceState == null) {
             FragmentListArticle fragmentListArticle = new FragmentListArticle();
+
             Bundle args = new Bundle();
             args.putString("keyword", "");
             fragmentListArticle.setArguments(args);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragmentListArticle)
                     .commit();
-
-
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.headerLayout, new FragmentHeaderMain())
                     .commit();
             PageManager.getInstance().fromFragment = "FragmentMain";
-
 
         }
     }

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.UiLifecycleHelper;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleHandler;

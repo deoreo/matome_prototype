@@ -12,9 +12,7 @@ import com.jds.webapp.R;
 
 
 public class FragmentTop extends Fragment {
-    Button btn1, btn2;
-    View mVw;
-    TextView searchText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,34 +25,7 @@ public class FragmentTop extends Fragment {
         if (container == null) {
             return null;
         }
-        searchText = (TextView) view.findViewById(R.id.SearchText);
-        /*
-        btnFacebook = (Button) view.findViewById(R.id.btnFacebook);
-        btnSaved = (Button) view.findViewById(R.id.btnSaved);
-        Btn1Pressed();
-        view.findViewById(R.id.btn1Pressed).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.btn2Pressed).setVisibility(View.INVISIBLE);
-        btnFacebook.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new FragmentHome())
-                        .commit();
-                Btn1Pressed();
-                mVw.findViewById(R.id.btn1Pressed).setVisibility(View.VISIBLE);
-                mVw.findViewById(R.id.btn2Pressed).setVisibility(View.INVISIBLE);
-            }
-        });
-        btnSaved.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new FragmentListArticle())
-                        .commit();
-                Btn2Pressed();
-                mVw.findViewById(R.id.btn1Pressed).setVisibility(View.INVISIBLE);
-                mVw.findViewById(R.id.btn2Pressed).setVisibility(View.VISIBLE);
-            }
-        });
-        */
+
         return view;
     }
 
@@ -62,7 +33,6 @@ public class FragmentTop extends Fragment {
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mVw = getView();
     }
 
 }

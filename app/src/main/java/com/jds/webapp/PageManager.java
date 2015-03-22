@@ -11,7 +11,7 @@ public class PageManager {
     private static PageManager sInstance;
 
     // Stated variables
-    public String fromFragment, fromSearch;
+    public String fromFragment, fromCategory="Fashion";
 
 	public PageManager() { }
 

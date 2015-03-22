@@ -12,7 +12,7 @@ public class ArticleControl {
     private ArticleResponse _articleResponse;
     private static String URL_API_ARTICLE = "http://api.matome.id/1/article/";
     private static String URL_API_SEARCH_ARTICLE = "http://api.matome.id/1/article/?per_page=1000&page=1&word=";
-
+    private static String URL_API_CATEGORY_ARTICLE = "http://api.matome.id/1/article/?per_page=500&page=1&cat=";
 
     public ArticleControl() {
         _articleResponse = new ArticleResponse();
@@ -24,6 +24,10 @@ public class ArticleControl {
     }
     public JSONArray searchArticle(String keyword) {
         JSONArray json = _articleResponse.GetArticleResponse(URL_API_SEARCH_ARTICLE + keyword);
+        return json;
+    }
+    public JSONArray listCategoryArticle(String category) {
+        JSONArray json = _articleResponse.GetArticleResponse(URL_API_CATEGORY_ARTICLE + category);
         return json;
     }
 

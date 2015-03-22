@@ -106,7 +106,6 @@ public class ArticlePersistence {
     }
 
     public void setListSavedArticle(List<DataArticle> newList){
-        //newList = new ArrayList<DataArticle>();
         _sharedPrefEditor.putInt("Status_size", newList.size()); /* sKey is an array */
 
         for(int i=0;i<newList.size();i++)
@@ -125,6 +124,193 @@ public class ArticlePersistence {
         {
             Gson gson = new Gson();
             String json = _sharedPref.getString("Status_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+
+    public void setListFashionArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Fashion_size", newList.size());
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Fashion_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListCosmeticsArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Cosmetics_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Cosmetics_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListTravelArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Travel_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Travel_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListBeautyArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Beauty_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Beauty_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListGourmetArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Gourmet_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Gourmet_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListGoodsArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Goods_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Goods_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListLifeArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Life_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Life_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+    public void setListAppsArticle(List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Apps_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Apps_"+i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+
+
+    public List<DataArticle> getListFashionArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Fashion_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Fashion_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListCosmeticsArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Cosmetics_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Cosmetics_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListTravelArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Travel_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Travel_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListBeautyArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Beauty_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Beauty_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListGourmetArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Gourmet_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Gourmet_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListGoodsArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Goods_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Goods_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListLifeArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Life_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Life_"+i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    public List<DataArticle> getListAppsArticle() {
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt("Apps_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("Apps_"+i, "");
             DataArticle obj = gson.fromJson(json, DataArticle.class);
             newList.add(obj);
         }

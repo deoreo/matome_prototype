@@ -16,7 +16,7 @@
             android:layout_height="fill_parent"
             android:paddingLeft="20dp"
             android:layout_weight="1"
-            android:id="@+id/frameLayout" >
+            android:id="@+id/frameLayoutLeft" >
 
 
             <ImageView
@@ -32,16 +32,17 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            >
+            android:id="@+id/frameLayoutRight">
 
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/frameLayoutBtnHome"
                 android:layout_weight="1">
+
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:id="@+id/btnHome"
                     android:background="@drawable/news"
                     android:layout_gravity="center"
@@ -53,7 +54,24 @@
                 </FrameLayout>
 
             </FrameLayout>
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/frameLayoutBtnNav"
+                android:layout_weight="1">
 
+                <FrameLayout
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/btnNav"
+                    android:background="@drawable/books"
+                    android:layout_gravity="center"
+                    android:clickable="true" >
+                </FrameLayout>
+                <include
+                    layout="@layout/pressed"
+                    android:id="@+id/btnNavPressed" />
+            </FrameLayout>
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -61,8 +79,8 @@
                 android:layout_weight="1">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:id="@+id/btnSaved"
                     android:background="@drawable/folder"
                     android:layout_gravity="center"
@@ -73,6 +91,8 @@
                         android:id="@+id/btnSavedPressed" />
                 </FrameLayout>
             </FrameLayout>
+
+
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -80,10 +100,10 @@
                 android:layout_weight="1">
 
                 <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:id="@+id/btnSearch"
-                    android:background="@drawable/search"
+                    android:background="@drawable/search2"
                     android:layout_gravity="center"
                     android:clickable="true" >
 
@@ -93,22 +113,7 @@
                 </FrameLayout>
             </FrameLayout>
 
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/frameLayoutBtnCategory"
-                android:layout_weight="1">
 
-                <FrameLayout
-                    android:layout_width="25dp"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/btnCategory"
-                    android:background="@drawable/conbtn"
-                    android:layout_gravity="right|center"
-                    android:clickable="true" >
-                </FrameLayout>
-            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -139,35 +144,213 @@
                 >
 
                 <RelativeLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:background="@drawable/close"
-                    android:id="@+id/closeBtn"></RelativeLayout>
+                    android:id="@+id/closeBtn">
+
+                    </RelativeLayout>
             </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/topLayout"
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:scrollbars="none"
+            android:id="@+id/categoryLayout" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:background="#ffffff"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnFashion">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Fashion"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnFashionPressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnCosmetics">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Cosmetics"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnCosmeticsPressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnTravel">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Travel"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnTravelPressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnBeauty">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Beauty"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnBeautyPressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnGourmet">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Gourmet"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnGourmetPressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnGoods">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Goods"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnGoodsPressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnLife">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Life"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnLifePressed" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/drop_shadow5"
+                    android:id="@+id/btnApps">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="#77FF0014"
+                        android:gravity="center"
+                        android:text="Apps"/>
+                    <include
+                        layout="@layout/pressed2"
+                        android:id="@+id/btnAppsPressed" />
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/prev"
+                android:layout_gravity="left|center_vertical"
+                android:id="@+id/prevImage"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/next"
+                android:layout_gravity="right|center_vertical"
+                android:id="@+id/nextImage"
+                android:visibility="gone" />
+
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="#ffff5774"
+            android:layout_gravity="center"
+            android:layout_below="@+id/categoryLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/drop_shadow"
+            android:layout_below="@+id/categoryLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+        </FrameLayout>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#ffff5774"
-        android:layout_gravity="center"
-        android:layout_alignLeft="@+id/linearLayout"
-        android:layout_alignStart="@+id/linearLayout"
-        android:layout_below="@+id/linearLayout">
-
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:background="@drawable/drop_shadow"
+        android:layout_height="0.5dp"
+        android:background="#f7f42437"
         android:layout_below="@+id/linearLayout"
+        android:layout_gravity="center"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-    </FrameLayout>
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -41,6 +41,7 @@ public class FragmentArticle extends Fragment {
                              Bundle savedInstanceState) {
         getExtras();
         View view = inflater.inflate(R.layout.activity_web, container, false);
+
         titleText = (TextView)view.findViewById(R.id.articletitleText);
         authorText = (TextView)view.findViewById(R.id.authorText);
         webview = (WebView) view.findViewById(R.id.webView);
@@ -88,6 +89,7 @@ public class FragmentArticle extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             String key = params[0];
+
             try {
                 doc = Jsoup.connect("http://matome.id/"+key).get();
                 String primeDiv="content";
@@ -121,17 +123,18 @@ public class FragmentArticle extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             pDialog.dismiss();
-            webview.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100%;}</style>"+
+            webview.loadDataWithBaseURL(null,
+
+                    "<style>iframe{display: inline;height: auto;max-width: 100%;}</style>"+
+                    "<style>img{display: inline;height: auto;max-width: 100%;}</style>"+
                     "<style>blockquote{margin: 1em 0 0;padding: 10px 15px 18px 40px;background-color: #f5f5f5;background-image: url(http://matome.id/images/quote.png);background-position: 10px 10px;background-repeat: no-repeat;border-radius: 5px;}</style>"+
                     "<style>a{display:block;width:300px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:small;text-decoration:none;margin:auto}</style>"+
                     "<body>"+data+"</body>", "text/html", "utf-8", null);
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
             authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
-            Log.v("WebS", data);
-
-
-
+            Log.v("WebView", data);
         }
-
     }
+
+
 }
