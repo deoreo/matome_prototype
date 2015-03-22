@@ -108,7 +108,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
             public void onClick(View v) {
 
                 //checkFromCategory();
-                //btnNavPressed();
+                btnNavPressed();
                 loadFragmentCategory("1");
                 btnFashion.setEnabled(false);btnCosmetics.setEnabled(true);
                 btnTravel.setEnabled(true);btnBeauty.setEnabled(true);
@@ -129,6 +129,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
                 btnSearchPressed.setVisibility(View.INVISIBLE);
                 btnNavPressed.setVisibility(View.VISIBLE);
                 topView.setVisibility(View.VISIBLE);
+
                 fromFragment = PageManager.getInstance().fromFragment = "FragmentNav";
                 fromCategory = PageManager.getInstance().fromCategory = "Fashion";
             }
