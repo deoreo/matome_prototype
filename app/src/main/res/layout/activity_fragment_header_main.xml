@@ -162,7 +162,7 @@
         android:layout_below="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <HorizontalScrollView
             android:layout_width="fill_parent"
@@ -180,7 +180,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnFashion">
                     <TextView
                         android:layout_width="fill_parent"
@@ -195,7 +195,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnCosmetics">
                     <TextView
                         android:layout_width="fill_parent"
@@ -210,7 +210,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnTravel">
                     <TextView
                         android:layout_width="fill_parent"
@@ -225,7 +225,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnBeauty">
                     <TextView
                         android:layout_width="fill_parent"
@@ -240,7 +240,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnGourmet">
                     <TextView
                         android:layout_width="fill_parent"
@@ -255,7 +255,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnGoods">
                     <TextView
                         android:layout_width="fill_parent"
@@ -270,7 +270,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnLife">
                     <TextView
                         android:layout_width="fill_parent"
@@ -285,7 +285,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/drop_shadow5"
+                    android:background="@drawable/drop_shadow3"
                     android:id="@+id/btnApps">
                     <TextView
                         android:layout_width="fill_parent"
