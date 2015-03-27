@@ -89,7 +89,6 @@ public class FragmentArticle extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             String key = params[0];
-
             try {
                 doc = Jsoup.connect("http://matome.id/"+key).get();
                 String primeDiv="content";

@@ -34,6 +34,7 @@ import com.jds.webapp.Fragment.FragmentListSavedArticle;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleHandler;
 import com.jds.webapp.SavedArticleThread;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -96,6 +97,7 @@ public class AdapterSavedArticle extends BaseAdapter {
             holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
             holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
             holder.deleteArticle = (ImageButton) convertView.findViewById(R.id.btnDeleteArticle);
+            holder.imgArticle = (ImageView) convertView.findViewById(R.id.imageViewSaved);
             convertView.setTag(holder);
 
             mSourceData.get(position);
@@ -106,10 +108,14 @@ public class AdapterSavedArticle extends BaseAdapter {
             final String PV = mSourceData.get(position).getPv();
             final String THUMBNAIL = mSourceData.get(position).getThumbnail();
 
+
             holder.titleText.setText(TITLE);
             holder.dateText.setText(DATE);
             holder.authorText.setText(AUTHOR);
             //holder.pvText.setText(PV);
+            Picasso.with(mAct).load(THUMBNAIL)
+                    .fit()
+                    .into(holder.imgArticle);
             convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", KEY, TITLE, DATE, AUTHOR, PV, THUMBNAIL));
 
             holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +153,7 @@ public class AdapterSavedArticle extends BaseAdapter {
         public TextView dateText;
         public TextView authorText;
         public TextView pvText;
+        public ImageView imgArticle;
         public ImageButton deleteArticle;
     }
 

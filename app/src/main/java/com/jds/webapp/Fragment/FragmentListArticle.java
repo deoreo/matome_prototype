@@ -3,13 +3,14 @@ package com.jds.webapp.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterListArticle;
 import com.jds.webapp.ArticleControl;
 import com.jds.webapp.ArticlePersistence;
@@ -28,9 +29,9 @@ import java.util.Date;
 import java.util.List;
 
 
-public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragmentListArticle extends Fragment {
     ListView mListView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    PullRefreshLayout mSwipeRefreshLayout;
     AdapterListArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     DataArticle article;
@@ -53,26 +54,27 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
                              Bundle savedInstanceState) {
 
         articlePersistence = new ArticlePersistence(getActivity());
-        View view = inflater.inflate(R.layout.activity_fragment_list_article, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_article_coba, container, false);
         mListView = (ListView) view.findViewById(R.id.lvArticle);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetArticle().execute();
+
+            }
+        });
+        mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.MODE_BOTTOM);
         int articleCount = articlePersistence.getListSavedArticle().size();
         if (articleCount <= 0)
             new GetArticle().execute();
         else
             new GetArticleFromSharedPref().execute();
+        mSwipeRefreshLayout.setRefreshing(true);
         return view;
     }
 
-    @Override
-    public void onRefresh() {
-        new GetArticle().execute();
-    }
 
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
@@ -85,7 +87,8 @@ public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
+            mSwipeRefreshLayout.setRefreshing(true);
+
         }
 
         @Override

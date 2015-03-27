@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterCategoryArticle;
 import com.jds.webapp.ArticleControl;
 import com.jds.webapp.ArticlePersistence;
@@ -27,9 +28,9 @@ import java.util.Date;
 import java.util.List;
 
 
-public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragmentCategoryArticle extends Fragment {
     ListView mListView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    PullRefreshLayout mSwipeRefreshLayout;
     AdapterCategoryArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     List<DataArticle> LIST_ARTICLE_MATOME_PREF = null;
@@ -69,14 +70,18 @@ public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLay
 
         getExtras();
         articlePersistence = new ArticlePersistence(getActivity());
-        View view = inflater.inflate(R.layout.activity_fragment_list_article, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_article_coba, container, false);
         mListView = (ListView) view.findViewById(R.id.lvArticle);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        // listen refresh event
+        mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetArticle(strKategori).execute();
+            }
+        });
+        mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        mSwipeRefreshLayout.setRefreshing(true);
 
         if(strKategori.equals("1")) {articleCount = articlePersistence.getListFashionArticle().size();}
         else if(strKategori.equals("2")) {articleCount = articlePersistence.getListCosmeticsArticle().size();}
@@ -94,10 +99,6 @@ public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLay
         return view;
     }
 
-    @Override
-    public void onRefresh() {
-        new GetArticle(strKategori).execute();
-    }
 
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
@@ -114,7 +115,7 @@ public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLay
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
+            //pDialog.show();
         }
 
         @Override
@@ -234,7 +235,7 @@ public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLay
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
+            //pDialog.show();
         }
 
         @Override
@@ -253,6 +254,7 @@ public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLay
             super.onPostExecute(result);
             pDialog.dismiss();
             mListView.setAdapter(mAdapter);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 

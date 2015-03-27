@@ -24,4 +24,8 @@
     <color name="ER0r0g0b100a_bg">#64000000</color>
     <color name="ER200r25g25b255a_alertNotification">#ffc81919</color>
     <color name="ER200r25g25b153a_alertNotificationTransparent">#99c81919</color>
+
+    <color name="color1">#ff47ff1e</color>
+    <color name="color2">#ffff0800</color>
+    <color name="color3">#ff4308ff</color>
 </resources>
