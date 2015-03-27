@@ -15,13 +15,14 @@ public class ArticleListClickListener implements View.OnClickListener{
     private FragmentActivity mActivity;
 
     private DataArticle dataArticle;
-    private String key, title, date, author, pv, thumbnail;
+    private String id, key, title, date, author, pv, thumbnail;
     private String fromAdapter;
     private View topLayout;
 
-    public ArticleListClickListener(FragmentActivity activity, String fromAdapter, String key,String title, String date, String author, String pv, String thumbnail){
+    public ArticleListClickListener(FragmentActivity activity, String fromAdapter, String id, String key,String title, String date, String author, String pv, String thumbnail){
         mActivity = activity;
         this.fromAdapter = fromAdapter;
+        this.id = id;
         this.key = key;
         this.title = title;
         this.date = date;
@@ -33,6 +34,7 @@ public class ArticleListClickListener implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Bundle args = new Bundle();
+        args.putString("id", id);
         args.putString("key", key);
         args.putString("title", title);
         args.putString("date", date);

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.jds.webapp.Adapter.AdapterSearchArticle;
-import com.jds.webapp.ArticleControl;
+import com.jds.webapp.JSONControl;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
@@ -90,8 +90,8 @@ public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayou
         protected JSONArray doInBackground(String... arg) {
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
-            ArticleControl articleControl = new ArticleControl();
-            json = articleControl.searchArticle(keyword);
+            JSONControl JSONControl = new JSONControl();
+            json = JSONControl.searchArticle(keyword);
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
                     String key = "";

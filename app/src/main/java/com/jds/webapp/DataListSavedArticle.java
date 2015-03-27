@@ -5,7 +5,7 @@ import io.realm.annotations.PrimaryKey;
 
 
 public class DataListSavedArticle extends RealmObject {
-    private String key, title, date, author, pv, thumbnail;
+    private String id, key, title, date, author, pv, thumbnail;
 
     public String getKey() {
         return key;
@@ -53,5 +53,13 @@ public class DataListSavedArticle extends RealmObject {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

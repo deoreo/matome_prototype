@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,16 @@ import android.widget.ListView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterListArticle;
-import com.jds.webapp.ArticleControl;
+import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
-import com.jds.webapp.Filter;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +33,7 @@ public class FragmentListArticle extends Fragment {
     AdapterListArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     DataArticle article;
-
+    private static final String KEY_ID = "_id";
     private static final String KEY_KEY = "key";
     private static final String KEY_TITLE = "ttl";
     private static final String KEY_USR = "usr";
@@ -96,10 +94,11 @@ public class FragmentListArticle extends Fragment {
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
             ArticlePersistence persistence = new ArticlePersistence(getActivity());
-            ArticleControl articleControl = new ArticleControl();
-            json = articleControl.listArticle();
+            JSONControl JSONControl = new JSONControl();
+            json = JSONControl.listArticle();
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
+                    String id = "";
                     String key = "";
                     String thumbnail = "";
                     String title = "";
@@ -110,6 +109,7 @@ public class FragmentListArticle extends Fragment {
                     boolean status = true;
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
+                        id = jsonObject.getString(KEY_ID);
                         key = jsonObject.getString(KEY_KEY);
                         thumbnail = jsonObject.getString(KEY_THUMBNAIL);
                         title = jsonObject.getString(KEY_TITLE);
@@ -126,6 +126,7 @@ public class FragmentListArticle extends Fragment {
                     }
                     if (status) {
                         article = new DataArticle();
+                        article.setId(id);
                         article.setKey(key);
                         article.setThumbnail(thumbnail);
                         article.setAuthor(author);

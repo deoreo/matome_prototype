@@ -101,6 +101,7 @@ public class AdapterSavedArticle extends BaseAdapter {
             convertView.setTag(holder);
 
             mSourceData.get(position);
+            final String ID = mSourceData.get(position).getId();
             final String KEY = mSourceData.get(position).getKey();
             final String TITLE = mSourceData.get(position).getTitle();
             final String DATE = mSourceData.get(position).getDate();
@@ -116,7 +117,7 @@ public class AdapterSavedArticle extends BaseAdapter {
             Picasso.with(mAct).load(THUMBNAIL)
                     .fit()
                     .into(holder.imgArticle);
-            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", KEY, TITLE, DATE, AUTHOR, PV, THUMBNAIL));
+            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, THUMBNAIL));
 
             holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -44,4 +44,5 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile 'com.baoyz.pullrefreshlayout:library:1.0.1'
     compile 'in.srain.cube:ultra-ptr:1.0.8@aar'
+    compile 'com.afollestad:material-dialogs:0.6.6.1'
 }

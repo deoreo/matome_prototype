@@ -20,14 +20,14 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-public class ArticleResponse {
+public class JSONResponse {
     static InputStream _inputStream = null;
     static JSONArray jsonArray = null;
     static String _json = "";
-    public ArticleResponse() {
+    public JSONResponse() {
 
     }
-    public JSONArray GetArticleResponse(String url) {
+    public JSONArray GETResponse(String url) {
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(url);

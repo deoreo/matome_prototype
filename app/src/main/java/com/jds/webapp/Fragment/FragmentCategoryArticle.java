@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.ListView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterCategoryArticle;
-import com.jds.webapp.ArticleControl;
+import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.PageManager;
@@ -35,7 +34,7 @@ public class FragmentCategoryArticle extends Fragment {
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     List<DataArticle> LIST_ARTICLE_MATOME_PREF = null;
     DataArticle article;
-
+    private static final String KEY_ID = "_id";
     private static final String KEY_KEY = "key";
     private static final String KEY_TITLE = "ttl";
     private static final String KEY_USR = "usr";
@@ -123,10 +122,11 @@ public class FragmentCategoryArticle extends Fragment {
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
             ArticlePersistence persistence = new ArticlePersistence(getActivity());
-            ArticleControl articleControl = new ArticleControl();
-            json = articleControl.listCategoryArticle(category);
+            JSONControl JSONControl = new JSONControl();
+            json = JSONControl.listCategoryArticle(category);
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
+                    String id = "";
                     String key = "";
                     String thumbnail = "";
                     String title = "";
@@ -137,6 +137,7 @@ public class FragmentCategoryArticle extends Fragment {
                     boolean status = true;
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
+                        id = jsonObject.getString(KEY_ID);
                         key = jsonObject.getString(KEY_KEY);
                         thumbnail = jsonObject.getString(KEY_THUMBNAIL);
                         title = jsonObject.getString(KEY_TITLE);
@@ -153,6 +154,7 @@ public class FragmentCategoryArticle extends Fragment {
                     }
                     if (status) {
                         article = new DataArticle();
+                        article.setId(id);
                         article.setKey(key);
                         article.setThumbnail(thumbnail);
                         article.setAuthor(author);
@@ -241,10 +243,7 @@ public class FragmentCategoryArticle extends Fragment {
         @Override
         protected String doInBackground(String... arg) {
             ArticlePersistence articlePersistence = new ArticlePersistence(getActivity());
-
-
             mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME_PREF);
-
             return category;
         }
 

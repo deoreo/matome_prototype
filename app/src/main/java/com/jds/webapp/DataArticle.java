@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Created by deoreo06 on 07/03/2015.
  */
 public class DataArticle implements Serializable {
-    private String key, title, date, author, pv, thumbnail, content;
+    private String id, key, title, date, author, pv, thumbnail, content;
 
     public String getTitle() {
         return title;
@@ -63,5 +63,13 @@ public class DataArticle implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 }

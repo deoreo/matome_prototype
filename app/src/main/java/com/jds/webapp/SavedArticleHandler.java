@@ -28,7 +28,7 @@ public class SavedArticleHandler extends Handler {
     public static final int REMOVE_ARTICLE = 3;
     public static final String ACTION = "action";
 
-    private String key, title, date, author, pv,thumbnail;
+    private String id, key, title, date, author, pv,thumbnail;
     private Realm realm;
 
     public SavedArticleHandler(Realm realm) {
@@ -39,6 +39,7 @@ public class SavedArticleHandler extends Handler {
     public void handleMessage(Message msg) {
         final Bundle bundle = msg.getData();
         final int action = bundle.getInt(ACTION);
+        id = bundle.getString("id");
         key = bundle.getString("key");
         title = bundle.getString("title");
         date = bundle.getString("date");
@@ -50,6 +51,7 @@ public class SavedArticleHandler extends Handler {
             case ADD_ARTICLE:
                 realm.beginTransaction();
                 DataListSavedArticle dataListSavedArticle = realm.createObject(DataListSavedArticle.class);
+                dataListSavedArticle.setId(id);
                 dataListSavedArticle.setKey(key);
                 dataListSavedArticle.setTitle(title);
                 dataListSavedArticle.setDate(date);

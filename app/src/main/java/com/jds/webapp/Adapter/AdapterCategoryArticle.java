@@ -58,6 +58,7 @@ public class AdapterCategoryArticle extends BaseAdapter {
         convertView.setTag(holder);
 
         DataArticle article = mSourceData.get(position);
+        final String ID = article.getId();
         final String TITLE = article.getTitle();
         final String DATE = article.getDate();
         final String AUTHOR = article.getAuthor();
@@ -75,7 +76,7 @@ public class AdapterCategoryArticle extends BaseAdapter {
                     .fit()
                     .into(holder.articleListBgImage);
 
-        convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterCategoryArticle", KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
+        convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterCategoryArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
 
         return convertView;

@@ -29,7 +29,7 @@ public class FragmentHeaderArticle extends Fragment {
     private View mVw;
     private Realm realm;
     private SavedArticleThread savedArticleThread;
-    private String key, title, date, author, pv, thumbnail;
+    private String id, key, title, date, author, pv, thumbnail;
     private Drawable drawableSave;
     private Resources res;
     private int identifierSave;
@@ -119,7 +119,7 @@ public class FragmentHeaderArticle extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.v("HeaderSave", "Save Article");
-                Message message = buildMessage(SavedArticleHandler.ADD_ARTICLE, key, title, date, author, pv, thumbnail);
+                Message message = buildMessage(SavedArticleHandler.ADD_ARTICLE, id, key, title, date, author, pv, thumbnail);
                 savedArticleThread.handler.sendMessage(message);
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -143,6 +143,7 @@ public class FragmentHeaderArticle extends Fragment {
 
     private void getExtras() {
         Bundle bundle = getArguments();
+        id = bundle.getString("id");
         key = bundle.getString("key");
         title = bundle.getString("title");
         date = bundle.getString("date");
@@ -151,9 +152,10 @@ public class FragmentHeaderArticle extends Fragment {
         thumbnail = bundle.getString("thumbnail");
     }
 
-    private static Message buildMessage(int action, String key, String title, String date, String author, String pv, String thumbnail) {
+    private static Message buildMessage(int action, String id, String key, String title, String date, String author, String pv, String thumbnail) {
         Bundle bundle = new Bundle(2);
         bundle.putInt(SavedArticleHandler.ACTION, action);
+        bundle.putString("id", id);
         bundle.putString("key", key);
         bundle.putString("title", title);
         bundle.putString("date", date);
