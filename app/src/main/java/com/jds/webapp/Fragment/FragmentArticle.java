@@ -1,5 +1,6 @@
 package com.jds.webapp.Fragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
@@ -11,16 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.jds.webapp.Adapter.AdapterSearchArticle;
-import com.jds.webapp.BlurTransform;
-import com.jds.webapp.DataArticle;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
@@ -35,23 +29,30 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 public class FragmentArticle extends Fragment {
     WebView webview;
     TextView titleText, authorText, commentText;
+    EditText nameEditText, commentEditText;
     String data = "",  judul="", info="", pv="";
     String key, title, date, author, bundlepv, thumbnail;
     String id, msg, nam, datecomment;
+    String comments = "";
     ImageView articleImage;
     private static final String KEY_ID = "id";
     private static final String KEY_MSG = "msg";
     private static final String KEY_NAM = "nam";
     private static final String KEY_DATE = "date";
+    MaterialDialog mMaterialDialog;
+    Activity mAct;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class FragmentArticle extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mAct = getActivity();
         getExtras();
         View view = inflater.inflate(R.layout.activity_web, container, false);
         ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.scroll_view);
@@ -69,7 +71,8 @@ public class FragmentArticle extends Fragment {
         fab.attachToScrollView(scrollView);
         titleText = (TextView)view.findViewById(R.id.articletitleText);
         authorText = (TextView)view.findViewById(R.id.authorText);
-        commentText = (TextView) view.findViewById(R.id.commentTextView);
+
+        //commentText = (TextView) view.findViewById(R.id.commentTextView);
         webview = (WebView) view.findViewById(R.id.webView);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
@@ -169,27 +172,47 @@ public class FragmentArticle extends Fragment {
         }
     }
     private void showCustomView() {
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title("Comment")
-                .customView(R.layout.dialog_customview, true)
-                .positiveText("Submit")
-                .callback(new MaterialDialog.ButtonCallback() {
+
+        mMaterialDialog = new MaterialDialog(mAct)
+                .setTitle("Comment")
+                .setView(viewMaterialDialog(comments))
+                .setPositiveButton("Submit", new View.OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(View v) {
+                        nam = nameEditText.getText().toString();
+                        msg = commentEditText.getText().toString();
+                        if (!nam.equals("") && !msg.equals("")) {
+                            new PostComment(id, msg, nam).execute();
+                        }
+                        mMaterialDialog.dismiss();
 
                     }
+                })
+                        .setNegativeButton("CANCEL", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                            }
+                        });
 
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                    }
-                }).build();
-        dialog.show();
+
+        mMaterialDialog.show();
+    }
+
+    public View viewMaterialDialog(String comments){
+        View view = LayoutInflater.from(mAct).inflate(R.layout.dialog_customview, null);
+        commentText = (TextView) view.findViewById(R.id.commentTextView);
+        nameEditText = (EditText) view.findViewById(R.id.nameEditText);
+        commentEditText = (EditText) view.findViewById(R.id.commentEditText);
+        commentText.setText(comments);
+
+        return view;
     }
 
     public class GetComment extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
         String key_article="";
-        String comments = "";
+
         public GetComment(String key_article){
             this.key_article = key_article;
         }
@@ -197,11 +220,11 @@ public class FragmentArticle extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
         protected JSONArray doInBackground(String... arg) {
+            comments = "";
             JSONArray json = null;
             JSONControl JSONControl = new JSONControl();
             json = JSONControl.listComment(key_article);
@@ -215,37 +238,74 @@ public class FragmentArticle extends Fragment {
                     boolean status = true;
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
-                        id = jsonObject.getString(KEY_ID);
-                        nam = jsonObject.getString(KEY_NAM);
-                        msg = jsonObject.getString(KEY_MSG);
-                        datecomment = jsonObject.getString(KEY_DATE);
-                        Date date = PageManager.getInstance().convertFormatDate(datecomment);
-                        postdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
-                        status = true;
+                        if(jsonObject!=null) {
+                            id = jsonObject.getString(KEY_ID);
+                            nam = jsonObject.getString(KEY_NAM);
+                            msg = jsonObject.getString(KEY_MSG);
+                            datecomment = jsonObject.getString(KEY_DATE);
+                            Date date = PageManager.getInstance().convertFormatDate(datecomment);
+                            postdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
+                            status = true;
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                         status = false;
                     }
                     if (status) {
                         comments+=Html.fromHtml(
-                                "<font color='#ffffff'>"+nam+"</font><br>"+
+                                "<font color='#ffffff'><b>"+nam+"</b></font><br>"+
                                 "<font color='#ffffff'>"+msg+"</font><br><br>"
                         );
                     }
                 }
-                //mAdapter = new AdapterSearchArticle(getActivity(), LIST_ARTICLE_MATOME);
+                if(comments.equals("")){
+                    comments ="Not Yet Comments";
+                }
             }
             return json;
         }
 
         @Override
-        protected void onPostExecute(final JSONArray json) {
+        protected void onPostExecute(final JSONArray result) {
             // TODO Auto-generated method stub
-            super.onPostExecute(json);
+            super.onPostExecute(result);
             //commentText.setText(comments);
 
         }
     }
 
+    public class PostComment extends AsyncTask<String, Void, String> {
+        ProgressDialog pDialog;
+        String key_article="";
+        String art, msg, nam;
+
+        private PostComment(String art, String msg, String nam){
+            this.art = art;
+            this.msg = msg;
+            this.nam = nam;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... arg) {
+            comments = "";
+            JSONControl JSONControl = new JSONControl();
+            JSONControl.postComment(art, msg, nam);
+            return "success";
+        }
+
+        @Override
+        protected void onPostExecute(final String result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            new GetComment(art).execute();
+
+        }
+    }
 
 }
