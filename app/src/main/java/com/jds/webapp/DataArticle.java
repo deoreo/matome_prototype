@@ -2,6 +2,8 @@ package com.jds.webapp;
 
 import java.io.Serializable;
 
+import io.realm.annotations.RealmClass;
+
 
 /**
  * Created by deoreo06 on 07/03/2015.

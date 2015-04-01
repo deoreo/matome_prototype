@@ -2,10 +2,32 @@ package com.jds.webapp;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 
-
+@RealmClass
 public class DataListSavedArticle extends RealmObject {
-    private String id, key, title, date, author, pv, thumbnail;
+
+    @PrimaryKey
+    private String id;
+    private String key;
+    private String title;
+    private String date;
+    private String author;
+    private String pv;
+    private String thumbnail;
+
+    public DataListSavedArticle(){
+
+    }
+    public DataListSavedArticle(String id, String key, String title, String date, String author, String pv, String thumbnail) {
+        this.id = id;
+        this.key = key;
+        this.title = title;
+        this.date = date;
+        this.author = author;
+        this.pv = pv;
+        this.thumbnail = thumbnail;
+    }
 
     public String getKey() {
         return key;

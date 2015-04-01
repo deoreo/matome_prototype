@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +29,7 @@ import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.DataListSavedArticle;
+import com.jds.webapp.DatabaseHandler;
 import com.jds.webapp.Fragment.FragmentArticle;
 import com.jds.webapp.Fragment.FragmentHeaderArticle;
 import com.jds.webapp.Fragment.FragmentListSavedArticle;
@@ -51,13 +53,24 @@ public class AdapterSavedArticle extends BaseAdapter {
     private List<DataListSavedArticle> mSourceData;
     private LayoutInflater mInflater =null;
     private Realm realm;
+    private DatabaseHandler dbHandler;
     boolean isEmpty = false;
 
     public AdapterSavedArticle(FragmentActivity activity) {
         mAct = activity;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        realm = Realm.getInstance(mAct);
-        mSourceData = realm.where(DataListSavedArticle.class).findAll();
+
+        if(Build.VERSION.SDK_INT > 10) {
+            realm = Realm.getInstance(mAct);
+            mSourceData = realm.where(DataListSavedArticle.class).findAll();
+        }
+        else{
+            dbHandler = new DatabaseHandler(mAct);
+            dbHandler.close();
+            mSourceData = dbHandler.getAllSavedArticles();
+        }
+
+
         if(mSourceData.isEmpty() || mSourceData==null){
             isEmpty=true;
         }
@@ -122,26 +135,29 @@ public class AdapterSavedArticle extends BaseAdapter {
             holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v("ADAPTER", "Click Delete Button - " + KEY);
-                    Realm realm = Realm.getInstance(mAct);
-                    SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
-
-                    savedArticleThread.start();
-                    realm.beginTransaction();
-                    realm.where(DataListSavedArticle.class).equalTo("key", KEY).findAll().clear();
-                    realm.commitTransaction();
-
-
-                    FragmentTransaction ft = mAct.getSupportFragmentManager().beginTransaction();
-                    try {
-                        FragmentListSavedArticle fragmentArticle = new FragmentListSavedArticle();
-                        ft.replace(R.id.container, fragmentArticle);
-                        ft.addToBackStack(null);
-                        ft.commit();
-                    } catch (ClassCastException e) {
-                        e.printStackTrace();
+                    if (Build.VERSION.SDK_INT > 10) {
+                        Log.v("ADAPTER", "Click Delete Button - " + KEY);
+                        Realm realm = Realm.getInstance(mAct);
+                        SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
+                        savedArticleThread.start();
+                        realm.beginTransaction();
+                        realm.where(DataListSavedArticle.class).equalTo("key", KEY).findAll().clear();
+                        realm.commitTransaction();
                     }
-
+                    else{
+                        DatabaseHandler dbHandler = new DatabaseHandler(mAct);
+                        dbHandler.deleteSaved(ID);
+                        dbHandler.close();
+                    }
+                        FragmentTransaction ft = mAct.getSupportFragmentManager().beginTransaction();
+                        try {
+                            FragmentListSavedArticle fragmentArticle = new FragmentListSavedArticle();
+                            ft.replace(R.id.container, fragmentArticle);
+                            ft.addToBackStack(null);
+                            ft.commit();
+                        } catch (ClassCastException e) {
+                            e.printStackTrace();
+                        }
 
                 }
             });

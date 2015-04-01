@@ -55,7 +55,6 @@ public class AdapterSearchArticle extends BaseAdapter {
         holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
         holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
         holder.articleListBgImage = (ImageView) convertView.findViewById(R.id.articleListBgImage);
-        holder.articleListThumbnail = (ImageView) convertView.findViewById(R.id.articleListThumbnail);
         convertView.setTag(holder);
 
         DataArticle article = mSourceData.get(position);
@@ -72,7 +71,6 @@ public class AdapterSearchArticle extends BaseAdapter {
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR + " ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
-        Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
 
         Picasso.with(mAct).load(URL_THUMBNAIL)
                 .fit()
@@ -90,7 +88,6 @@ public class AdapterSearchArticle extends BaseAdapter {
         public TextView authorText;
         public TextView pvText;
         public ImageView articleListBgImage;
-        public ImageView articleListThumbnail;
     }
 
 }

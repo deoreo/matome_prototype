@@ -2,6 +2,7 @@ package com.jds.webapp.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,8 +56,10 @@ public class FragmentListSavedArticle extends Fragment implements SwipeRefreshLa
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        savedArticleThread = new SavedArticleThread(getActivity());
-        savedArticleThread.start();
+        if(Build.VERSION.SDK_INT>10) {
+            savedArticleThread = new SavedArticleThread(getActivity());
+            savedArticleThread.start();
+        }
     }
 
     @Override

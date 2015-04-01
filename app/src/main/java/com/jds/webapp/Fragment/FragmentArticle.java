@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,7 +167,7 @@ public class FragmentArticle extends Fragment {
                     "<body>"+data+"</body>", "text/html", "utf-8", null);
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
             authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
-            Log.v("WebView", data);
+
         }
     }
     private void showCustomView() {

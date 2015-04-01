@@ -27,7 +27,6 @@ public class AdapterCategoryArticle extends BaseAdapter {
         mAct = activity;
         mSourceData = d;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override

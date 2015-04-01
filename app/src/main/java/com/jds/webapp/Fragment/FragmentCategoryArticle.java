@@ -173,8 +173,6 @@ public class FragmentCategoryArticle extends Fragment {
                 else if(category.equals("6")) {persistence.setListGoodsArticle(LIST_ARTICLE_MATOME);}
                 else if(category.equals("7")) {persistence.setListLifeArticle(LIST_ARTICLE_MATOME);}
                 else if(category.equals("8")) {persistence.setListAppsArticle(LIST_ARTICLE_MATOME);}
-
-
                 mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME);
 
             }

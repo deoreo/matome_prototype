@@ -5,12 +5,12 @@ android {
         apksigned {
             keyAlias 'apksigned'
             keyPassword 'apksigned'
-            storeFile file('C:/EDO_LearningAndroidStudio/Matome/keystore/apksigned.jks')
+            storeFile file('C:/jds_attendance/Matome/keystore/apksigned.jks')
             storePassword 'apksigned'
         }
     }
     compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '21.1.2'
     defaultConfig {
         applicationId "com.jds.webapp"
         minSdkVersion 10
@@ -43,7 +43,5 @@ dependencies {
     compile 'com.jpardogo.materialtabstrip:library:1.0.9'
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile 'com.baoyz.pullrefreshlayout:library:1.0.1'
-    compile 'in.srain.cube:ultra-ptr:1.0.8@aar'
     compile 'me.drakeet.materialdialog:library:1.2.2'
-
 }

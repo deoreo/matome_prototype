@@ -40,7 +40,6 @@ public class AdapterListArticle extends BaseAdapter {
         mAct = activity;
         mSourceData = d;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
@@ -61,14 +60,13 @@ public class AdapterListArticle extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        convertView = mInflater.inflate(R.layout.list_article, null);
+        convertView = mInflater.inflate(R.layout.list_category_article, null);
         holder = new ViewHolder();
         holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
         holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
         holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
         holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
         holder.articleListBgImage = (ImageView) convertView.findViewById(R.id.articleListBgImage);
-        holder.articleListThumbnail = (ImageView) convertView.findViewById(R.id.articleListThumbnail);
         convertView.setTag(holder);
 
         DataArticle article = mSourceData.get(position);
@@ -85,11 +83,8 @@ public class AdapterListArticle extends BaseAdapter {
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR+" ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
-        Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
-
-            Picasso.with(mAct).load(URL_THUMBNAIL)
-                    .fit()
-                    .into(holder.articleListBgImage);
+        //Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
+        Picasso.with(mAct).load(URL_THUMBNAIL).fit().into(holder.articleListBgImage);
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterListArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
@@ -103,7 +98,21 @@ public class AdapterListArticle extends BaseAdapter {
         public TextView authorText;
         public TextView pvText;
         public ImageView articleListBgImage;
-        public ImageView articleListThumbnail;
+    }
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
     }
 
 }

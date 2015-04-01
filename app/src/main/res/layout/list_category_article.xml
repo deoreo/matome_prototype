@@ -24,7 +24,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal|bottom"
-            android:background="@drawable/drop_shadow2"
+            android:background="#fff4f4f4"
             android:id="@+id/childContentListLayout" >
 
             <LinearLayout

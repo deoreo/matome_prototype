@@ -122,6 +122,7 @@ public class FragmentListArticle extends Fragment {
                         status = true;
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        new GetArticleFromSharedPref().execute();
                         status = false;
                     }
                     if (status) {
