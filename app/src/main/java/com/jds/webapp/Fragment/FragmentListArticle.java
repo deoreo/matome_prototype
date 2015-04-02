@@ -181,12 +181,13 @@ public class FragmentListArticle extends Fragment {
                                         alarmIntent.putExtra("title",article.getTitle());
                                         pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                                         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                                        int interval = 1 * 60 * 1000;;
+                                        int interval = 1 * 30 * 1000;;
                                         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
                                     }
                                 }
                                 catch (NullPointerException e){
                                     isNull = true;
+                                    persistence.setFirstArticle(article);
                                 }
 
 
