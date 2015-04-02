@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:padding="15dp"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="fill_parent">
 
 
     <TextView
@@ -50,7 +50,7 @@
     </FrameLayout>
     <EditText
         android:id="@+id/nameEditText"
-        android:paddingTop="5dp"
+        android:paddingTop="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="12sp"

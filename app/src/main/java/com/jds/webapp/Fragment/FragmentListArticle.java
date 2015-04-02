@@ -1,9 +1,16 @@
 package com.jds.webapp.Fragment;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,7 @@ import com.jds.webapp.Adapter.AdapterListArticle;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
+import com.jds.webapp.NotificationReceiver;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 
@@ -26,10 +34,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 
 public class FragmentListArticle extends Fragment {
     ListView mListView;
     PullRefreshLayout mSwipeRefreshLayout;
+    MaterialDialog mMaterialDialog;
     AdapterListArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     DataArticle article;
@@ -42,12 +53,27 @@ public class FragmentListArticle extends Fragment {
     private static final String KEY_POST_DATE = "pos";
     private static final String KEY_THUMBNAIL = "img";
     private ArticlePersistence articlePersistence;
+    private PendingIntent pendingIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // Auto-update Configuration
+        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
+        alarmIntent.putExtra("title","judul artikel dari fragment list");
+        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        int interval = 15 * 60 * 1000;;
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -60,19 +86,38 @@ public class FragmentListArticle extends Fragment {
             @Override
             public void onRefresh() {
                 new GetArticle().execute();
-
             }
         });
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.MODE_BOTTOM);
         int articleCount = articlePersistence.getListSavedArticle().size();
-        if (articleCount <= 0)
-            new GetArticle().execute();
-        else
-            new GetArticleFromSharedPref().execute();
+       // if (articleCount <= 0)
+            if(NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+                new GetArticle().execute();
+            }
+            else{
+                showDialog();
+            }
+       // else
+       //     new GetArticleFromSharedPref().execute();
         mSwipeRefreshLayout.setRefreshing(true);
         return view;
     }
 
+    private void showDialog() {
+
+        mMaterialDialog = new MaterialDialog(getActivity())
+                .setTitle("Warning!")
+                .setMessage("Internet Connection Trouble")
+                .setPositiveButton("Ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMaterialDialog.dismiss();
+
+                    }
+                });
+
+        mMaterialDialog.show();
+    }
 
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
@@ -80,66 +125,67 @@ public class FragmentListArticle extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mSwipeRefreshLayout.setRefreshing(true);
 
         }
 
         @Override
         protected JSONArray doInBackground(String... arg) {
-            JSONArray json = null;
-            LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
-            ArticlePersistence persistence = new ArticlePersistence(getActivity());
-            JSONControl JSONControl = new JSONControl();
-            json = JSONControl.listArticle();
-            if (json != null) {
-                for (int i = 0; i < json.length(); i++) {
-                    String id = "";
-                    String key = "";
-                    String thumbnail = "";
-                    String title = "";
-                    String pv = "";
-                    String post = "";
-                    String postdate = "";
-                    String author = "";
-                    boolean status = true;
+                JSONArray json = null;
+                LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
+                ArticlePersistence persistence = new ArticlePersistence(getActivity());
+                JSONControl JSONControl = new JSONControl();
+                json = JSONControl.listArticle();
+                if (json != null) {
+                    for (int i = 0; i < json.length(); i++) {
+                        String id = "";
+                        String key = "";
+                        String thumbnail = "";
+                        String title = "";
+                        String pv = "";
+                        String post = "";
+                        String postdate = "";
+                        String author = "";
+                        boolean status = true;
+                        try {
+                            JSONObject jsonObject = json.getJSONObject(i);
+                            id = jsonObject.getString(KEY_ID);
+                            key = jsonObject.getString(KEY_KEY);
+                            thumbnail = jsonObject.getString(KEY_THUMBNAIL);
+                            title = jsonObject.getString(KEY_TITLE);
+                            pv = jsonObject.getString(KEY_PV);
+                            post = jsonObject.getString(KEY_POST_DATE);
+                            Date date = PageManager.getInstance().convertFormatDate(post);
+                            postdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
+                            JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
+                            author = jsonObject1.getString(KEY_AUTHOR);
+                            status = true;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            new GetArticleFromSharedPref().execute();
+                            status = false;
+                        }
+                        if (status) {
+                            article = new DataArticle();
+                            article.setId(id);
+                            article.setKey(key);
+                            article.setThumbnail(thumbnail);
+                            article.setAuthor(author);
+                            article.setTitle(title);
+                            article.setDate(postdate);
+                            article.setPv(pv);
+                            article.setContent("");
+                            LIST_ARTICLE_MATOME.add(article);
+                        }
+                    }
+
                     try {
-                        JSONObject jsonObject = json.getJSONObject(i);
-                        id = jsonObject.getString(KEY_ID);
-                        key = jsonObject.getString(KEY_KEY);
-                        thumbnail = jsonObject.getString(KEY_THUMBNAIL);
-                        title = jsonObject.getString(KEY_TITLE);
-                        pv = jsonObject.getString(KEY_PV);
-                        post = jsonObject.getString(KEY_POST_DATE);
-                        Date date = PageManager.getInstance().convertFormatDate(post);
-                        postdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
-                        JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
-                        author = jsonObject1.getString(KEY_AUTHOR);
-                        status = true;
-                    } catch (JSONException e) {
+                        persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
+                        mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
+                    }
+                    catch (NullPointerException e){
                         e.printStackTrace();
-                        new GetArticleFromSharedPref().execute();
-                        status = false;
                     }
-                    if (status) {
-                        article = new DataArticle();
-                        article.setId(id);
-                        article.setKey(key);
-                        article.setThumbnail(thumbnail);
-                        article.setAuthor(author);
-                        article.setTitle(title);
-                        article.setDate(postdate);
-                        article.setPv(pv);
-                        article.setContent("");
-                        LIST_ARTICLE_MATOME.add(article);
-                    }
-                }
-                persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
-                mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
 
             }
 
@@ -150,7 +196,6 @@ public class FragmentListArticle extends Fragment {
         protected void onPostExecute(final JSONArray json) {
             // TODO Auto-generated method stub
             super.onPostExecute(json);
-            pDialog.dismiss();
             mListView.setAdapter(mAdapter);
             mSwipeRefreshLayout.setRefreshing(false);
         }

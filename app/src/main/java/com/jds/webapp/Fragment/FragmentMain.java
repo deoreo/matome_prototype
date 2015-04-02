@@ -1,15 +1,20 @@
 package com.jds.webapp.Fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.DataListSavedArticle;
+import com.jds.webapp.NotificationReceiver;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 import com.jds.webapp.SavedArticleThread;
@@ -27,7 +32,11 @@ public class FragmentMain extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_fragment_main);
+
+
+
 
         if (savedInstanceState == null) {
             FragmentListArticle fragmentListArticle = new FragmentListArticle();

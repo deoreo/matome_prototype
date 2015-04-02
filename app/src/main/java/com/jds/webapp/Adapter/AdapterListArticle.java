@@ -1,25 +1,18 @@
 package com.jds.webapp.Adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jds.webapp.ArticleListClickListener;
-import com.jds.webapp.BlurTransform;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.R;
 import com.squareup.picasso.Picasso;
