@@ -29,6 +29,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // For our recurring task, we'll just display a message
         Toast.makeText(context, "Matome Running", Toast.LENGTH_SHORT).show();
+        Log.v("Notification", "Update Notif");
         String title =intent.getExtras().getString("title");
         Intent notificationIntent = new Intent(context, FragmentMain.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context,

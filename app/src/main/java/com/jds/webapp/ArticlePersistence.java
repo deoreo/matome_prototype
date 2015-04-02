@@ -24,6 +24,8 @@ public class ArticlePersistence {
     private static final String KEY_POST_DATE = "postDate";
     private static final String KEY_DESC = "description";
 
+    private static final String KEY_RECENT = "recent";
+
     public ArticlePersistence(Context context){
         _context = context;
         _sharedPref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -148,7 +150,7 @@ public class ArticlePersistence {
         {
             Gson gson = new Gson();
             String dataJson = gson.toJson(newList.get(i));
-            _sharedPrefEditor.putString("Cosmetics_"+i, dataJson);
+            _sharedPrefEditor.putString("Cosmetics_" + i, dataJson);
         }
         _sharedPrefEditor.commit();
     }
@@ -315,5 +317,23 @@ public class ArticlePersistence {
             newList.add(obj);
         }
         return newList;
+    }
+
+
+    public void setFirstArticle(DataArticle dataArticle){
+
+            Gson gson = new Gson();
+            String dataRecent = gson.toJson(dataArticle);
+            _sharedPrefEditor.putString("data_recent", dataRecent);
+
+        _sharedPrefEditor.commit();
+    }
+
+    public DataArticle getFirstArticle() {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString("data_recent","");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+
+        return obj;
     }
 }

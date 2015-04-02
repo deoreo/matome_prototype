@@ -58,13 +58,6 @@ public class FragmentListArticle extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Auto-update Configuration
-        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
-        alarmIntent.putExtra("title","judul artikel dari fragment list");
-        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        int interval = 15 * 60 * 1000;;
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
     }
 
     @Override
@@ -176,6 +169,30 @@ public class FragmentListArticle extends Fragment {
                             article.setPv(pv);
                             article.setContent("");
                             LIST_ARTICLE_MATOME.add(article);
+                            if(i==0){
+                                boolean isNull = false;
+                                DataArticle firstArticle = null;
+                                try {
+                                    firstArticle = persistence.getFirstArticle();
+                                    if(!firstArticle.getKey().equals(article.getKey()) && !isNull) {
+                                        persistence.setFirstArticle(article);
+                                        //notif
+                                        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
+                                        alarmIntent.putExtra("title",article.getTitle());
+                                        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                                        int interval = 1 * 60 * 1000;;
+                                        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+                                    }
+                                }
+                                catch (NullPointerException e){
+                                    isNull = true;
+                                }
+
+
+
+
+                            }
                         }
                     }
 
