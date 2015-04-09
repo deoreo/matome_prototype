@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 
 import com.jds.webapp.Fragment.FragmentArticle;
@@ -33,6 +34,8 @@ public class ArticleListClickListener implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        int pos = (Integer) v.getTag();
+        PageManager.getInstance().rowCategory = pos;
         Bundle args = new Bundle();
         args.putString("id", id);
         args.putString("key", key);

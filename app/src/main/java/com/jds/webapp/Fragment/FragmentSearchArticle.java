@@ -32,7 +32,7 @@ public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayou
     AdapterSearchArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     DataArticle article;
-
+    private static final String KEY_ID = "_id";
     private static final String KEY_KEY = "key";
     private static final String KEY_TITLE = "ttl";
     private static final String KEY_USR = "usr";
@@ -94,6 +94,7 @@ public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayou
             json = JSONControl.searchArticle(keyword);
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
+                    String id = "";
                     String key = "";
                     String thumbnail = "";
                     String title = "";
@@ -104,6 +105,7 @@ public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayou
                     boolean status = true;
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
+                        id = jsonObject.getString(KEY_ID);
                         key = jsonObject.getString(KEY_KEY);
                         thumbnail = jsonObject.getString(KEY_THUMBNAIL);
                         title = jsonObject.getString(KEY_TITLE);
@@ -120,6 +122,7 @@ public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayou
                     }
                     if (status) {
                         article = new DataArticle();
+                        article.setId(id);
                         article.setKey(key);
                         article.setThumbnail(thumbnail);
                         article.setAuthor(author);

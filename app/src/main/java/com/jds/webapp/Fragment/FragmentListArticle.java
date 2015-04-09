@@ -169,7 +169,7 @@ public class FragmentListArticle extends Fragment {
                             article.setPv(pv);
                             article.setContent("");
                             LIST_ARTICLE_MATOME.add(article);
-                            if(i==0){
+                            /*if(i==0){
                                 boolean isNull = false;
                                 DataArticle firstArticle = null;
                                 try {
@@ -177,23 +177,21 @@ public class FragmentListArticle extends Fragment {
                                     if(!firstArticle.getKey().equals(article.getKey()) && !isNull) {
                                         persistence.setFirstArticle(article);
                                         //notif
+
                                         Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
                                         alarmIntent.putExtra("title",article.getTitle());
                                         pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                                         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                                         int interval = 1 * 30 * 1000;;
                                         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
                                     }
                                 }
                                 catch (NullPointerException e){
                                     isNull = true;
                                     persistence.setFirstArticle(article);
                                 }
-
-
-
-
-                            }
+                            }*/
                         }
                     }
 

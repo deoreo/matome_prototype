@@ -1,6 +1,7 @@
 package com.jds.webapp.Adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -48,14 +49,19 @@ public class AdapterSearchArticle extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        convertView = mInflater.inflate(R.layout.list_article, null);
+        if(Build.VERSION.SDK_INT<=10){
+            convertView = mInflater.inflate(R.layout.list_category_article, null);
+        }
+        else {
+            convertView = mInflater.inflate(R.layout.list_article, null);
+        }
         holder = new ViewHolder();
         holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
         holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
         holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
         holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
         holder.articleListBgImage = (ImageView) convertView.findViewById(R.id.articleListBgImage);
-        convertView.setTag(holder);
+        convertView.setTag(position);
 
         DataArticle article = mSourceData.get(position);
         final String ID = article.getId();

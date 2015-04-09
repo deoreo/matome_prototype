@@ -28,14 +28,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import me.drakeet.materialdialog.MaterialDialog;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 public class FragmentArticle extends Fragment {
     WebView webview;
@@ -91,7 +89,7 @@ public class FragmentArticle extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showCustomView();
+                        showDialogCustomView();
                     }
                 });
         return view;
@@ -170,8 +168,28 @@ public class FragmentArticle extends Fragment {
 
         }
     }
-    private void showCustomView() {
+    private void showDialogCustomView() {
+        new MaterialDialog.Builder(mAct)
+                .autoDismiss(true)
+                .customView(viewMaterialDialog(comments), false)
+                .positiveText("Ok")
+                .negativeText("Cancel")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        nam = nameEditText.getText().toString();
+                        msg = commentEditText.getText().toString();
+                        if (!nam.equals("") && !msg.equals("")) {
+                            new PostComment(id, msg, nam).execute();
+                        }
+                    }
 
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+            }})
+                .show();
+
+        /*
         mMaterialDialog = new MaterialDialog(mAct)
                 .setTitle("Comment")
                 .setView(viewMaterialDialog(comments))
@@ -194,8 +212,8 @@ public class FragmentArticle extends Fragment {
                             }
                         });
 
-
         mMaterialDialog.show();
+        */
     }
 
     public View viewMaterialDialog(String comments){

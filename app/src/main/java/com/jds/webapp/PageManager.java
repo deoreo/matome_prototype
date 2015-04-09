@@ -12,6 +12,7 @@ public class PageManager {
 
     // Stated variables
     public String fromFragment, fromCategory="Fashion";
+    public int rowCategory=0;
 
 	public PageManager() { }
 

@@ -111,7 +111,7 @@ public class AdapterSavedArticle extends BaseAdapter {
             holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
             holder.deleteArticle = (ImageButton) convertView.findViewById(R.id.btnDeleteArticle);
             holder.imgArticle = (ImageView) convertView.findViewById(R.id.imageViewSaved);
-            convertView.setTag(holder);
+            convertView.setTag(position);
 
             mSourceData.get(position);
             final String ID = mSourceData.get(position).getId();

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,14 +54,14 @@ public class AdapterListArticle extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        convertView = mInflater.inflate(R.layout.list_category_article, null);
-        holder = new ViewHolder();
-        holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
-        holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
-        holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
-        holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
-        holder.articleListBgImage = (ImageView) convertView.findViewById(R.id.articleListBgImage);
-        convertView.setTag(holder);
+            convertView = mInflater.inflate(R.layout.list_category_article, null);
+            holder = new ViewHolder();
+            holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
+            holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
+            holder.authorText = (TextView) convertView.findViewById(R.id.authorText);
+            holder.pvText = (TextView) convertView.findViewById(R.id.pvText);
+            holder.articleListBgImage = (ImageView) convertView.findViewById(R.id.articleListBgImage);
+            convertView.setTag(position);
 
         DataArticle article = mSourceData.get(position);
         final String ID = article.getId();
@@ -74,7 +75,7 @@ public class AdapterListArticle extends BaseAdapter {
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
-        holder.authorText.setText(AUTHOR+" ");
+        holder.authorText.setText(AUTHOR + " ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
         //Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
         Picasso.with(mAct).load(URL_THUMBNAIL).fit().into(holder.articleListBgImage);

@@ -49,14 +49,15 @@ public class FragmentCategoryArticle extends Fragment {
 
     private void getExtras() {
         Bundle bundle = getArguments();
-            try {
-                strKategori = bundle.getString("category");
-            } catch (NullPointerException e){
-                e.printStackTrace();
-                strKategori = "1";
-            }
+        try {
+            strKategori = bundle.getString("category");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            strKategori = "1";
+        }
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +72,7 @@ public class FragmentCategoryArticle extends Fragment {
         articlePersistence = new ArticlePersistence(getActivity());
         View view = inflater.inflate(R.layout.fragment_list_article_coba, container, false);
         mListView = (ListView) view.findViewById(R.id.lvArticle);
+        mListView.setSelection(PageManager.getInstance().rowCategory);
         mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         // listen refresh event
         mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
@@ -82,14 +84,23 @@ public class FragmentCategoryArticle extends Fragment {
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         mSwipeRefreshLayout.setRefreshing(true);
 
-        if(strKategori.equals("1")) {articleCount = articlePersistence.getListFashionArticle().size();}
-        else if(strKategori.equals("2")) {articleCount = articlePersistence.getListCosmeticsArticle().size();}
-        else if(strKategori.equals("3")) {articleCount = articlePersistence.getListTravelArticle().size();}
-        else if(strKategori.equals("4")) {articleCount = articlePersistence.getListBeautyArticle().size();}
-        else if(strKategori.equals("5")) {articleCount = articlePersistence.getListGourmetArticle().size();}
-        else if(strKategori.equals("6")) {articleCount = articlePersistence.getListGoodsArticle().size();}
-        else if(strKategori.equals("7")) {articleCount = articlePersistence.getListLifeArticle().size();}
-        else if(strKategori.equals("8")) {articleCount = articlePersistence.getListAppsArticle().size();}
+        if (strKategori.equals("1")) {
+            articleCount = articlePersistence.getListFashionArticle().size();
+        } else if (strKategori.equals("2")) {
+            articleCount = articlePersistence.getListCosmeticsArticle().size();
+        } else if (strKategori.equals("3")) {
+            articleCount = articlePersistence.getListTravelArticle().size();
+        } else if (strKategori.equals("4")) {
+            articleCount = articlePersistence.getListBeautyArticle().size();
+        } else if (strKategori.equals("5")) {
+            articleCount = articlePersistence.getListGourmetArticle().size();
+        } else if (strKategori.equals("6")) {
+            articleCount = articlePersistence.getListGoodsArticle().size();
+        } else if (strKategori.equals("7")) {
+            articleCount = articlePersistence.getListLifeArticle().size();
+        } else if (strKategori.equals("8")) {
+            articleCount = articlePersistence.getListAppsArticle().size();
+        }
 
         if (articleCount <= 0)
             new GetArticle(strKategori).execute();
@@ -102,7 +113,8 @@ public class FragmentCategoryArticle extends Fragment {
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
         String category;
-        public GetArticle(String category){
+
+        public GetArticle(String category) {
             this.category = category;
         }
 
@@ -165,14 +177,23 @@ public class FragmentCategoryArticle extends Fragment {
                         LIST_ARTICLE_MATOME.add(article);
                     }
                 }
-                if(category.equals("1")) {persistence.setListFashionArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("2")) {persistence.setListCosmeticsArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("3")) {persistence.setListTravelArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("4")) {persistence.setListBeautyArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("5")) {persistence.setListGourmetArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("6")) {persistence.setListGoodsArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("7")) {persistence.setListLifeArticle(LIST_ARTICLE_MATOME);}
-                else if(category.equals("8")) {persistence.setListAppsArticle(LIST_ARTICLE_MATOME);}
+                if (category.equals("1")) {
+                    persistence.setListFashionArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("2")) {
+                    persistence.setListCosmeticsArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("3")) {
+                    persistence.setListTravelArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("4")) {
+                    persistence.setListBeautyArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("5")) {
+                    persistence.setListGourmetArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("6")) {
+                    persistence.setListGoodsArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("7")) {
+                    persistence.setListLifeArticle(LIST_ARTICLE_MATOME);
+                } else if (category.equals("8")) {
+                    persistence.setListAppsArticle(LIST_ARTICLE_MATOME);
+                }
                 mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME);
 
             }
@@ -185,6 +206,7 @@ public class FragmentCategoryArticle extends Fragment {
             // TODO Auto-generated method stub
             super.onPostExecute(json);
             pDialog.dismiss();
+            mListView.setSelection(PageManager.getInstance().rowCategory);
             mListView.setAdapter(mAdapter);
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -196,37 +218,11 @@ public class FragmentCategoryArticle extends Fragment {
         String category;
         List<DataArticle> LIST_ARTICLE_MATOME_PREF = null;
 
-        public GetArticleFromSharedPref(String category){
+        public GetArticleFromSharedPref(String category) {
             this.category = category;
-            switch(category) {
-                case "1" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListFashionArticle();
-                    break;
-                case "2" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListCosmeticsArticle();
-                    break;
-                case "3" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListTravelArticle();
-                    break;
-                case "4" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListBeautyArticle();
-                    break;
-                case "5" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListGourmetArticle();
-                    break;
-                case "6" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListGoodsArticle();
-                    break;
-                case "7" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListLifeArticle();
-                    break;
-                case "8" :
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListAppsArticle();
-                    break;
-                default:
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListFashionArticle();
-            }
+
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -240,7 +236,34 @@ public class FragmentCategoryArticle extends Fragment {
 
         @Override
         protected String doInBackground(String... arg) {
-            ArticlePersistence articlePersistence = new ArticlePersistence(getActivity());
+            switch (category) {
+                case "1":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListFashionArticle();
+                    break;
+                case "2":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListCosmeticsArticle();
+                    break;
+                case "3":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListTravelArticle();
+                    break;
+                case "4":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListBeautyArticle();
+                    break;
+                case "5":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListGourmetArticle();
+                    break;
+                case "6":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListGoodsArticle();
+                    break;
+                case "7":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListLifeArticle();
+                    break;
+                case "8":
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListAppsArticle();
+                    break;
+                default:
+                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListFashionArticle();
+            }
             mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME_PREF);
             return category;
         }
@@ -251,6 +274,7 @@ public class FragmentCategoryArticle extends Fragment {
             super.onPostExecute(result);
             pDialog.dismiss();
             mListView.setAdapter(mAdapter);
+            mListView.setSelection(PageManager.getInstance().rowCategory);
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
