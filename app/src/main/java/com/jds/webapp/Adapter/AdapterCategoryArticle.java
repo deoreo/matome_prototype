@@ -75,7 +75,6 @@ public class AdapterCategoryArticle extends BaseAdapter {
         Picasso.with(mAct).load(URL_THUMBNAIL).fit().into(holder.articleListBgImage);
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterCategoryArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
-        Log.v("ARTICLE CLICK", "" + position);
         return convertView;
     }
 
