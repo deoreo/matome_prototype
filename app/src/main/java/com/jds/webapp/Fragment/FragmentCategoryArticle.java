@@ -48,8 +48,8 @@ public class FragmentCategoryArticle extends Fragment {
 
 
     private void getExtras() {
-        Bundle bundle = getArguments();
         try {
+            Bundle bundle = getArguments();
             strKategori = bundle.getString("category");
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -83,25 +83,7 @@ public class FragmentCategoryArticle extends Fragment {
         });
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         mSwipeRefreshLayout.setRefreshing(true);
-
-        if (strKategori.equals("1")) {
-            articleCount = articlePersistence.getListFashionArticle().size();
-        } else if (strKategori.equals("2")) {
-            articleCount = articlePersistence.getListCosmeticsArticle().size();
-        } else if (strKategori.equals("3")) {
-            articleCount = articlePersistence.getListTravelArticle().size();
-        } else if (strKategori.equals("4")) {
-            articleCount = articlePersistence.getListBeautyArticle().size();
-        } else if (strKategori.equals("5")) {
-            articleCount = articlePersistence.getListGourmetArticle().size();
-        } else if (strKategori.equals("6")) {
-            articleCount = articlePersistence.getListGoodsArticle().size();
-        } else if (strKategori.equals("7")) {
-            articleCount = articlePersistence.getListLifeArticle().size();
-        } else if (strKategori.equals("8")) {
-            articleCount = articlePersistence.getListAppsArticle().size();
-        }
-
+        articleCount = articlePersistence.getListCategoryArticle(strKategori).size();
         if (articleCount <= 0)
             new GetArticle(strKategori).execute();
         else
@@ -236,34 +218,7 @@ public class FragmentCategoryArticle extends Fragment {
 
         @Override
         protected String doInBackground(String... arg) {
-            switch (category) {
-                case "1":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListFashionArticle();
-                    break;
-                case "2":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListCosmeticsArticle();
-                    break;
-                case "3":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListTravelArticle();
-                    break;
-                case "4":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListBeautyArticle();
-                    break;
-                case "5":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListGourmetArticle();
-                    break;
-                case "6":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListGoodsArticle();
-                    break;
-                case "7":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListLifeArticle();
-                    break;
-                case "8":
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListAppsArticle();
-                    break;
-                default:
-                    LIST_ARTICLE_MATOME_PREF = articlePersistence.getListFashionArticle();
-            }
+            LIST_ARTICLE_MATOME_PREF = articlePersistence.getListCategoryArticle(category);
             mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME_PREF);
             return category;
         }

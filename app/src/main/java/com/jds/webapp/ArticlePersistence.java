@@ -23,6 +23,9 @@ public class ArticlePersistence {
     private static final String KEY_PV = "pv";
     private static final String KEY_POST_DATE = "postDate";
     private static final String KEY_DESC = "description";
+    private static  String mKeyCategorySize = "";
+    private static  String mKeyCategoryJson = "";
+
 
     private static final String KEY_RECENT = "recent";
 
@@ -102,7 +105,7 @@ public class ArticlePersistence {
 
     public DataArticle getSavedArticle(int key){
         Gson gson = new Gson();
-        String json = _sharedPref.getString("saved_"+key, "");
+        String json = _sharedPref.getString("saved_" + key, "");
         DataArticle obj = gson.fromJson(json, DataArticle.class);
         return obj;
     }
@@ -132,6 +135,23 @@ public class ArticlePersistence {
         return newList;
     }
 
+
+
+
+    //////////////////////////SET CATEGORY ARTICLE///////////////////////////////////////
+    public void setListCategoryArticle(String category, List<DataArticle> newList){
+        _sharedPrefEditor.putInt("Apps_size", newList.size()); /* sKey is an array */
+
+        for(int i=0;i<newList.size();i++)
+        {
+            Gson gson = new Gson();
+            String dataJson = gson.toJson(newList.get(i));
+            _sharedPrefEditor.putString("Apps_" + i, dataJson);
+        }
+        _sharedPrefEditor.commit();
+    }
+
+
     public void setListFashionArticle(List<DataArticle> newList){
         _sharedPrefEditor.putInt("Fashion_size", newList.size());
 
@@ -139,7 +159,7 @@ public class ArticlePersistence {
         {
             Gson gson = new Gson();
             String dataJson = gson.toJson(newList.get(i));
-            _sharedPrefEditor.putString("Fashion_"+i, dataJson);
+            _sharedPrefEditor.putString("Fashion_" + i, dataJson);
         }
         _sharedPrefEditor.commit();
     }
@@ -222,6 +242,59 @@ public class ArticlePersistence {
     }
 
 
+
+    //////////////////////////Get List Category////////////////////////////////////////
+    public List<DataArticle> getListCategoryArticle(String category) {
+        switch (category) {
+            case "1":
+                mKeyCategorySize = "Fashion_size";
+                mKeyCategoryJson = "Fashion_";
+                break;
+            case "2":
+                mKeyCategorySize = "Cosmetics_size";
+                mKeyCategoryJson = "Cosmetics_";
+                break;
+            case "3":
+                mKeyCategorySize = "Travel_size";
+                mKeyCategoryJson = "Travel_";
+                break;
+            case "4":
+                mKeyCategorySize = "Beauty_size";
+                mKeyCategoryJson = "Beauty_";
+                break;
+            case "5":
+                mKeyCategorySize = "Gourmet_size";
+                mKeyCategoryJson = "Gourmet_";
+                break;
+            case "6":
+                mKeyCategorySize = "Goods_size";
+                mKeyCategoryJson = "Goods_";
+                break;
+            case "7":
+                mKeyCategorySize = "Life_size";
+                mKeyCategoryJson = "Life_";
+                break;
+            case "8":
+                mKeyCategorySize = "Apps_size";
+                mKeyCategoryJson = "Apps_";
+                break;
+            default:
+                mKeyCategorySize = "Fashion_size";
+                mKeyCategoryJson = "Fashion_";
+        }
+
+        List<DataArticle> newList = new ArrayList<DataArticle>();
+        int size = _sharedPref.getInt(mKeyCategorySize, 0);
+        for(int i=0;i<size;i++)
+        {
+            Gson gson = new Gson();
+            String json = _sharedPref.getString(mKeyCategoryJson +i, "");
+            DataArticle obj = gson.fromJson(json, DataArticle.class);
+            newList.add(obj);
+        }
+        return newList;
+    }
+    /*
     public List<DataArticle> getListFashionArticle() {
         List<DataArticle> newList = new ArrayList<DataArticle>();
         int size = _sharedPref.getInt("Fashion_size", 0);
@@ -318,7 +391,7 @@ public class ArticlePersistence {
         }
         return newList;
     }
-
+*/
 
     public void setFirstArticle(DataArticle dataArticle){
 

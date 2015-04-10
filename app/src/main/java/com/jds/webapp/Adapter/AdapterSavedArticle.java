@@ -1,18 +1,9 @@
 package com.jds.webapp.Adapter;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,31 +11,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.jds.webapp.AlertDialogManager;
 import com.jds.webapp.ArticleListClickListener;
-import com.jds.webapp.DataArticle;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.DatabaseHandler;
-import com.jds.webapp.Fragment.FragmentArticle;
-import com.jds.webapp.Fragment.FragmentHeaderArticle;
+import com.jds.webapp.DialogBox;
 import com.jds.webapp.Fragment.FragmentListSavedArticle;
 import com.jds.webapp.R;
-import com.jds.webapp.SavedArticleHandler;
 import com.jds.webapp.SavedArticleThread;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URI;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmBaseAdapter;
-import io.realm.RealmResults;
 
 public class AdapterSavedArticle extends BaseAdapter {
 
@@ -136,6 +116,7 @@ public class AdapterSavedArticle extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (Build.VERSION.SDK_INT > 10) {
+                        DialogBox.getInstance().showDialog(mAct,"OK", "", "Article Deleted");
                         Log.v("ADAPTER", "Click Delete Button - " + KEY);
                         Realm realm = Realm.getInstance(mAct);
                         SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
