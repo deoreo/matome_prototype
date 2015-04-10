@@ -111,7 +111,7 @@ public class ArticlePersistence {
     }
 
     public void setListSavedArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Status_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Status_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -140,18 +140,55 @@ public class ArticlePersistence {
 
     //////////////////////////SET CATEGORY ARTICLE///////////////////////////////////////
     public void setListCategoryArticle(String category, List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Apps_size", newList.size()); /* sKey is an array */
+        switch (category) {
+            case "1":
+                mKeyCategorySize = "Fashion_size";
+                mKeyCategoryJson = "Fashion_";
+                break;
+            case "2":
+                mKeyCategorySize = "Cosmetics_size";
+                mKeyCategoryJson = "Cosmetics_";
+                break;
+            case "3":
+                mKeyCategorySize = "Travel_size";
+                mKeyCategoryJson = "Travel_";
+                break;
+            case "4":
+                mKeyCategorySize = "Beauty_size";
+                mKeyCategoryJson = "Beauty_";
+                break;
+            case "5":
+                mKeyCategorySize = "Gourmet_size";
+                mKeyCategoryJson = "Gourmet_";
+                break;
+            case "6":
+                mKeyCategorySize = "Goods_size";
+                mKeyCategoryJson = "Goods_";
+                break;
+            case "7":
+                mKeyCategorySize = "Life_size";
+                mKeyCategoryJson = "Life_";
+                break;
+            case "8":
+                mKeyCategorySize = "Apps_size";
+                mKeyCategoryJson = "Apps_";
+                break;
+            default:
+                mKeyCategorySize = "Fashion_size";
+                mKeyCategoryJson = "Fashion_";
+        }
+        _sharedPrefEditor.putInt(mKeyCategorySize, newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
             Gson gson = new Gson();
             String dataJson = gson.toJson(newList.get(i));
-            _sharedPrefEditor.putString("Apps_" + i, dataJson);
+            _sharedPrefEditor.putString(mKeyCategoryJson + i, dataJson);
         }
         _sharedPrefEditor.commit();
     }
 
-
+/*
     public void setListFashionArticle(List<DataArticle> newList){
         _sharedPrefEditor.putInt("Fashion_size", newList.size());
 
@@ -164,7 +201,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListCosmeticsArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Cosmetics_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Cosmetics_size", newList.size()); 
 
         for(int i=0;i<newList.size();i++)
         {
@@ -175,7 +212,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListTravelArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Travel_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Travel_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -186,7 +223,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListBeautyArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Beauty_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Beauty_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -197,7 +234,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListGourmetArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Gourmet_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Gourmet_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -208,7 +245,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListGoodsArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Goods_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Goods_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -219,7 +256,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListLifeArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Life_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Life_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -230,7 +267,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
     public void setListAppsArticle(List<DataArticle> newList){
-        _sharedPrefEditor.putInt("Apps_size", newList.size()); /* sKey is an array */
+        _sharedPrefEditor.putInt("Apps_size", newList.size());  
 
         for(int i=0;i<newList.size();i++)
         {
@@ -241,7 +278,7 @@ public class ArticlePersistence {
         _sharedPrefEditor.commit();
     }
 
-
+*/
 
     //////////////////////////Get List Category////////////////////////////////////////
     public List<DataArticle> getListCategoryArticle(String category) {

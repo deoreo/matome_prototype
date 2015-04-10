@@ -159,23 +159,7 @@ public class FragmentCategoryArticle extends Fragment {
                         LIST_ARTICLE_MATOME.add(article);
                     }
                 }
-                if (category.equals("1")) {
-                    persistence.setListFashionArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("2")) {
-                    persistence.setListCosmeticsArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("3")) {
-                    persistence.setListTravelArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("4")) {
-                    persistence.setListBeautyArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("5")) {
-                    persistence.setListGourmetArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("6")) {
-                    persistence.setListGoodsArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("7")) {
-                    persistence.setListLifeArticle(LIST_ARTICLE_MATOME);
-                } else if (category.equals("8")) {
-                    persistence.setListAppsArticle(LIST_ARTICLE_MATOME);
-                }
+                persistence.setListCategoryArticle(category, LIST_ARTICLE_MATOME);
                 mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME);
 
             }
