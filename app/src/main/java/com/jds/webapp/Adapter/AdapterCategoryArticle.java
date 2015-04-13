@@ -23,15 +23,23 @@ public class AdapterCategoryArticle extends BaseAdapter {
     private FragmentActivity mAct;
     private List<DataArticle> mSourceData, mFilterData;
     private LayoutInflater mInflater = null;
+    private boolean mKeyIsEmpty = false;
 
     public AdapterCategoryArticle(FragmentActivity activity, List<DataArticle> d) {
         mAct = activity;
         mSourceData = d;
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if(d==null || d.isEmpty()){
+            mKeyIsEmpty = true;
+        }
+
     }
 
     @Override
     public int getCount() {
+        if(mKeyIsEmpty)
+            return 1;
         return mSourceData.size();
     }
 
@@ -47,7 +55,12 @@ public class AdapterCategoryArticle extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+
+        if(mKeyIsEmpty){
+            convertView = mInflater.inflate(R.layout.list_row_empty, null);
+        }
+        else {
+            ViewHolder holder;
             convertView = mInflater.inflate(R.layout.list_category_article, null);
             holder = new ViewHolder();
             holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
@@ -75,6 +88,8 @@ public class AdapterCategoryArticle extends BaseAdapter {
         Picasso.with(mAct).load(URL_THUMBNAIL).fit().into(holder.articleListBgImage);
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterCategoryArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
+        }
+
         return convertView;
     }
 

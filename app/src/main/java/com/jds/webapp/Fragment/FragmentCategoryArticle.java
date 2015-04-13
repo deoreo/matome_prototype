@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterCategoryArticle;
+import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
@@ -61,6 +62,7 @@ public class FragmentCategoryArticle extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
     }
 
@@ -84,10 +86,17 @@ public class FragmentCategoryArticle extends Fragment {
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         mSwipeRefreshLayout.setRefreshing(true);
         articleCount = articlePersistence.getListCategoryArticle(strKategori).size();
-        if (articleCount <= 0)
+        if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+            if (articleCount <= 0) {
+                new GetArticle(strKategori).execute();
+            } else {
+                new GetArticleFromSharedPref(strKategori).execute();
+            }
+        }
+        else{
+            DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
             new GetArticle(strKategori).execute();
-        else
-            new GetArticleFromSharedPref(strKategori).execute();
+        }
         return view;
     }
 
@@ -192,18 +201,25 @@ public class FragmentCategoryArticle extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Load Articles...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            //pDialog.show();
+            if(!isCancelled()) {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage("Load Articles...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(false);
+                pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                //pDialog.show();
+            }
         }
 
         @Override
         protected String doInBackground(String... arg) {
-            LIST_ARTICLE_MATOME_PREF = articlePersistence.getListCategoryArticle(category);
-            mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME_PREF);
+            try {
+                LIST_ARTICLE_MATOME_PREF = articlePersistence.getListCategoryArticle(category);
+                mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME_PREF);
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
             return category;
         }
 

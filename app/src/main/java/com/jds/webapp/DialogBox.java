@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -17,10 +18,12 @@ public class DialogBox {
         }
         return sInstance;
     }
-    public void showDialog(Context context, String positive, String negative, String content) {
+    public void showDialog(Context context, Drawable icon, String positive, String negative, String title, String content) {
         new MaterialDialog.Builder(context)
                 .autoDismiss(true)
-                .icon(context.getResources().getDrawable(R.drawable.news))
+                .icon(icon)
+                //.icon(context.getResources().getDrawable(R.drawable.news))
+                .title(title)
                 .content(content)
                 .positiveText(positive)
                 .negativeText(negative)

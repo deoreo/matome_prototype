@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterListArticle;
+import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
@@ -66,7 +67,6 @@ public class FragmentListArticle extends Fragment {
     }
 
 
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -83,16 +83,13 @@ public class FragmentListArticle extends Fragment {
         });
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.MODE_BOTTOM);
         int articleCount = articlePersistence.getListSavedArticle().size();
-       // if (articleCount <= 0)
-            if(NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
-                new GetArticle().execute();
-            }
-            else{
-                showDialog();
-            }
-       // else
-       //     new GetArticleFromSharedPref().execute();
-        mSwipeRefreshLayout.setRefreshing(true);
+        if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+            new GetArticle().execute();
+        } else {
+            DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+            mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
+
+        }
         return view;
     }
 
@@ -124,84 +121,60 @@ public class FragmentListArticle extends Fragment {
 
         @Override
         protected JSONArray doInBackground(String... arg) {
-                JSONArray json = null;
-                LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
-                ArticlePersistence persistence = new ArticlePersistence(getActivity());
-                JSONControl JSONControl = new JSONControl();
-                json = JSONControl.listArticle();
-                if (json != null) {
-                    for (int i = 0; i < json.length(); i++) {
-                        String id = "";
-                        String key = "";
-                        String thumbnail = "";
-                        String title = "";
-                        String pv = "";
-                        String post = "";
-                        String postdate = "";
-                        String author = "";
-                        boolean status = true;
-                        try {
-                            JSONObject jsonObject = json.getJSONObject(i);
-                            id = jsonObject.getString(KEY_ID);
-                            key = jsonObject.getString(KEY_KEY);
-                            thumbnail = jsonObject.getString(KEY_THUMBNAIL);
-                            title = jsonObject.getString(KEY_TITLE);
-                            pv = jsonObject.getString(KEY_PV);
-                            post = jsonObject.getString(KEY_POST_DATE);
-                            Date date = PageManager.getInstance().convertFormatDate(post);
-                            postdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
-                            JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
-                            author = jsonObject1.getString(KEY_AUTHOR);
-                            status = true;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            new GetArticleFromSharedPref().execute();
-                            status = false;
-                        }
-                        if (status) {
-                            article = new DataArticle();
-                            article.setId(id);
-                            article.setKey(key);
-                            article.setThumbnail(thumbnail);
-                            article.setAuthor(author);
-                            article.setTitle(title);
-                            article.setDate(postdate);
-                            article.setPv(pv);
-                            article.setContent("");
-                            LIST_ARTICLE_MATOME.add(article);
-                            /*if(i==0){
-                                boolean isNull = false;
-                                DataArticle firstArticle = null;
-                                try {
-                                    firstArticle = persistence.getFirstArticle();
-                                    if(!firstArticle.getKey().equals(article.getKey()) && !isNull) {
-                                        persistence.setFirstArticle(article);
-                                        //notif
-
-                                        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
-                                        alarmIntent.putExtra("title",article.getTitle());
-                                        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                                        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                                        int interval = 1 * 30 * 1000;;
-                                        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-
-                                    }
-                                }
-                                catch (NullPointerException e){
-                                    isNull = true;
-                                    persistence.setFirstArticle(article);
-                                }
-                            }*/
-                        }
-                    }
-
+            JSONArray json = null;
+            LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
+            ArticlePersistence persistence = new ArticlePersistence(getActivity());
+            JSONControl JSONControl = new JSONControl();
+            json = JSONControl.listArticle();
+            if (json != null) {
+                for (int i = 0; i < json.length(); i++) {
+                    String id = "";
+                    String key = "";
+                    String thumbnail = "";
+                    String title = "";
+                    String pv = "";
+                    String post = "";
+                    String postdate = "";
+                    String author = "";
+                    boolean status = true;
                     try {
-                        persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
-                        mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
-                    }
-                    catch (NullPointerException e){
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        id = jsonObject.getString(KEY_ID);
+                        key = jsonObject.getString(KEY_KEY);
+                        thumbnail = jsonObject.getString(KEY_THUMBNAIL);
+                        title = jsonObject.getString(KEY_TITLE);
+                        pv = jsonObject.getString(KEY_PV);
+                        post = jsonObject.getString(KEY_POST_DATE);
+                        Date date = PageManager.getInstance().convertFormatDate(post);
+                        postdate = new SimpleDateFormat("yyyy/MM/dd").format(date);
+                        JSONObject jsonObject1 = jsonObject.getJSONObject(KEY_USR);
+                        author = jsonObject1.getString(KEY_AUTHOR);
+                        status = true;
+                    } catch (JSONException e) {
                         e.printStackTrace();
+                        new GetArticleFromSharedPref().execute();
+                        status = false;
                     }
+                    if (status) {
+                        article = new DataArticle();
+                        article.setId(id);
+                        article.setKey(key);
+                        article.setThumbnail(thumbnail);
+                        article.setAuthor(author);
+                        article.setTitle(title);
+                        article.setDate(postdate);
+                        article.setPv(pv);
+                        article.setContent("");
+                        LIST_ARTICLE_MATOME.add(article);
+                    }
+                }
+
+                try {
+                    persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
+                    mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
 
             }
 

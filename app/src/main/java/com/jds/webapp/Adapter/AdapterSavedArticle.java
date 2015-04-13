@@ -116,7 +116,7 @@ public class AdapterSavedArticle extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (Build.VERSION.SDK_INT > 10) {
-                        DialogBox.getInstance().showDialog(mAct,"OK", "", "Article Deleted");
+                        DialogBox.getInstance().showDialog(mAct,null, "OK", "","Information", "Article Deleted");
                         Log.v("ADAPTER", "Click Delete Button - " + KEY);
                         Realm realm = Realm.getInstance(mAct);
                         SavedArticleThread savedArticleThread = new SavedArticleThread(mAct);
