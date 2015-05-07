@@ -6,15 +6,21 @@ import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
+import com.jds.webapp.NetworkManager;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 import com.melnykov.fab.FloatingActionButton;
@@ -30,6 +36,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,7 +46,7 @@ public class FragmentArticle extends Fragment {
     WebView webview;
     TextView titleText, authorText, commentText;
     EditText nameEditText, commentEditText;
-    String data = "",  judul="", info="", pv="";
+    String data = "", judul = "", info = "", pv = "";
     String key, title, date, author, bundlepv, thumbnail;
     String id, msg, nam, datecomment;
     String comments = "";
@@ -50,6 +57,7 @@ public class FragmentArticle extends Fragment {
     private static final String KEY_DATE = "date";
     MaterialDialog mMaterialDialog;
     Activity mAct;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,39 +69,48 @@ public class FragmentArticle extends Fragment {
                              Bundle savedInstanceState) {
 
         mAct = getActivity();
-        getExtras();
-        View view = inflater.inflate(R.layout.activity_web, container, false);
-        ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.scroll_view);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.attachToScrollView(scrollView);
-        titleText = (TextView)view.findViewById(R.id.articletitleText);
-        authorText = (TextView)view.findViewById(R.id.authorText);
+        View view = null;
+        if(!NetworkManager.getInstance(mAct).isConnectingToInternet()){
+            view = inflater.inflate(R.layout.activity_web_empty, container, false);
+            DialogBox.getInstance().showDialog(mAct,null,"OK","","Warning","Internet Connection Trouble!");
+            return view;
+        }
+        else {
+            getExtras();
+            view = inflater.inflate(R.layout.activity_web, container, false);
+            ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.scroll_view);
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab.attachToScrollView(scrollView);
+            titleText = (TextView) view.findViewById(R.id.articletitleText);
+            authorText = (TextView) view.findViewById(R.id.authorText);
 
-        //commentText = (TextView) view.findViewById(R.id.commentTextView);
-        webview = (WebView) view.findViewById(R.id.webView);
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webview.getSettings().setBuiltInZoomControls(true);
+            //commentText = (TextView) view.findViewById(R.id.commentTextView);
+            webview = (WebView) view.findViewById(R.id.webView);
+            webview.getSettings().setJavaScriptEnabled(true);
+            webview.getSettings().setAllowContentAccess(true);
+            webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            webview.getSettings().setBuiltInZoomControls(true);
+            webview.setWebChromeClient(new WebChromeClient() {
+            });
+            webview.setScrollbarFadingEnabled(true);
+            articleImage = (ImageView) view.findViewById(R.id.articleImage);
+            Picasso.with(getActivity()).load(thumbnail)
+                    .fit()
+                    .into(articleImage);
+            new LoadPage().execute(key);
+            new GetComment(id).execute();
+            fab.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showDialogCustomView();
+                        }
+                    });
 
-       // webview.getSettings().setLoadWithOverviewMode(true);
-        //webview.getSettings().setUseWideViewPort(true);
-        //webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-        webview.setScrollbarFadingEnabled(true);
-        articleImage = (ImageView) view.findViewById(R.id.articleImage);
-        Picasso.with(getActivity()).load(thumbnail)
-                .fit()
-                .into(articleImage);
-        new LoadPage().execute(key);
-        new GetComment(id).execute();
-        fab.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDialogCustomView();
-                    }
-                });
+        }
         return view;
     }
+
     private void getExtras() {
         Bundle bundle = getArguments();
         id = bundle.getString("id");
@@ -105,10 +122,10 @@ public class FragmentArticle extends Fragment {
         thumbnail = bundle.getString("thumbnail");
     }
 
-
     private class LoadPage extends AsyncTask<String, Void, String> {
         Document doc = null;
         ProgressDialog pDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -122,18 +139,19 @@ public class FragmentArticle extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            String key = params[0];
+
             try {
-                doc = Jsoup.connect("http://matome.id/"+key).get();
-                String primeDiv="content";
+                String key = params[0];
+                doc = Jsoup.connect("http://matome.id/" + key).get();
+                String primeDiv = "content";
                 //scrap content
-                Elements content = doc.select("div[id="+primeDiv+"]");
+                Elements content = doc.select("div[id=" + primeDiv + "]");
                 for (Element post : content) {
                     Elements post_content = post.getElementsByClass("post-content");
-                    for(Element c : post_content){
+                    for (Element c : post_content) {
                         judul = c.getElementsByClass("post-title").text();
                         Elements authors = c.getElementsByClass("author-line");
-                        for(Element a : authors){
+                        for (Element a : authors) {
                             info = a.getElementsByClass("author-name").text();
                             pv = a.getElementsByClass("grey").text();
                         }
@@ -149,6 +167,7 @@ public class FragmentArticle extends Fragment {
                 e.printStackTrace();
             }
 
+
             return key;
         }
 
@@ -162,12 +181,13 @@ public class FragmentArticle extends Fragment {
                             "<style>img{display: inline;height: auto;max-width: 100%;}</style>" +
                             "<style>blockquote{margin: 1em 0 0;padding: 10px 15px 18px 40px;background-color: #f5f5f5;background-image: url(http://matome.id/images/quote.png);background-position: 10px 10px;background-repeat: no-repeat;border-radius: 5px;}</style>" +
                             "<style>a{display:block;width:300px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:small;text-decoration:none;margin:auto}</style>" +
-                            "<body>" + data + "</body>", "text/html", "utf-8", null);
+                            "<body>" + data + "</body>", "text/html", "UTF-8", null);
+
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
             authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
-
         }
     }
+
     private void showDialogCustomView() {
         new MaterialDialog.Builder(mAct)
                 .autoDismiss(true)
@@ -186,7 +206,8 @@ public class FragmentArticle extends Fragment {
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
-            }})
+                    }
+                })
                 .show();
 
         /*
@@ -216,7 +237,7 @@ public class FragmentArticle extends Fragment {
         */
     }
 
-    public View viewMaterialDialog(String comments){
+    public View viewMaterialDialog(String comments) {
         View view = LayoutInflater.from(mAct).inflate(R.layout.dialog_customview, null);
         commentText = (TextView) view.findViewById(R.id.commentTextView);
         nameEditText = (EditText) view.findViewById(R.id.nameEditText);
@@ -228,9 +249,9 @@ public class FragmentArticle extends Fragment {
 
     public class GetComment extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
-        String key_article="";
+        String key_article = "";
 
-        public GetComment(String key_article){
+        public GetComment(String key_article) {
             this.key_article = key_article;
         }
 
@@ -244,7 +265,11 @@ public class FragmentArticle extends Fragment {
             comments = "";
             JSONArray json = null;
             JSONControl JSONControl = new JSONControl();
-            json = JSONControl.listComment(key_article);
+            try {
+                json = JSONControl.listComment(key_article);
+            } catch (ConnectException e) {
+                e.printStackTrace();
+            }
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
                     String id = "";
@@ -255,7 +280,7 @@ public class FragmentArticle extends Fragment {
                     boolean status = true;
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
-                        if(jsonObject!=null) {
+                        if (jsonObject != null) {
                             id = jsonObject.getString(KEY_ID);
                             nam = jsonObject.getString(KEY_NAM);
                             msg = jsonObject.getString(KEY_MSG);
@@ -270,14 +295,14 @@ public class FragmentArticle extends Fragment {
                         status = false;
                     }
                     if (status) {
-                        comments+=Html.fromHtml(
-                                "<font color='#ffffff'><b>"+nam+"</b></font><br>"+
-                                "<font color='#ffffff'>"+msg+"</font><br><br>"
+                        comments += Html.fromHtml(
+                                "<font color='#ffffff'><b>" + nam + "</b></font><br>" +
+                                        "<font color='#ffffff'>" + msg + "</font><br><br>"
                         );
                     }
                 }
-                if(comments.equals("")){
-                    comments ="Not Yet Comments";
+                if (comments.equals("")) {
+                    comments = "Not Yet Comments";
                 }
             }
             return json;
@@ -294,10 +319,10 @@ public class FragmentArticle extends Fragment {
 
     public class PostComment extends AsyncTask<String, Void, String> {
         ProgressDialog pDialog;
-        String key_article="";
+        String key_article = "";
         String art, msg, nam;
 
-        private PostComment(String art, String msg, String nam){
+        private PostComment(String art, String msg, String nam) {
             this.art = art;
             this.msg = msg;
             this.nam = nam;

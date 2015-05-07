@@ -1,10 +1,13 @@
 package com.jds.webapp;
 
+import android.app.Activity;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,20 +22,25 @@ public class JSONControl {
         _JSONResponse = new JSONResponse();
     }
 
-    public JSONArray listArticle() {
-        JSONArray json = _JSONResponse.GETResponse(URL_API_ARTICLE);
+    public JSONArray listArticle(Activity activity) {
+        JSONArray json = null;
+        try {
+            json = _JSONResponse.GETResponse(URL_API_ARTICLE);
+        } catch (ConnectException e) {
+            DialogBox.getInstance().showDialog(activity, null, "", "OK", "Warning", "Please reload");
+        }
         return json;
     }
-    public JSONArray searchArticle(String keyword) {
+    public JSONArray searchArticle(String keyword) throws ConnectException {
         JSONArray json = _JSONResponse.GETResponse(URL_API_SEARCH_ARTICLE + keyword);
         return json;
     }
-    public JSONArray listCategoryArticle(String category) {
+    public JSONArray listCategoryArticle(String category) throws ConnectException {
         JSONArray json = _JSONResponse.GETResponse(URL_API_CATEGORY_ARTICLE + category);
         return json;
     }
 
-    public JSONArray listComment(String article_key) {
+    public JSONArray listComment(String article_key) throws ConnectException {
         JSONArray json = _JSONResponse.GETResponse(URL_API_COMMENT +"/"+article_key);
         return json;
     }

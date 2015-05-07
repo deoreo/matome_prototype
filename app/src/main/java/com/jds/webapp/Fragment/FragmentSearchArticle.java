@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,7 +92,11 @@ public class FragmentSearchArticle extends Fragment implements SwipeRefreshLayou
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
             JSONControl JSONControl = new JSONControl();
-            json = JSONControl.searchArticle(keyword);
+            try {
+                json = JSONControl.searchArticle(keyword);
+            } catch (ConnectException e) {
+                e.printStackTrace();
+            }
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
                     String id = "";

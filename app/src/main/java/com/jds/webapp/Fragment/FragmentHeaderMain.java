@@ -494,12 +494,18 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
 
 
     private void loadFragmentCategory(String category) {
-        FragmentCategoryArticle fragmentCategoryArticle = new FragmentCategoryArticle();
-        Bundle args = new Bundle();
-        args.putString("category", category);
-        fragmentCategoryArticle.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container,fragmentCategoryArticle )
-                .commit();
+        try {
+
+            FragmentCategoryArticle fragmentCategoryArticle = new FragmentCategoryArticle();
+            Bundle args = new Bundle();
+            args.putString("category", category);
+            fragmentCategoryArticle.setArguments(args);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragmentCategoryArticle)
+                    .commit();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

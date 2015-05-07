@@ -69,7 +69,6 @@ public class FragmentListSavedArticle extends Fragment implements SwipeRefreshLa
 
 
     public class GetListSavedArticle extends AsyncTask<Void, Void, String> {
-        ProgressDialog pDialog;
         private FragmentActivity fragmentActivity;
         private SavedArticleThread savedArticleThread;
 
@@ -81,12 +80,6 @@ public class FragmentListSavedArticle extends Fragment implements SwipeRefreshLa
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Load Articles...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
             mSwipeRefreshLayout.setRefreshing(true);
 
         }
@@ -100,7 +93,6 @@ public class FragmentListSavedArticle extends Fragment implements SwipeRefreshLa
         protected void onPostExecute(final String results) {
             // TODO Auto-generated method stub
             super.onPostExecute(results);
-            pDialog.dismiss();
             mAdapter = new AdapterSavedArticle(fragmentActivity);
             mListView.setAdapter(mAdapter);
             mSwipeRefreshLayout.setRefreshing(false);

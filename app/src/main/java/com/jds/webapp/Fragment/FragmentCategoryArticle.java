@@ -1,13 +1,14 @@
 package com.jds.webapp.Fragment;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterCategoryArticle;
@@ -15,6 +16,7 @@ import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
+import com.jds.webapp.NetworkManager;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 
@@ -22,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,9 +48,10 @@ public class FragmentCategoryArticle extends Fragment {
     private static final String KEY_THUMBNAIL = "img";
     private ArticlePersistence articlePersistence;
     public String strKategori = "1";
-    int articleCount;
-
-
+    private int articleCount;
+    private View btnFashion, btnCosmetics, btnTravel, btnBeauty, btnGourmet, btnGoods, btnLife, btnApps;
+    private LayoutInflater mInflater;
+    private ViewGroup mContainer;
     private void getExtras() {
         try {
             Bundle bundle = getArguments();
@@ -63,7 +67,6 @@ public class FragmentCategoryArticle extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
     }
 
 
@@ -71,8 +74,12 @@ public class FragmentCategoryArticle extends Fragment {
                              Bundle savedInstanceState) {
 
         getExtras();
+        mInflater = inflater;
+        mContainer = container;
         articlePersistence = new ArticlePersistence(getActivity());
         View view = inflater.inflate(R.layout.fragment_list_article_coba, container, false);
+
+
         mListView = (ListView) view.findViewById(R.id.lvArticle);
         mListView.setSelection(PageManager.getInstance().rowCategory);
         mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -80,7 +87,12 @@ public class FragmentCategoryArticle extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new GetArticle(strKategori).execute();
+                if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+                    new GetArticle(strKategori).execute();
+                } else {
+                    DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
@@ -95,14 +107,18 @@ public class FragmentCategoryArticle extends Fragment {
         }
         else{
             DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
-            new GetArticle(strKategori).execute();
+            mSwipeRefreshLayout.setRefreshing(false);
         }
         return view;
     }
 
 
+
+
+
+
+
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
-        ProgressDialog pDialog;
         String category;
 
         public GetArticle(String category) {
@@ -112,12 +128,6 @@ public class FragmentCategoryArticle extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            //pDialog.show();
         }
 
         @Override
@@ -126,7 +136,11 @@ public class FragmentCategoryArticle extends Fragment {
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
             ArticlePersistence persistence = new ArticlePersistence(getActivity());
             JSONControl JSONControl = new JSONControl();
-            json = JSONControl.listCategoryArticle(category);
+            try {
+                json = JSONControl.listCategoryArticle(category);
+            } catch (ConnectException e) {
+                e.printStackTrace();
+            }
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
                     String id = "";
@@ -169,8 +183,12 @@ public class FragmentCategoryArticle extends Fragment {
                     }
                 }
                 persistence.setListCategoryArticle(category, LIST_ARTICLE_MATOME);
-                mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME);
-
+                try {
+                    mAdapter = new AdapterCategoryArticle(getActivity(), LIST_ARTICLE_MATOME);
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
 
             return json;
@@ -180,15 +198,14 @@ public class FragmentCategoryArticle extends Fragment {
         protected void onPostExecute(final JSONArray json) {
             // TODO Auto-generated method stub
             super.onPostExecute(json);
-            pDialog.dismiss();
             mListView.setSelection(PageManager.getInstance().rowCategory);
             mListView.setAdapter(mAdapter);
             mSwipeRefreshLayout.setRefreshing(false);
+            //PageManager.getInstance().setIsButtonCategoryEnable(true);
         }
     }
 
     public class GetArticleFromSharedPref extends AsyncTask<String, Void, String> {
-        ProgressDialog pDialog;
         AdapterCategoryArticle mAdapter;
         String category;
         List<DataArticle> LIST_ARTICLE_MATOME_PREF = null;
@@ -201,14 +218,6 @@ public class FragmentCategoryArticle extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(!isCancelled()) {
-                pDialog = new ProgressDialog(getActivity());
-                pDialog.setMessage("Load Articles...");
-                pDialog.setIndeterminate(false);
-                pDialog.setCancelable(false);
-                pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                //pDialog.show();
-            }
         }
 
         @Override
@@ -227,7 +236,6 @@ public class FragmentCategoryArticle extends Fragment {
         protected void onPostExecute(final String result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            pDialog.dismiss();
             mListView.setAdapter(mAdapter);
             mListView.setSelection(PageManager.getInstance().rowCategory);
             mSwipeRefreshLayout.setRefreshing(false);

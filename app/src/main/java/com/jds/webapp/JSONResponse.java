@@ -9,7 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.util.List;
 
 public class JSONResponse {
@@ -27,15 +27,8 @@ public class JSONResponse {
     static JSONArray jsonArray = null;
     static JSONObject _jObj = null;
     static String _json = "";
-    public JSONResponse() {
 
-    }
-
-
-
-
-
-    public JSONArray GETResponse(String url) {
+    public JSONArray GETResponse(String url) throws ConnectException{
         try {
 
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -44,7 +37,9 @@ public class JSONResponse {
             HttpResponse httpResponse = httpClient.execute(httpGet);
             HttpEntity httpEntity = httpResponse.getEntity();
             _inputStream = httpEntity.getContent();
-
+        }
+        catch(ConnectException e){
+                throw e;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -75,8 +70,6 @@ public class JSONResponse {
         }
         return jsonArray;
     }
-
-
 
     public JSONObject POSTResponse(String url, List<NameValuePair> params) {
         try {

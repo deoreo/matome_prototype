@@ -1,11 +1,7 @@
 package com.jds.webapp;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 
 

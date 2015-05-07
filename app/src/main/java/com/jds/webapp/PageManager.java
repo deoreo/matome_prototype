@@ -23,6 +23,8 @@ public class PageManager {
         return sInstance;
     }
 
+
+
     public Date convertFormatDate(final String iso8601string) {
         String s = iso8601string.replace("Z", "+00:00");
         try {

@@ -1,4 +1,4 @@
-package com.jds.webapp.Fragment;
+package com.jds.webapp;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

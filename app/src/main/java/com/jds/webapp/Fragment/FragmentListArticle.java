@@ -1,16 +1,10 @@
 package com.jds.webapp.Fragment;
 
-import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +16,7 @@ import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.ArticlePersistence;
 import com.jds.webapp.DataArticle;
-import com.jds.webapp.NotificationReceiver;
+import com.jds.webapp.NetworkManager;
 import com.jds.webapp.PageManager;
 import com.jds.webapp.R;
 
@@ -78,18 +72,18 @@ public class FragmentListArticle extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+                    DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+                }
                 new GetArticle().execute();
             }
         });
         mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.MODE_BOTTOM);
         int articleCount = articlePersistence.getListSavedArticle().size();
-        if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
-            new GetArticle().execute();
-        } else {
+        if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
             DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
-            mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
-
         }
+        new GetArticle().execute();
         return view;
     }
 
@@ -123,9 +117,15 @@ public class FragmentListArticle extends Fragment {
         protected JSONArray doInBackground(String... arg) {
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
+            //LIST_ARTICLE_MATOME = null;
             ArticlePersistence persistence = new ArticlePersistence(getActivity());
             JSONControl JSONControl = new JSONControl();
-            json = JSONControl.listArticle();
+            try {
+                json = JSONControl.listArticle(getActivity());
+            }
+            catch (Exception e){
+//                DialogBox.getInstance().showDialog(getActivity(),null,"","OK","Warning", "Please reload");
+            }
             if (json != null) {
                 for (int i = 0; i < json.length(); i++) {
                     String id = "";
@@ -168,14 +168,12 @@ public class FragmentListArticle extends Fragment {
                         LIST_ARTICLE_MATOME.add(article);
                     }
                 }
-
                 try {
                     persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
                     mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
-                } catch (NullPointerException e) {
+                } catch (NullPointerException e){
                     e.printStackTrace();
                 }
-
             }
 
             return json;
