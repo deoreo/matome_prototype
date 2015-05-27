@@ -82,7 +82,7 @@ public class AdapterListArticle extends BaseAdapter {
             final String PV = article.getPv();
             final String KEY = article.getKey();
             final String THUMBNAIL = article.getThumbnail();
-            final String URL_THUMBNAIL = "http://api.matome.id/photo/" + THUMBNAIL + "?w=310&h=260&c=fill";
+            final String URL_THUMBNAIL = "http://api.matomeindo.com/photo/" + THUMBNAIL + "?w=310&h=260&c=fill";
 
             holder.titleText.setText(TITLE);
             holder.dateText.setText(DATE);
