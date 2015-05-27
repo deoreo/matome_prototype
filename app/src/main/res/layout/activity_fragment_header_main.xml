@@ -152,10 +152,10 @@
 
                     </RelativeLayout>
             </FrameLayout>
+
         </LinearLayout>
 
     </LinearLayout>
-
 
     <RelativeLayout
         android:id="@+id/topLayout"
@@ -292,7 +292,7 @@
                         android:layout_height="fill_parent"
                         android:textColor="#77FF0014"
                         android:gravity="center"
-                        android:text="Apps"/>
+                        android:text="Entertainment"/>
                     <include
                         layout="@layout/pressed2"
                         android:id="@+id/btnAppsPressed" />

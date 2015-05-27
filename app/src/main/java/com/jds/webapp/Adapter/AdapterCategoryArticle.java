@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
+import com.jds.webapp.NetworkManager;
 import com.jds.webapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -56,7 +57,7 @@ public class AdapterCategoryArticle extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(mKeyIsEmpty){
+        if(mKeyIsEmpty || !NetworkManager.getInstance(mAct).isConnectingToInternet()){
             convertView = mInflater.inflate(R.layout.list_row_empty, null);
         }
         else {
@@ -85,7 +86,7 @@ public class AdapterCategoryArticle extends BaseAdapter {
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR + " ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
-        Picasso.with(mAct).load(URL_THUMBNAIL).fit().into(holder.articleListBgImage);
+        Picasso.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fit().into(holder.articleListBgImage);
 
         convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterCategoryArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
         }

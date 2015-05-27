@@ -112,7 +112,7 @@ public class FragmentHeaderArticle extends Fragment {
         });
         btnShareOther.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url_article = "http://m.matome.id/" + key;
+                String url_article = urlMatome + key;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, title + " - " + url_article);

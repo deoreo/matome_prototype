@@ -89,7 +89,7 @@ public class AdapterListArticle extends BaseAdapter {
             holder.authorText.setText(AUTHOR + " ");
             holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
             //Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
-            Picasso.with(mAct).load(URL_THUMBNAIL).fit().into(holder.articleListBgImage);
+            Picasso.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fit().into(holder.articleListBgImage);
             convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterListArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
         }

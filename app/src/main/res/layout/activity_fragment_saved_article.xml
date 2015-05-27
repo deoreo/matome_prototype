@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     tools:context="com.jds.webapp.Fragment.FragmentListSavedArticle">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/activity_saved_swipe_refresh_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -23,6 +23,6 @@
             android:layout_alignParentStart="true">
         </FrameLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.baoyz.widget.PullRefreshLayout>
 
 </RelativeLayout>

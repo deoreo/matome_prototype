@@ -108,6 +108,7 @@ public class AdapterSavedArticle extends BaseAdapter {
             holder.authorText.setText(AUTHOR);
             //holder.pvText.setText(PV);
             Picasso.with(mAct).load(THUMBNAIL)
+                    .error(R.drawable.bear)
                     .fit()
                     .into(holder.imgArticle);
             convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, THUMBNAIL));

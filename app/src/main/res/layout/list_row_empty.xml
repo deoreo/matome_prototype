@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="30dp"
-        android:text="No Article"
+        android:textSize="20dp"
+        android:text="Article is not found!"
         android:layout_marginBottom="20dp"
         android:textColor="#C8C8C8" />
 

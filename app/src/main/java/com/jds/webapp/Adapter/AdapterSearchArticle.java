@@ -49,12 +49,8 @@ public class AdapterSearchArticle extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(Build.VERSION.SDK_INT<=10){
-            convertView = mInflater.inflate(R.layout.list_category_article, null);
-        }
-        else {
-            convertView = mInflater.inflate(R.layout.list_article, null);
-        }
+        convertView = mInflater.inflate(R.layout.list_category_article, null);
+
         holder = new ViewHolder();
         holder.titleText = (TextView) convertView.findViewById(R.id.titleText);
         holder.dateText = (TextView) convertView.findViewById(R.id.dateText);
@@ -79,6 +75,7 @@ public class AdapterSearchArticle extends BaseAdapter {
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
 
         Picasso.with(mAct).load(URL_THUMBNAIL)
+                .error(R.drawable.bear)
                 .fit()
                 .into(holder.articleListBgImage);
 
