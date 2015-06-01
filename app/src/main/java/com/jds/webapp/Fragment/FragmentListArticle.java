@@ -5,12 +5,13 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterListArticle;
 import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
@@ -32,9 +33,9 @@ import java.util.List;
 import me.drakeet.materialdialog.MaterialDialog;
 
 
-public class FragmentListArticle extends Fragment {
+public class FragmentListArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     ListView mListView;
-    PullRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     MaterialDialog mMaterialDialog;
     AdapterListArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
@@ -67,21 +68,18 @@ public class FragmentListArticle extends Fragment {
         articlePersistence = new ArticlePersistence(getActivity());
         View view = inflater.inflate(R.layout.fragment_list_article_coba, container, false);
         mListView = (ListView) view.findViewById(R.id.lvArticle);
-        mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
-                    DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
-                }
-                new GetArticle().execute();
-            }
-        });
-        mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.MODE_BOTTOM);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         int articleCount = articlePersistence.getListSavedArticle().size();
         if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
             DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+            mListView.setAdapter(null);
         }
         new GetArticle().execute();
         return view;
@@ -103,27 +101,31 @@ public class FragmentListArticle extends Fragment {
         mMaterialDialog.show();
     }
 
+    @Override
+    public void onRefresh() {
+        if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+            DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+        }
+        new GetArticle().execute();
+    }
+
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {
         ProgressDialog pDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mSwipeRefreshLayout.setRefreshing(true);
-
         }
 
         @Override
         protected JSONArray doInBackground(String... arg) {
             JSONArray json = null;
             LIST_ARTICLE_MATOME = new ArrayList<DataArticle>();
-            //LIST_ARTICLE_MATOME = null;
             ArticlePersistence persistence = new ArticlePersistence(getActivity());
             JSONControl JSONControl = new JSONControl();
             try {
                 json = JSONControl.listArticle(getActivity());
-            }
-            catch (Exception e){
+            } catch (Exception e) {
 //                DialogBox.getInstance().showDialog(getActivity(),null,"","OK","Warning", "Please reload");
             }
             if (json != null) {
@@ -171,9 +173,12 @@ public class FragmentListArticle extends Fragment {
                 try {
                     persistence.setListSavedArticle(LIST_ARTICLE_MATOME);
                     mAdapter = new AdapterListArticle(getActivity(), LIST_ARTICLE_MATOME);
-                } catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
+            }
+            else{
+                LIST_ARTICLE_MATOME = null;
             }
 
             return json;

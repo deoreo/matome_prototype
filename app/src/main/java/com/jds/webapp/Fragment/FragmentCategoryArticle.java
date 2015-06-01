@@ -3,6 +3,8 @@ package com.jds.webapp.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterCategoryArticle;
 import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
@@ -31,9 +32,9 @@ import java.util.Date;
 import java.util.List;
 
 
-public class FragmentCategoryArticle extends Fragment {
+public class FragmentCategoryArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     ListView mListView;
-    PullRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     AdapterCategoryArticle mAdapter;
     List<DataArticle> LIST_ARTICLE_MATOME = null;
     List<DataArticle> LIST_ARTICLE_MATOME_PREF = null;
@@ -82,21 +83,13 @@ public class FragmentCategoryArticle extends Fragment {
 
         mListView = (ListView) view.findViewById(R.id.lvArticle);
         mListView.setSelection(PageManager.getInstance().rowCategory);
-        mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        // listen refresh event
-        mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
-                    new GetArticle(strKategori).execute();
-                } else {
-                    DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-        mSwipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
-        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         articleCount = articlePersistence.getListCategoryArticle(strKategori).size();
         if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
             if (articleCount <= 0) {
@@ -112,10 +105,15 @@ public class FragmentCategoryArticle extends Fragment {
         return view;
     }
 
-
-
-
-
+    @Override
+    public void onRefresh() {
+        if (NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+            new GetArticle(strKategori).execute();
+        } else {
+            DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
 
 
     public class GetArticle extends AsyncTask<String, Void, JSONArray> {

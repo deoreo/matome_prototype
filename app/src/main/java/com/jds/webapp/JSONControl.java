@@ -13,10 +13,10 @@ import java.util.List;
 
 public class JSONControl {
     private JSONResponse _JSONResponse;
-    private static String URL_API_ARTICLE = "http://api.matome.id/1/article/";
-    private static String URL_API_SEARCH_ARTICLE = "http://api.matome.id/1/article/?per_page=1000&page=1&word=";
-    private static String URL_API_CATEGORY_ARTICLE = "http://api.matome.id/1/article/?per_page=500&page=1&cat=";
-    private static String URL_API_COMMENT = "http://api.matome.id/1/comment";
+    private static String URL_API_ARTICLE = "http://api.matomeindo.com/1/article/";
+    private static String URL_API_SEARCH_ARTICLE = "http://api.matomeindo.com/1/article/?per_page=1000&page=1&word=";
+    private static String URL_API_CATEGORY_ARTICLE = "http://api.matomeindo.com/1/article/?per_page=500&page=1&cat=";
+    private static String URL_API_COMMENT = "http://api.matomeindo.com/1/comment";
 
     public JSONControl() {
         _JSONResponse = new JSONResponse();

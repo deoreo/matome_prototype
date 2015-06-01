@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.R;
@@ -67,18 +68,15 @@ public class AdapterSearchArticle extends BaseAdapter {
         final String PV = article.getPv();
         final String KEY = article.getKey();
         final String THUMBNAIL = article.getThumbnail();
-        final String URL_THUMBNAIL = "http://api.matome.id/photo/" + THUMBNAIL + "?w=310&h=260&c=fill";
+        final String URL_THUMBNAIL = "http://api.matomeindo.com/photo/" + THUMBNAIL + "?w=310&h=260&c=fill";
 
         holder.titleText.setText(TITLE);
         holder.dateText.setText(DATE);
         holder.authorText.setText(AUTHOR + " ");
         holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
 
-        Picasso.with(mAct).load(URL_THUMBNAIL)
-                .error(R.drawable.bear)
-                .fit()
-                .into(holder.articleListBgImage);
-
+        //Picasso.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fit().into(holder.articleListBgImage);
+        Glide.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fitCenter().centerCrop().into(holder.articleListBgImage);
         convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSearchArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
 

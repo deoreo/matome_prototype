@@ -1,6 +1,8 @@
 package com.jds.webapp.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -18,7 +20,7 @@ import com.jds.webapp.R;
 
 
 public class FragmentHeaderMain extends Fragment implements OnKeyListener {
-    View btnHome, btnSaved, btnSearch, btnNav,btnClose;
+    View btnHome, btnSaved, btnSearch, btnNav,btnClose, btnLogo;
     View btnHomePressed, btnSavedPressed, btnSearchPressed, btnNavPressed;
     View mVw;
     View topView, searchView, categoryView;
@@ -41,6 +43,7 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
             return null;
         }
 
+        btnLogo = view.findViewById(R.id.btnLogo);
         btnFashion = view.findViewById(R.id.btnFashion);
         btnCosmetics = view.findViewById(R.id.btnCosmetics);
         btnTravel = view.findViewById(R.id.btnTravel);
@@ -101,6 +104,13 @@ public class FragmentHeaderMain extends Fragment implements OnKeyListener {
             public void onClick(View v) {
                 searchView.setVisibility(View.VISIBLE);
                 topView.setVisibility(View.GONE);
+            }
+        });
+
+        btnLogo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://matomeindo.com/"));
+                startActivity(browserIntent);
             }
         });
 

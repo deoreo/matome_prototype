@@ -5,8 +5,10 @@ import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jds.webapp.DialogBox;
 import com.jds.webapp.JSONControl;
 import com.jds.webapp.NetworkManager;
@@ -42,7 +45,7 @@ import java.util.Date;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-public class FragmentArticle extends Fragment {
+public class FragmentArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     WebView webview;
     TextView titleText, authorText, commentText;
     EditText nameEditText, commentEditText;
@@ -57,7 +60,8 @@ public class FragmentArticle extends Fragment {
     private static final String KEY_DATE = "date";
     MaterialDialog mMaterialDialog;
     Activity mAct;
-
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    FloatingActionButton fab;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +83,9 @@ public class FragmentArticle extends Fragment {
             getExtras();
             view = inflater.inflate(R.layout.activity_web, container, false);
             ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.scroll_view);
-            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab = (FloatingActionButton) view.findViewById(R.id.fab);
             fab.attachToScrollView(scrollView);
+
             titleText = (TextView) view.findViewById(R.id.articletitleText);
             authorText = (TextView) view.findViewById(R.id.authorText);
 
@@ -94,9 +99,15 @@ public class FragmentArticle extends Fragment {
             });
             webview.setScrollbarFadingEnabled(true);
             articleImage = (ImageView) view.findViewById(R.id.articleImage);
-            Picasso.with(getActivity()).load(thumbnail)
-                    .fit()
-                    .into(articleImage);
+            mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+            mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+            mSwipeRefreshLayout.setRefreshing(true);
+            mSwipeRefreshLayout.setOnRefreshListener(this);
+            mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+            Picasso.with(mAct).load(thumbnail).error(R.drawable.bear).fit().into(articleImage);
             new LoadPage().execute(key);
             new GetComment(id).execute();
             fab.setOnClickListener(
@@ -122,19 +133,29 @@ public class FragmentArticle extends Fragment {
         thumbnail = bundle.getString("thumbnail");
     }
 
+    @Override
+    public void onRefresh() {
+        Glide.with(mAct).load(thumbnail).error(R.drawable.bear).fitCenter().centerCrop().into(articleImage);
+        new LoadPage().execute(key);
+    }
+
     private class LoadPage extends AsyncTask<String, Void, String> {
         Document doc = null;
         ProgressDialog pDialog;
 
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mSwipeRefreshLayout.setRefreshing(true);
             pDialog = new ProgressDialog(getActivity());
             pDialog.setMessage("Please wait. . .");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
+            //pDialog.show();
+            fab.hide();
+
         }
 
         @Override
@@ -153,7 +174,8 @@ public class FragmentArticle extends Fragment {
                         Elements authors = c.getElementsByClass("author-line");
                         for (Element a : authors) {
                             info = a.getElementsByClass("author-name").text();
-                            pv = a.getElementsByClass("grey").text();
+                            String apv = a.getElementsByClass("grey").text();
+                            pv = " ( "+apv+" ) ";
                         }
                         c.getElementsByClass("post-title").remove();
                         c.getElementsByClass("post-info").remove();
@@ -183,7 +205,9 @@ public class FragmentArticle extends Fragment {
                             "<body>" + data + "</body>", "text/html", "UTF-8", null);
 
             titleText.setText(Html.fromHtml("<font color='#000011'><u>" + judul + "</u></font>"));
-            authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> (" + pv + ")</i></font>"));
+            authorText.setText(Html.fromHtml("<font color='#000011'><i>" + info + "</i></font><font color='#000011'><i> " + pv + "</i></font>"));
+            mSwipeRefreshLayout.setRefreshing(false);
+            fab.show();
 
         }
     }

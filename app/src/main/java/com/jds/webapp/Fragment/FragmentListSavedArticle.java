@@ -7,12 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.baoyz.widget.PullRefreshLayout;
 import com.jds.webapp.Adapter.AdapterSavedArticle;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.DialogBox;
@@ -27,9 +27,9 @@ import java.util.Date;
 import io.realm.RealmResults;
 
 
-public class FragmentListSavedArticle extends Fragment {
+public class FragmentListSavedArticle extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     ListView mListView;
-    PullRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     AdapterSavedArticle mAdapter;
     RealmResults<DataListSavedArticle> mListArticle;
     private FragmentActivity mAct;
@@ -46,17 +46,18 @@ public class FragmentListSavedArticle extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.activity_fragment_saved_article, container, false);
-        mSwipeRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.activity_saved_swipe_refresh_layout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_saved_swipe_refresh_layout);
+        mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         mListView = (ListView)view.findViewById(R.id.lvSavedArticle);
-        mSwipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
-                    DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
-                }
-                new GetListSavedArticle(mAct, savedArticleThread).execute();
-            }
-        });
+        if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+            DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+        }
+        new GetListSavedArticle(mAct, savedArticleThread).execute();
 
         return view;
     }
@@ -67,6 +68,14 @@ public class FragmentListSavedArticle extends Fragment {
             savedArticleThread = new SavedArticleThread(getActivity());
             savedArticleThread.start();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!NetworkManager.getInstance(getActivity()).isConnectingToInternet()) {
+            DialogBox.getInstance().showDialog(getActivity(), null, "OK", "", "Warning", "Internet Connection Trouble!");
+        }
+        new GetListSavedArticle(mAct, savedArticleThread).execute();
     }
 
     public class GetListSavedArticle extends AsyncTask<Void, Void, String> {

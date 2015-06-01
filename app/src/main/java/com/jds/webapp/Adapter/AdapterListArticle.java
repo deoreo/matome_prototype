@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataArticle;
 import com.jds.webapp.R;
@@ -88,8 +89,9 @@ public class AdapterListArticle extends BaseAdapter {
             holder.dateText.setText(DATE);
             holder.authorText.setText(AUTHOR + " ");
             holder.pvText.setText(Html.fromHtml(" - <i>" + PV + " Views </i>"));
-            //Picasso.with(mAct).load(URL_THUMBNAIL).into(holder.articleListThumbnail);
-            Picasso.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fit().into(holder.articleListBgImage);
+
+            //Picasso.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fit().into(holder.articleListBgImage);
+            Glide.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fitCenter().centerCrop().into(holder.articleListBgImage);
             convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterListArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
         }

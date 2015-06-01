@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jds.webapp.ArticleListClickListener;
 import com.jds.webapp.DataListSavedArticle;
 import com.jds.webapp.DatabaseHandler;
@@ -100,18 +101,16 @@ public class AdapterSavedArticle extends BaseAdapter {
             final String DATE = mSourceData.get(position).getDate();
             final String AUTHOR = mSourceData.get(position).getAuthor();
             final String PV = mSourceData.get(position).getPv();
-            final String THUMBNAIL = mSourceData.get(position).getThumbnail();
+            final String URL_THUMBNAIL = mSourceData.get(position).getThumbnail();
 
 
             holder.titleText.setText(TITLE);
             holder.dateText.setText(DATE);
             holder.authorText.setText(AUTHOR);
             //holder.pvText.setText(PV);
-            Picasso.with(mAct).load(THUMBNAIL)
-                    .error(R.drawable.bear)
-                    .fit()
-                    .into(holder.imgArticle);
-            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, THUMBNAIL));
+            //Picasso.with(mAct).load(THUMBNAIL).error(R.drawable.bear).fit().into(holder.imgArticle);
+            Glide.with(mAct).load(URL_THUMBNAIL).error(R.drawable.bear).fitCenter().centerCrop().into(holder.imgArticle);
+            convertView.setOnClickListener(new ArticleListClickListener(mAct, "AdapterSavedArticle", ID, KEY, TITLE, DATE, AUTHOR, PV, URL_THUMBNAIL));
 
             holder.deleteArticle.setOnClickListener(new View.OnClickListener() {
                 @Override

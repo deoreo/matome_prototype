@@ -14,17 +14,21 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingLeft="20dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:id="@+id/frameLayoutLeft" >
 
-
+<RelativeLayout
+    android:id="@+id/btnLogo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="130dp"
                 android:layout_height="30dp"
                 android:background="@drawable/matome"
                 android:layout_gravity="center"
                 android:id="@+id/imageView" />
+</RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
